@@ -1,0 +1,3 @@
+{
+  "config.factory": "Mini\\Cms\\Configurations\\ConfigFactory"
+}

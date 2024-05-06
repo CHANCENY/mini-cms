@@ -1,0 +1,15 @@
+{
+    "maintain_mode": {
+        "is_active": true
+    },
+    "images_styles": {
+        "thumbnail": {
+            "width": "150",
+            "height": "100"
+        },
+        "profile_images": {
+            "width": "480",
+            "height": "400"
+        }
+    }
+}

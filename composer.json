@@ -1,0 +1,26 @@
+{
+    "name": "mini/cms",
+    "description": "\"Building backend for you apis and your blogging websites mini cms provide quick and simple to use to set up funtioning backend of your site.\"",
+    "type": "project",
+    "require-dev": {
+        "symfony/var-dumper": "^5.4"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Chance Nyasulu",
+            "email": "nyasuluchance6@gmail.com"
+        }
+    ],
+    "require": {
+"ramsey/uuid": "^4.7",
+        "symfony/http-foundation": "^7.0",
+      "ext-pdo": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mini\\Cms\\": "core/",
+            "Mini\\Cms\\Web\\Controllers\\" : "web/controllers/"
+        }
+    }
+}

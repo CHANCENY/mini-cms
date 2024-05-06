@@ -1,0 +1,9 @@
+{
+    "message": "This uri is missing in system \/favicon.ico",
+    "line": 86,
+    "code": 0,
+    "file": "C:\\xampp\\htdocs\\Mini_cms\\core\\Controller\\Route.php",
+    "trace": "#0 C:\\xampp\\htdocs\\Mini_cms\\core\\Controller\\Route.php(92): Mini\\Cms\\Controller\\Route->match('GET', '\/favicon.ico')\n#1 C:\\xampp\\htdocs\\Mini_cms\\web\\index.php(26): Mini\\Cms\\Controller\\Route::app('GET', '\/favicon.ico')\n#2 {main}",
+    "report_on": 1714788936,
+    "type": "critical"
+}

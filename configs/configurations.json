@@ -1,0 +1,16 @@
+{
+    "maintain_mode": {
+        "is_active": true
+    },
+    "error_saver": {
+        "is_active": false
+    },
+    "theme": [
+        {
+            "title": "MiniCMS",
+            "description": "Theme for admin dashboard",
+            "source_directory": "themes/mini_cms/src",
+            "active": true
+        }
+    ]
+}
