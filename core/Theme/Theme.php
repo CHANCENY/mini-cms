@@ -3,6 +3,7 @@
 namespace Mini\Cms\Theme;
 
 use Mini\Cms\Configurations\ConfigFactory;
+use Mini\Cms\Modules\MetaTag\MetaTag;
 use Mini\Cms\Modules\Storage\Tempstore;
 use Mini\Cms\Services\Services;
 
@@ -78,6 +79,7 @@ class Theme
     public function writeNavigation(): string|null
     {
         $navigation = Tempstore::load('theme_navigation');
+        //TODO: calling menus_alter hook.
         if($navigation instanceof Menus) {
             return Tempstore::load('theme_loaded')->view('navigation.php',$navigation);
         }
@@ -86,7 +88,13 @@ class Theme
 
     public function writeFooter(): string
     {
-        return "<p>@copyrights reserved</p>";
+        $footer = Tempstore::load('theme_footer');
+        if($footer instanceof FooterInterface) {
+            // TODO call hook footer_alter
+            $renderArray = $footer->render();
+            return $this->view($renderArray['theme'] ?? '', $renderArray['options'] ?? []);
+        }
+        return "";
     }
 
     public function writeAssets(string $assets_section): ?string
@@ -134,6 +142,11 @@ class Theme
 
     public function writeMetaTag(): string
     {
+        $metadata = Tempstore::load('theme_meta_tags');
+        if($metadata instanceof MetaTag) {
+            //TODO call meta_tag_alter.
+            return $metadata->__toString();
+        }
         return "";
     }
 

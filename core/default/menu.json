@@ -1,0 +1,42 @@
+{
+  "menu_dashboard": {
+    "label": "Dashboard",
+    "link": "/dashboard",
+    "icon": "dashboard",
+    "children": [],
+    "attributes": {
+      "class": "nav-item",
+      "id": "nav-item-dashboard",
+      "title": "Dashboard"
+    },
+    "options": {
+      "roles": ["administrator"]
+    }
+  },
+  "menu_content_type": {
+    "label": "Structures",
+    "link": "/structures",
+    "icon": "structures",
+    "children": [
+      {
+        "name": "Content Type",
+        "link": "/structure/content-type",
+        "icon": "content-type",
+        "attributes": {
+          "class": "nav-item",
+          "id": "nav-item-1",
+          "title": "Content type"
+        },
+        "children": []
+      }
+    ],
+    "attributes": {
+      "class": "nav-item",
+      "id": "nav-item-structures",
+      "title": "Structures"
+    },
+    "options": {
+      "roles": ["*"]
+    }
+  }
+}

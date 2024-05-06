@@ -1,0 +1,31 @@
+[
+  {
+    "id": "0414768b-b67a-42df-ba94-0ba9f07a4f32",
+    "options": {
+      "unauthorized_access": true,
+      "methods": [
+        "GET"
+      ],
+      "roles": [
+        "*"
+      ]
+    },
+    "name": "Contact Us",
+    "url": "\/contact-us",
+    "description": "Contact us page for our users",
+    "handler": "Mini\\Cms\\default\\Controllers\\ContactUs"
+  },
+  {
+    "id": "96af8def-c1c8-4fe3-a95f-61fe54e4c85c",
+    "options": {
+      "unauthorized_access": true,
+      "methods": [
+        "GET"
+      ]
+    },
+    "name": "Home",
+    "url": "\/home",
+    "description": "Home page of mini cms",
+    "handler": "Mini\\Cms\\default\\Controllers\\Home"
+  }
+]

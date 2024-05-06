@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Navigate to the core/bin directory
+cd core/bin
+
+# Execute mini.php with the provided arguments
+php mini.php "$@"

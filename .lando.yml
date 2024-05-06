@@ -1,0 +1,11 @@
+name: minicms
+recipe: lamp
+config:
+  webroot: web
+  php: '8.2'
+services:
+  phpmyadmin:
+    type: phpmyadmin
+    hosts:
+      - database
+    portforward: true

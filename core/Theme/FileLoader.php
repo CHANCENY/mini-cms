@@ -21,25 +21,26 @@ class FileLoader
     public function findFiles(string $fileName): array
     {
         $foundFiles = [];
-        function recursive_finder(string $dir, string $file_name): array
-        {
-            $foundFiles = [];
-            $fileInDirectory = array_diff(scandir($dir), ['..', '.']);
-            foreach ($fileInDirectory as $file) {
-                $fullPath = $dir . '/'. $file;
-                if (is_dir($fullPath)) {
-                    $results = recursive_finder($fullPath, $file_name);
-                    if(!empty($results)) {
-                        $foundFiles = array_merge($foundFiles, $results);
-                    }
-                }
-                if(is_file($fullPath) && str_ends_with($fullPath,$file_name)){
-                   $foundFiles[] = $fullPath;
+        return $this->recursive_finder($this->path, $fileName);
+    }
+
+    private function recursive_finder(string $dir, string $file_name): array
+    {
+        $foundFiles = [];
+        $fileInDirectory = array_diff(scandir($dir), ['..', '.']);
+        foreach ($fileInDirectory as $file) {
+            $fullPath = $dir . '/'. $file;
+            if (is_dir($fullPath)) {
+                $results = $this->recursive_finder($fullPath, $file_name);
+                if(!empty($results)) {
+                    $foundFiles = array_merge($foundFiles, $results);
                 }
             }
-            return $foundFiles;
+            if(is_file($fullPath) && str_ends_with($fullPath,$file_name)){
+                $foundFiles[] = $fullPath;
+            }
         }
-        return recursive_finder($this->path, $fileName);
+        return $foundFiles;
     }
 
     public static function find(string $filename,string $path = ''): array

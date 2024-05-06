@@ -13,7 +13,7 @@ class RouteBuilder
      * Path to defaults routes.
      * @var string
      */
-    private string $default_routes = '../configs/default_routes.json';
+    private string $default_routes = '../core/default/default_routes.json';
 
     /**
      * Path to custom routes.
@@ -41,7 +41,7 @@ class RouteBuilder
         $this->routes = [];
         $this->defaults = [];
         if(file_exists($this->default_routes)) {
-            $this->defaults = json_decode(file_get_contents($this->default_routes), true);
+            $this->defaults = json_decode(file_get_contents($this->default_routes), true) ?? [];
         }
         if(file_exists($this->custom_routes)) {
             $this->routes = json_decode(file_get_contents($this->custom_routes), true) ?? [];
@@ -170,12 +170,21 @@ class RouteBuilder
      * Saving new route.
      * @return bool
      */
-    public function save(): bool
+    public function save(bool $is_default = false): bool
     {
-        $this->routes[] = $this->new_route;
-        if(file_put_contents($this->custom_routes, json_encode($this->routes , JSON_PRETTY_PRINT))) {
-            return true;
+        if($is_default === false) {
+            $this->routes[] = $this->new_route;
+            if(file_put_contents($this->custom_routes, json_encode($this->routes , JSON_PRETTY_PRINT))) {
+                return true;
+            }
         }
+        else {
+            $this->routes[] = $this->new_route;
+            if(file_put_contents($this->defaults, json_encode($this->routes , JSON_PRETTY_PRINT))) {
+                return true;
+            }
+        }
+
         return false;
     }
 

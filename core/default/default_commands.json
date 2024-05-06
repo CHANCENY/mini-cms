@@ -1,0 +1,6 @@
+{
+  "route:admin": {
+    "arg": [],
+    "listener":"Mini\\Cms\\Modules\\Terminal\\RouteCreationTerminal"
+  }
+}

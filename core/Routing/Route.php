@@ -8,7 +8,7 @@ class Route
      * Path to defaults routes.
      * @var string
      */
-    private string $default_routes = '../configs/default_routes.json';
+    private string $default_routes = '../core/default/default_routes.json';
 
     /**
      * Path to custom routes.

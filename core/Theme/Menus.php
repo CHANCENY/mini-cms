@@ -10,6 +10,14 @@ class Menus
     private array $menus;
     private string $current_uri;
 
+    private string $default_menu = '../core/default/menu.json';
+
+    private string $custom_menu = '../configs/menus.json';
+
+    private array $default_menus;
+
+    private array $custom_menus;
+
     private array $active;
 
     /**
@@ -18,59 +26,17 @@ class Menus
      */
     public function __construct(string $current_uri = '/')
     {
+        if(file_exists($this->default_menu)) {
+            $this->default_menus = json_decode(file_get_contents($this->default_menu), true) ?? [];
+        }
+        if(file_exists($this->custom_menu)) {
+            $this->custom_menus = json_decode(file_get_contents($this->custom_menu) ?? '{}', true) ?? [];
+        }
+
+        // TODO: check if current user is admin
+        $this->menus = array_merge($this->default_menus, $this->custom_menus);
         $this->current_uri = $current_uri;
         // Bring these menus from hook menu_register.
-        $this->menus = [
-            'menu_home' => [
-                'label' => 'Home',
-                'link' => '/home',
-                'icon' => 'home',
-                'children' => [
-                    ['name' => 'Home child one',
-                        'link' => '/home/child-1',
-                        'icon' => 'home',
-                        'attributes' => [
-                            'class' => 'nav-item',
-                            'id' => 'nav-item-1',
-                        ],
-                        'children' => []
-                    ]
-                ],
-                'attributes' => [
-                    'class' => 'nav-item',
-                    'id' => 'nav-item-contact',
-                    'title' => 'Home',
-                ],
-                'options' => [
-                    'roles' => ['*'],
-                ],
-            ],
-            'menu_contact_us' => [
-                'label' => 'Contact Us',
-                'link' => '/contact-us',
-                'icon' => 'contact',
-                'children' => [
-                    ['name' => 'Contact child one',
-                        'link' => '/contact-us/child-1',
-                        'icon' => 'co',
-                        'attributes' => [
-                            'class' => 'nav-item',
-                            'id' => 'nav-item-1',
-                            'title' => 'Contact child one'
-                        ],
-                        'children' => []
-                    ]
-                ],
-                'attributes' => [
-                    'class' => 'nav-item',
-                    'id' => 'nav-item-home',
-                    'title' => 'Contact',
-                ],
-                'options' => [
-                    'roles' => ['*'],
-                ],
-            ],
-        ];
 
         // Find active.
         foreach ($this->menus as $key=>$menu) {

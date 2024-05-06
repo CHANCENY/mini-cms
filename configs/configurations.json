@@ -9,7 +9,7 @@
         {
             "title": "MiniCMS",
             "description": "Theme for admin dashboard",
-            "source_directory": "themes/mini_cms/src",
+            "source_directory": "../core/default/themes/mini_cms/src",
             "active": true
         }
     ]

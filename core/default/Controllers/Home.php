@@ -1,6 +1,6 @@
 <?php
 
-namespace Mini\Cms\Web\Controllers;
+namespace Mini\Cms\default\Controllers;
 
 use Mini\Cms\Controller\ContentTypeEnum;
 use Mini\Cms\Controller\ControllerInterface;

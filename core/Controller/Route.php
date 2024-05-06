@@ -1,10 +1,12 @@
 <?php
 namespace Mini\Cms\Controller;
 
+use Mini\Cms\Modules\MetaTag\MetaTag;
 use Mini\Cms\Modules\Storage\Tempstore;
 use Mini\Cms\Routing\RouteBuilder;
 use Mini\Cms\Routing\URIMatcher;
 use Mini\Cms\Services\Services;
+use Mini\Cms\Theme\Footer;
 use Mini\Cms\Theme\Menus;
 use Mini\Cms\Theme\Theme;
 
@@ -58,6 +60,13 @@ class Route
             $menus = new Menus($path);
             //TODO: call menu_alter
             Tempstore::save('theme_navigation', $menus);
+
+            $footer = new Footer();
+            $footer->themeFile('footer.php');
+            Tempstore::save('theme_footer', $footer);
+
+            $metaTag = new MetaTag();
+            Tempstore::save('theme_meta_tags', $metaTag);
 
             if(!empty($params)) {
                 $_GET = array_merge($_GET, $params);
