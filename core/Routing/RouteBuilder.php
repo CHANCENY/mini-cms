@@ -40,11 +40,25 @@ class RouteBuilder
 
         $this->routes = [];
         $this->defaults = [];
+
         if(file_exists($this->default_routes)) {
             $this->defaults = json_decode(file_get_contents($this->default_routes), true) ?? [];
         }
+        else {
+            $alternative_path ='../default/default_routes.json';
+            if(file_exists($alternative_path)) {
+                $this->defaults = json_decode(file_get_contents($alternative_path), true) ?? [];
+            }
+        }
+
         if(file_exists($this->custom_routes)) {
             $this->routes = json_decode(file_get_contents($this->custom_routes), true) ?? [];
+        }
+        else {
+            $alternative_path = '../../configs/custom_routes.json';
+            if(file_exists($alternative_path)) {
+                $this->routes = json_decode(file_get_contents($alternative_path), true) ?? [];
+            }
         }
     }
 
@@ -168,20 +182,41 @@ class RouteBuilder
 
     /**
      * Saving new route.
+     * @param bool $is_default
      * @return bool
      */
     public function save(bool $is_default = false): bool
     {
         if($is_default === false) {
             $this->routes[] = $this->new_route;
-            if(file_put_contents($this->custom_routes, json_encode($this->routes , JSON_PRETTY_PRINT))) {
-                return true;
+            $alternative_path = '../../configs/custom_routes.json';
+            if(file_exists($this->custom_routes)) {
+                if(file_put_contents($this->custom_routes, json_encode($this->routes , JSON_PRETTY_PRINT))) {
+                    return true;
+                }
+            }
+            else {
+                if(file_exists($alternative_path)) {
+                    if(file_put_contents($alternative_path, json_encode($this->routes , JSON_PRETTY_PRINT))) {
+                        return true;
+                    }
+                }
             }
         }
         else {
-            $this->routes[] = $this->new_route;
-            if(file_put_contents($this->defaults, json_encode($this->routes , JSON_PRETTY_PRINT))) {
-                return true;
+            $this->defaults[] = $this->new_route;
+            $alternative_path  = '../default/default_routes.json';
+            if(file_exists($this->default_routes)) {
+                if(file_put_contents($this->default_routes, json_encode($this->defaults , JSON_PRETTY_PRINT))) {
+                    return true;
+                }
+            }
+            else {
+                if(file_exists($alternative_path)) {
+                    if(file_put_contents($alternative_path, json_encode($this->defaults , JSON_PRETTY_PRINT))) {
+                        return true;
+                    }
+                }
             }
         }
 

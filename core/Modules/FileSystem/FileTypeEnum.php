@@ -24,7 +24,7 @@ enum FileTypeEnum: string
 
     case FILE_ODG = 'application/vnd.oasis.opendocument.data';
 
-    case FILE_TEXT = 'plain/text';
+    case FILE_TEXT = 'text/plain';
 
     case FILE_JSON = 'application/json';
 

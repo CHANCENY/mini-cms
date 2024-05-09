@@ -2,6 +2,7 @@
 
 namespace Mini\Cms\Theme;
 
+use DOMDocument;
 use Mini\Cms\Configurations\ConfigFactory;
 use Mini\Cms\Modules\MetaTag\MetaTag;
 use Mini\Cms\Modules\Storage\Tempstore;
@@ -52,7 +53,7 @@ class Theme
             'current_route' => Tempstore::load('current_route'),
             'current_user' => [],
         ];
-        if(file_exists($view_file[0])) {
+        if(!empty($view_file[0]) && file_exists($view_file[0])) {
             ob_start();
             extract($variables);
             require_once $view_file[0];
@@ -169,4 +170,86 @@ class Theme
         }
         return null;
     }
+
+    public function processBuildContentHtml(string $content): string
+    {
+        // Disable DOMDocument warnings
+        libxml_use_internal_errors(true);
+
+        // Create a DOMDocument object
+        $dom = new DOMDocument();
+
+        // Load the HTML content into the DOMDocument object
+        $dom->loadHTML($content);
+
+        // Get all anchor tags
+        $anchors = $dom->getElementsByTagName('a');
+
+        // Iterate over each anchor tag
+        foreach ($anchors as $anchor) {
+            // Check if the aria-label attribute is set
+            if (!$anchor->hasAttribute('aria-label')) {
+                // If not set, use the text content of the anchor tag as the aria-label
+                $linkText = $anchor->nodeValue;
+                $anchor->setAttribute('aria-label', trim($linkText));
+            }
+
+            // Check if the title attribute is set
+            if (!$anchor->hasAttribute('title')) {
+                // If not set, use the text content of the anchor tag as the title attribute
+                $linkText = $anchor->nodeValue;
+                $anchor->setAttribute('title', trim($linkText));
+            }
+        }
+
+        $images = $dom->getElementsByTagName('img');
+
+        // Get all img tags
+        $images = $dom->getElementsByTagName('img');
+
+        // Iterate over each img tag
+        foreach ($images as $image) {
+
+            // Get the source (src) attribute of the image
+            $src = $image->getAttribute('src');
+
+            // Extract the file name from the source URL
+            $fileName = basename($src);
+
+            // Remove file extension from the file name
+            $fileName = pathinfo($fileName, PATHINFO_FILENAME);
+
+            // Set the alt attribute to the file name
+            $image->setAttribute('alt', $fileName);
+        }
+
+        $inputs = $dom->getElementsByTagName('input');
+
+        foreach ($inputs as $index => $input) {
+            // Get input type and name
+            $type = strtolower($input->getAttribute('type'));
+            $name = $input->getAttribute('name');
+
+            // Generate unique ID for input element
+            $inputId = $input->hasAttribute('id') ? $input->getAttribute('id') : 'input-' . $index;
+
+            // Create label text
+            $labelText = 'Field ' . ($name !== '' ? $name : 'input');
+
+            // Create hidden label element
+            $label = $dom->createElement('label');
+            $label->setAttribute('for', $inputId);
+            $label->setAttribute('style', 'display: none;');
+            $label->nodeValue = $labelText;
+
+            // Insert label element before input element
+            $input->parentNode->insertBefore($label, $input);
+
+            // Set aria-labelledby attribute for input
+            $input->setAttribute('aria-labelledby', trim($inputId));
+        }
+        // Return the modified HTML content
+        return $dom->saveHTML();
+    }
+
 }

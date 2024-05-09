@@ -14,26 +14,16 @@
     }
   },
   "menu_content_type": {
-    "label": "Structures",
-    "link": "/structures",
-    "icon": "structures",
+    "label": "Installation",
+    "link": "/install",
+    "icon": "installation",
     "children": [
-      {
-        "name": "Content Type",
-        "link": "/structure/content-type",
-        "icon": "content-type",
-        "attributes": {
-          "class": "nav-item",
-          "id": "nav-item-1",
-          "title": "Content type"
-        },
-        "children": []
-      }
+
     ],
     "attributes": {
       "class": "nav-item",
-      "id": "nav-item-structures",
-      "title": "Structures"
+      "id": "nav-item-install",
+      "title": "Installation of new MiniCMS"
     },
     "options": {
       "roles": ["*"]

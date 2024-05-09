@@ -2,6 +2,7 @@
 
 namespace Mini\Cms\StorageManager;
 
+use Mini\Cms\Connections\Database\Database;
 use PDO;
 use PDOException;
 
@@ -51,22 +52,44 @@ class Connector
 
     private function createTables(): void
     {
-        // Table entity_types.
-        $query = "CREATE TABLE IF NOT EXISTS `entity_types` (entity_type_id INTEGER PRIMARY KEY AUTOINCREMENT, entity_type_name VARCHAR(255), entity_type_description VARCHAR(255), entity_label VARCHAR(255))";
-        $this->connection->exec($query);
+        $database = new Database();
 
-        // Table entity_types_fields.
-        $query = "CREATE TABLE IF NOT EXISTS `entity_types_fields` (entity_type_field_id INTEGER PRIMARY KEY AUTOINCREMENT, field_name VARCHAR(255), field_description VARCHAR(255), field_label VARCHAR(255), field_type VARCHAR(255), field_settings TEXT NOT NULL, entity_type_id INTEGER NOT NULL)";
-        $this->connection->exec($query);
+        if($database->getDatabaseType() === 'sqlite') {
+            // Table entity_types.
+            $query = "CREATE TABLE IF NOT EXISTS `entity_types` (entity_type_id INTEGER PRIMARY KEY AUTOINCREMENT, entity_type_name VARCHAR(255), entity_type_description VARCHAR(255), entity_label VARCHAR(255))";
+            $this->connection->exec($query);
 
-        $query = "CREATE TABLE IF NOT EXISTS `entity_node_data` (node_id INTEGER PRIMARY KEY AUTOINCREMENT, bundle varchar(255), title varchar(400) NOT NULL, deleted boolean DEFAULT FALSE NOT NULL, created varchar(255) NOT NULL, updated varchar(255) NOT NULL, status varchar(255) NOT NULL, uid INTEGER NOT NULL)";
-        $this->connection->exec($query);
+            // Table entity_types_fields.
+            $query = "CREATE TABLE IF NOT EXISTS `entity_types_fields` (entity_type_field_id INTEGER PRIMARY KEY AUTOINCREMENT, field_name VARCHAR(255), field_description VARCHAR(255), field_label VARCHAR(255), field_type VARCHAR(255), field_settings TEXT NOT NULL, entity_type_id INTEGER NOT NULL)";
+            $this->connection->exec($query);
 
-        $query = "CREATE TABLE IF NOT EXISTS `vocabularies` (vid INTEGER PRIMARY KEY AUTOINCREMENT, vocabulary_name varchar(255), vocabulary_label vachar(255))";
-        $this->connection->exec($query);
+            $query = "CREATE TABLE IF NOT EXISTS `entity_node_data` (node_id INTEGER PRIMARY KEY AUTOINCREMENT, bundle varchar(255), title varchar(400) NOT NULL, deleted boolean DEFAULT FALSE NOT NULL, created varchar(255) NOT NULL, updated varchar(255) NOT NULL, status varchar(255) NOT NULL, uid INTEGER NOT NULL)";
+            $this->connection->exec($query);
 
-        $query = "CREATE TABLE IF NOT EXISTS `terms` (term_id INTEGER PRIMARY KEY AUTOINCREMENT, term_name varchar(255) NOT NULL, vocabulary_id INTEGER NOT NULL)";
-        $this->connection->exec($query);
+            $query = "CREATE TABLE IF NOT EXISTS `vocabularies` (vid INTEGER PRIMARY KEY AUTOINCREMENT, vocabulary_name varchar(255), vocabulary_label vachar(255))";
+            $this->connection->exec($query);
+
+            $query = "CREATE TABLE IF NOT EXISTS `terms` (term_id INTEGER PRIMARY KEY AUTOINCREMENT, term_name varchar(255) NOT NULL, vocabulary_id INTEGER NOT NULL)";
+            $this->connection->exec($query);
+        }
+        if($database->getDatabaseType() === 'mysql') {
+            // Table entity_types.
+            $query = "CREATE TABLE IF NOT EXISTS `entity_types` (entity_type_id INTEGER PRIMARY KEY AUTO_INCREMENT, entity_type_name VARCHAR(255), entity_type_description VARCHAR(255), entity_label VARCHAR(255))";
+            $this->connection->exec($query);
+
+            // Table entity_types_fields.
+            $query = "CREATE TABLE IF NOT EXISTS `entity_types_fields` (entity_type_field_id INTEGER PRIMARY KEY AUTO_INCREMENT, field_name VARCHAR(255), field_description VARCHAR(255), field_label VARCHAR(255), field_type VARCHAR(255), field_settings TEXT NOT NULL, entity_type_id INTEGER NOT NULL)";
+            $this->connection->exec($query);
+
+            $query = "CREATE TABLE IF NOT EXISTS `entity_node_data` (node_id INTEGER PRIMARY KEY AUTO_INCREMENT, bundle varchar(255), title varchar(400) NOT NULL, deleted boolean DEFAULT FALSE NOT NULL, created varchar(255) NOT NULL, updated varchar(255) NOT NULL, status varchar(255) NOT NULL, uid INTEGER NOT NULL)";
+            $this->connection->exec($query);
+
+            $query = "CREATE TABLE IF NOT EXISTS `vocabularies` (vid INTEGER PRIMARY KEY AUTO_INCREMENT, vocabulary_name varchar(255), vocabulary_label varchar(255))";
+            $this->connection->exec($query);
+
+            $query = "CREATE TABLE IF NOT EXISTS `terms` (term_id INTEGER PRIMARY KEY AUTO_INCREMENT, term_name varchar(255) NOT NULL, vocabulary_id INTEGER NOT NULL)";
+            $this->connection->exec($query);
+        }
     }
 
 }

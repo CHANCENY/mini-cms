@@ -24,6 +24,7 @@ class Response
         $this->generator = "Mini CMS";
         $this->statusCode = StatusCodeEnum::OK;
         $this->cacheHeader = 'max-age=' . (60 * 60 * 24 * 365);
+        $this->body = '';
     }
 
     public function setStatusCode(StatusCodeEnum $status_code): Response
@@ -76,7 +77,7 @@ class Response
             // Making sure that on txt/html we are sending all required html content.
             if($this->contentType === ContentTypeEnum::TEXT_HTML) {
 
-                $in_response_data = "<html {{ATTRIBUTES}}>
+                $in_response_data = "<!DOCTYPE html><html {{ATTRIBUTES}}>
                                      <head>
                                        {{META_TAGS}}
                                        {{HEAD_ASSETS}}
@@ -117,7 +118,7 @@ class Response
                 $in_response_data = str_replace('{{APPEND_ASSETS}}',$belowAssets, $in_response_data);
 
                 // Finishing
-                echo $in_response_data;
+                echo $theme->processBuildContentHtml($in_response_data);
                 exit;
             }
             else {

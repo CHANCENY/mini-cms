@@ -3,11 +3,20 @@
 namespace Mini\Cms\Modules\FileSystem;
 
 
+use Mini\Cms\Connections\Database\Database;
 use Mini\Cms\ConnectorInterface;
 use Mini\Cms\StorageManager\Connector;
 
 class FileSystem implements ConnectorInterface
 {
+
+    private array $upload;
+
+    public function getUpload(): array
+    {
+        return $this->upload;
+    }
+
     private Connector $connector;
 
     private string $temporary_dir;
@@ -102,9 +111,17 @@ class FileSystem implements ConnectorInterface
      */
     private function confirmStorage(): void
     {
-        $query = "CREATE TABLE IF NOT EXISTS `file_managed` (fid INTEGER PRIMARY KEY AUTOINCREMENT, uri TEXT NOT NULL, size INTEGER DEFAULT 0, width INTEGER DEFAULT 0, height INTEGER DEFAULT 0, file_name TEXT NOT NULL, type TEXT NOT NULL, alt TEXT NOT NULL, uploaded_on TEXT NOT NULL)";
-        $statement = $this->connector->getConnection()->prepare($query);
-        $statement->execute();
+        $database = new Database();
+        if($database->getDatabaseType() === 'sqlite') {
+            $query = "CREATE TABLE IF NOT EXISTS `file_managed` (fid INTEGER PRIMARY KEY AUTOINCREMENT, uri TEXT NOT NULL, size INTEGER DEFAULT 0, width INTEGER DEFAULT 0, height INTEGER DEFAULT 0, file_name TEXT NOT NULL, type TEXT NOT NULL, alt TEXT NOT NULL, uploaded_on TEXT NOT NULL)";
+            $statement = $this->connector->getConnection()->prepare($query);
+            $statement->execute();
+        }
+        if($database->getDatabaseType() === 'mysql') {
+            $query = "CREATE TABLE IF NOT EXISTS `file_managed` (fid INT(11) PRIMARY KEY AUTO_INCREMENT, uri TEXT NOT NULL, size INTEGER DEFAULT 0, width INTEGER DEFAULT 0, height INTEGER DEFAULT 0, file_name TEXT NOT NULL, type TEXT NOT NULL, alt TEXT NOT NULL, uploaded_on TEXT NOT NULL)";
+            $statement = $this->connector->getConnection()->prepare($query);
+            $statement->execute();
+        }
     }
 
     /**
@@ -217,7 +234,6 @@ class FileSystem implements ConnectorInterface
                             'uploaded_on' => time(),
                         ];
                     }
-
                 }
             }
 
@@ -420,11 +436,11 @@ class FileSystem implements ConnectorInterface
                     $query = "INSERT INTO file_managed ($keys) VALUES($values)";
                     $statement = $this->connector->getConnection()->prepare($query);
                     $statement->execute();
-                    $upload['fid'] = $this->connector->getConnection()->lastInsertId();
+                    $this->upload['fid'] = $this->connector->getConnection()->lastInsertId();
                 }
             }
         }
-        return !empty($this->fid);
+        return !empty($this->upload);
     }
 
 }

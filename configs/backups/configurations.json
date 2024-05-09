@@ -2,14 +2,15 @@
     "maintain_mode": {
         "is_active": true
     },
-    "images_styles": {
-        "thumbnail": {
-            "width": "150",
-            "height": "100"
-        },
-        "profile_images": {
-            "width": "480",
-            "height": "400"
+    "error_saver": {
+        "is_active": false
+    },
+    "theme": [
+        {
+            "title": "MiniCMS",
+            "description": "Theme for admin dashboard",
+            "source_directory": "../core/default/themes/mini_cms/src",
+            "active": true
         }
-    }
+    ]
 }

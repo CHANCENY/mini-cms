@@ -1,31 +1,70 @@
 [
-  {
-    "id": "0414768b-b67a-42df-ba94-0ba9f07a4f32",
-    "options": {
-      "unauthorized_access": true,
-      "methods": [
-        "GET"
-      ],
-      "roles": [
-        "*"
-      ]
+    {
+        "id": "cf2fcaa9-f729-4dc3-a348-256cb9eefaf9",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "*"
+            ]
+        },
+        "name": "Dashboard",
+        "description": "Dashboard route",
+        "url": "\/dashboard",
+        "handler": "Mini\\Cms\\default\\Controllers\\Dashboard"
     },
-    "name": "Contact Us",
-    "url": "\/contact-us",
-    "description": "Contact us page for our users",
-    "handler": "Mini\\Cms\\default\\Controllers\\ContactUs"
-  },
-  {
-    "id": "96af8def-c1c8-4fe3-a95f-61fe54e4c85c",
-    "options": {
-      "unauthorized_access": true,
-      "methods": [
-        "GET"
-      ]
+    {
+        "id": "6335a6e9-2cd2-4914-ba9e-fc3dace12b29",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "*"
+            ]
+        },
+        "name": "Installation",
+        "description": "Installation route",
+        "url": "\/install",
+        "handler": "Mini\\Cms\\default\\Controllers\\Installation"
     },
-    "name": "Home",
-    "url": "\/home",
-    "description": "Home page of mini cms",
-    "handler": "Mini\\Cms\\default\\Controllers\\Home"
-  }
+    {
+        "id": "a82ec6dd-e996-4798-90e2-d86692dd2e35",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "*"
+            ]
+        },
+        "name": "SiteConfiguration",
+        "description": "Configuration of site",
+        "url": "\/site-configuration",
+        "handler": "Mini\\Cms\\default\\Controllers\\SiteConfiguration"
+    },
+    {
+        "id": "dc551189-d1e1-4d56-b331-2bf50956c957",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "*"
+            ]
+        },
+        "name": "HomePage",
+        "description": "Home page of mini cms",
+        "url": "\/",
+        "handler": "Mini\\Cms\\default\\Controllers\\HomePage"
+    }
 ]

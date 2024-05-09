@@ -9,8 +9,15 @@
         {
             "title": "MiniCMS",
             "description": "Theme for admin dashboard",
-            "source_directory": "../core/default/themes/mini_cms/src",
+            "source_directory": "..\/core\/default\/themes\/mini_cms\/src",
             "active": true
         }
-    ]
+    ],
+    "database": {
+        "db_host": "127.0.0.1",
+        "db_user": "root",
+        "db_password": "",
+        "db_name": "mini_db",
+        "db_type": "mysql"
+    }
 }

@@ -41,11 +41,25 @@ class Route
     {
         $this->routes = [];
         $this->defaults = [];
+
         if(file_exists($this->default_routes)) {
-            $this->defaults = json_decode(file_get_contents($this->default_routes), true);
+            $this->defaults = json_decode(file_get_contents($this->default_routes), true) ?? [];
         }
+        else {
+            $alternative_path ='../default/default_routes.json';
+            if(file_exists($alternative_path)) {
+                $this->defaults = json_decode(file_get_contents($alternative_path), true) ?? [];
+            }
+        }
+
         if(file_exists($this->custom_routes)) {
-            $this->routes = json_decode(file_get_contents($this->custom_routes), true);
+            $this->routes = json_decode(file_get_contents($this->custom_routes), true) ?? [];
+        }
+        else {
+            $alternative_path = '../../configs/custom_routes.json';
+            if(file_exists($alternative_path)) {
+                $this->routes = json_decode(file_get_contents($alternative_path), true) ?? [];
+            }
         }
         $fullCollection = array_merge($this->routes, $this->defaults);
         $this->route = array_filter($fullCollection, function ($route) use ($route_id) {

@@ -58,7 +58,7 @@ class RouteCreationTerminal implements TerminalInterface
                     }
                     break;
                 case 'setUnAuthorizedAccess':
-                    $builder->setUnAuthorizedAccess(strtolower($answers) == 'yes' ? true : false);
+                    $builder->setUnAuthorizedAccess(strtolower($answers) == 'yes');
                     break;
                 case 'setMethod':
                     $list = explode(',', $answers);

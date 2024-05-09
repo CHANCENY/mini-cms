@@ -16,7 +16,7 @@ class Site
         ],
         'BrandingAssets' => [
             'Logo' => '',
-            'Content' => '',
+            'Slogan' => '',
             'Name' => ''
         ],
         'LegalInformation' => [
@@ -25,7 +25,6 @@ class Site
         ],
         'ContactInformation' => [
             'Email' => '',
-            'Name' => '',
             'Smtp' => [
                 'stmp_server' => '',
                 'stmp_port' => '',
@@ -54,16 +53,16 @@ class Site
     public function setLegalInformation(string $type, string $content): void
     {
         $type = ucfirst($type); // Capitalize the type name
-        if (array_key_exists($type, $this->siteInformation['LegalInformation'])) {
+        if (array_key_exists($type, $this->siteInformation)) {
             $this->siteInformation['LegalInformation'][$type] = $content;
         }
     }
 
     // Setter method for setting ContactInformation
-    public function setContactInformation(string $type, string $value): void
+    public function setContactInformation(string $type, mixed $value): void
     {
         $type = ucfirst($type); // Capitalize the type name
-        if (array_key_exists($type, $this->siteInformation['ContactInformation'])) {
+        if (array_key_exists($type, $this->siteInformation)) {
             $this->siteInformation['ContactInformation'][$type] = $value;
         }
     }
@@ -72,7 +71,7 @@ class Site
     public function setTargetAudience(string $category, string $value): void
     {
         $category = ucfirst($category); // Capitalize the category name
-        if (array_key_exists($category, $this->siteInformation['TargetAudience'])) {
+        if (array_key_exists($category, $this->siteInformation)) {
             $this->siteInformation['TargetAudience'][$category] = $value;
         }
     }
@@ -81,7 +80,7 @@ class Site
     public function setBrandingAssets(string $asset, string $value): void
     {
         $asset = ucfirst($asset); // Capitalize the asset name
-        if (array_key_exists($asset, $this->siteInformation['BrandingAssets'])) {
+        if (array_key_exists($asset, $this->siteInformation)) {
             $this->siteInformation['BrandingAssets'][$asset] = $value;
         }
     }
