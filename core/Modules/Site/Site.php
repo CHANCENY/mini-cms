@@ -44,16 +44,16 @@ class Site
     public function __construct()
     {
         $config = Services::create('config.factory');
-        if($config instanceof ConfigFactory) {
+        if($config instanceof ConfigFactory && !empty($config->get('site_information'))) {
             $this->siteInformation = $config->get('site_information');
         }
     }
 
     // Setter method for setting LegalInformation
-    public function setLegalInformation(string $type, string $content): void
+    public function setLegalInformation(string $type, mixed $content): void
     {
         $type = ucfirst($type); // Capitalize the type name
-        if (array_key_exists($type, $this->siteInformation)) {
+        if (array_key_exists($type, $this->siteInformation['LegalInformation'])) {
             $this->siteInformation['LegalInformation'][$type] = $content;
         }
     }
@@ -62,7 +62,7 @@ class Site
     public function setContactInformation(string $type, mixed $value): void
     {
         $type = ucfirst($type); // Capitalize the type name
-        if (array_key_exists($type, $this->siteInformation)) {
+        if (array_key_exists($type, $this->siteInformation['ContactInformation'])) {
             $this->siteInformation['ContactInformation'][$type] = $value;
         }
     }
@@ -71,16 +71,16 @@ class Site
     public function setTargetAudience(string $category, string $value): void
     {
         $category = ucfirst($category); // Capitalize the category name
-        if (array_key_exists($category, $this->siteInformation)) {
+        if (array_key_exists($category, $this->siteInformation['TargetAudience'])) {
             $this->siteInformation['TargetAudience'][$category] = $value;
         }
     }
 
     // Setter method for setting BrandingAssets
-    public function setBrandingAssets(string $asset, string $value): void
+    public function setBrandingAssets(string $asset, mixed $value): void
     {
         $asset = ucfirst($asset); // Capitalize the asset name
-        if (array_key_exists($asset, $this->siteInformation)) {
+        if (array_key_exists($asset, $this->siteInformation['BrandingAssets'])) {
             $this->siteInformation['BrandingAssets'][$asset] = $value;
         }
     }
@@ -121,5 +121,20 @@ class Site
             return $config->save();
         }
         return false;
+    }
+
+    public function setDomain(float|bool|int|string|null $get): void
+    {
+        $this->siteInformation['DomainName'] = $get;
+    }
+
+    public function setPurpose(float|bool|int|string|null $get): void
+    {
+        $this->siteInformation['Purpose'] = $get;
+    }
+
+    public function setSocial(array $array): void
+    {
+        $this->siteInformation['SocialMediaIntegration'] = array_merge($this->siteInformation['SocialMediaIntegration'], $array);
     }
 }

@@ -79,7 +79,7 @@ class Route
      */
     public function getRouteTitle(): mixed
     {
-        return $this->route['title'] ?? null;
+        return $this->route['name'] ?? null;
     }
 
     /**

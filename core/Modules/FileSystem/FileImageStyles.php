@@ -5,13 +5,16 @@ namespace Mini\Cms\Modules\FileSystem;
 class FileImageStyles
 {
     private array $styles;
+    private $default;
 
     public function __construct()
     {
+        //TODO Getting images styles here.
         $this->styles = [
             'small'=>[
                 'width' => 200,
                 'height' => 150,
+                'default'=>true
             ],
             'medium' => [
                 'width' => 300,
@@ -22,6 +25,14 @@ class FileImageStyles
                 'height' => 450,
             ]
         ];
+
+        $this->default = array_filter($this->styles,function($style){
+           return !empty($style['default']);
+        });
+
+        if(empty($this->default)){
+            $this->default = $this->styles['small'] ?? [];
+        }
     }
 
     public function getStyles(): array
@@ -42,6 +53,11 @@ class FileImageStyles
 
     public function getDefaultStyle(): array
     {
-        return $this->styles['small'];
+        return reset($this->default);
+    }
+
+    public function style(): string
+    {
+        return array_keys($this->default)[0] ?? '';
     }
 }

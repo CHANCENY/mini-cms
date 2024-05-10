@@ -23,6 +23,8 @@ class FileSystem implements ConnectorInterface
 
     private string $public_dir;
 
+    private string $save_as;
+
     private string $private_dir;
 
     private array $allowed_extensions;
@@ -100,9 +102,10 @@ class FileSystem implements ConnectorInterface
         $this->allowed_size = FileSizeEnum::XX_MEDIUM_FILES;
         $this->total_files = 10;
         $this->validateUploads = [];
-        $this->public_dir = 'sites/default/files/public/';
-        $this->private_dir = 'sites/default/files/private/';
+        $this->public_dir = 'public://';
+        $this->private_dir = 'private://';
         $this->is_public = true;
+        $this->save_as = $this->public_dir;
     }
 
     /**
@@ -151,6 +154,17 @@ class FileSystem implements ConnectorInterface
     {
         return $this->public_dir;
     }
+
+    /**
+     * Where will file be uploaded public or private. by default file are saved in public.
+     * @param bool $save_as if True the file will be saved in public.
+     * @return void
+     */
+    public function setSaveAs(bool $save_as): void
+    {
+        $this->save_as = $save_as ? $this->public_dir : $this->private_dir;
+    }
+
 
     /**
      * Private directory.
@@ -291,7 +305,7 @@ class FileSystem implements ConnectorInterface
         $extend = null;
         $fullPath = preg_replace('/[^A-Za-z0-9]/', '_', $filename) . '.' . $extension;
         up:
-        $writable_file = trim($this->public_dir, '/') . '/' .$extend. $fullPath;
+        $writable_file = trim($this->save_as) .$extend. $fullPath;
         // Make sure we are not overriding file.
         if(file_exists($writable_file)) {
           $extend = time();
@@ -303,9 +317,9 @@ class FileSystem implements ConnectorInterface
             array_filter($this->allowed_extensions,function ($extension_enum) use ($extension, $styles, $fullPath, $writable_file,$extend) {
                 $list = explode('/', $extension_enum->value);
                 if($extension_enum instanceof FileTypeEnum && strtolower(end($list)) === strtolower($extension)) {
-                    $directory =  trim($this->public_dir, '/');
+                    $directory =  trim($this->save_as);
                     foreach ($styles as $style=>$value) {
-                        $style_dir = $directory .'/'. preg_replace('/[^A-Za-z0-9]/', '_', $style) . '/';
+                        $style_dir = $directory .trim(preg_replace('/[^A-Za-z0-9]/', '_', $style).'/') . '/';
                         if(!is_dir($style_dir)) {
                             mkdir(trim($style_dir,'/'));
                         }

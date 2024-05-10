@@ -66,5 +66,22 @@
         "description": "Home page of mini cms",
         "url": "\/",
         "handler": "Mini\\Cms\\default\\Controllers\\HomePage"
+    },
+    {
+        "id": "35543daa-9360-4f4d-967b-6c0ea47fb0de",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "*"
+            ]
+        },
+        "name": "UserRegistration",
+        "description": "\"Registration of user\"",
+        "url": "\/user\/register",
+        "handler": "Mini\\Cms\\default\\Controllers\\UserRegistration"
     }
 ]

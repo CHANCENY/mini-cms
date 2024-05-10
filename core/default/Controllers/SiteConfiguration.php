@@ -15,6 +15,7 @@ use Mini\Cms\Modules\Site\Site;
 use Mini\Cms\Modules\Storage\Tempstore;
 use Mini\Cms\StorageManager\Connector;
 use Mini\Cms\Theme\Theme;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class SiteConfiguration implements ControllerInterface
 {
@@ -51,8 +52,48 @@ class SiteConfiguration implements ControllerInterface
             $file->setAllowedExtension(FileTypeEnum::FILE_PDF);
             $file->setAllowedSize(FileSizeEnum::XX_MEDIUM_FILES);
             $file->prepareUpload($_FILES['site_privacy']);
-            $site_privacy = $file->save();
-            dump($site_privacy);
+            $file->save();
+            $site_privacy = $file->getUpload();
+
+            $file = new FileSystem();
+            $file->connector(Connector::connect(external_connection: Database::database()));
+            $file->setAllowedExtension(FileTypeEnum::FILE_TEXT);
+            $file->setAllowedExtension(FileTypeEnum::FILE_PDF);
+            $file->setAllowedSize(FileSizeEnum::XX_MEDIUM_FILES);
+            $file->prepareUpload($_FILES['site_terms']);
+            $file->save();
+            $site_terms = $file->getUpload();
+
+            $file = new FileSystem();
+            $file->connector(Connector::connect(external_connection: Database::database()));
+            $file->setAllowedExtension(FileTypeEnum::FILE_TEXT);
+            $file->setAllowedExtension(FileTypeEnum::FILE_PDF);
+            $file->setAllowedSize(FileSizeEnum::XX_MEDIUM_FILES);
+            $file->prepareUpload($_FILES['site_logo']);
+            $site_logo = $file->getUpload();
+
+            $site->setLegalInformation('PrivacyPolicy', $site_privacy);
+            $site->setLegalInformation('TermsOfService', $site_terms);
+
+            $site->setBrandingAssets('Logo', $site_logo);
+            $site->setBrandingAssets('Name', $payload->get('site_name'));
+            $site->setBrandingAssets('Slogan', $payload->get('site_slogan'));
+
+            $site->setDomain($payload->get('domain_name'));
+            $site->setPurpose($payload->get('purpose'));
+
+            $site->setSocial([
+                'Facebook' => $payload->get('site_facebook'),
+                'Instagram' => $payload->get('site_instagram'),
+                'Twitter' => $payload->get('site_twitter'),
+                'LinkedIn' => $payload->get('LinkedIn'),
+                'WhatsApp' => $payload->get('site_whatsapp'),
+            ]
+            );
+            if($site->save()) {
+                (new RedirectResponse('/user/register',StatusCodeEnum::PERMANENT_REDIRECT->value))->send();
+                exit;
+            }
 
         }
         $theme = Tempstore::load('theme_loaded');

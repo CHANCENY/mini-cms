@@ -137,4 +137,10 @@ class Route
     {
         return $this->loadedRoute;
     }
+
+    public function __construct()
+    {
+        stream_wrapper_register('public', 'Mini\Cms\Modules\Streams\MiniWrapper', STREAM_IS_URL);
+        stream_wrapper_register('private', 'Mini\Cms\Modules\Streams\MiniWrapper', STREAM_IS_URL);
+    }
 }

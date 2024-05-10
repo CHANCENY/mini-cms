@@ -77,10 +77,12 @@ class Response
             // Making sure that on txt/html we are sending all required html content.
             if($this->contentType === ContentTypeEnum::TEXT_HTML) {
 
+                $title = $route->getLoadedRoute()->getRouteTitle();
                 $in_response_data = "<!DOCTYPE html><html {{ATTRIBUTES}}>
                                      <head>
                                        {{META_TAGS}}
                                        {{HEAD_ASSETS}}
+                                       <title>$title</title>
                                      </head>
                                      <body class='body-content full-content-$route_id'>
                                        <header class='header-content'>{{NAVIGATION}}</header>

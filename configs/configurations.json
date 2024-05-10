@@ -19,5 +19,44 @@
         "db_password": "",
         "db_name": "mini_db",
         "db_type": "mysql"
+    },
+    "site_information": {
+        "DomainName": "http:\/\/localhost",
+        "Purpose": "Mini CMS",
+        "TargetAudience": {
+            "Demographics": "",
+            "Interests": ""
+        },
+        "BrandingAssets": {
+            "Logo": {
+                "fid": "6"
+            },
+            "Slogan": "mini slogan",
+            "Name": "MINI"
+        },
+        "LegalInformation": {
+            "PrivacyPolicy": {
+                "fid": "4"
+            },
+            "TermsOfService": {
+                "fid": "5"
+            }
+        },
+        "ContactInformation": {
+            "Email": "chan@gmail.com",
+            "Smtp": {
+                "smtp_server": "hostigner",
+                "smtp_port": 465,
+                "smtp_username": null,
+                "smtp_password": ""
+            }
+        },
+        "SocialMediaIntegration": {
+            "Facebook": "facebook.com",
+            "Instagram": "instagram.com",
+            "Twitter": "x.com",
+            "LinkedIn": "linkeldn.com",
+            "WhatsApp": null
+        }
     }
 }

@@ -1,3 +1,4 @@
 {
-  "config.factory": "Mini\\Cms\\Configurations\\ConfigFactory"
+  "config.factory": "Mini\\Cms\\Configurations\\ConfigFactory",
+  "messenger": "Mini\\Cms\\Modules\\Messenger\\Messenger"
 }

@@ -38,7 +38,7 @@
                         <input title="site privacy legal document" id="site_privacy" type="file" name="site_privacy" class="form-control">
                     </div>
                     <div class="form-group col">
-                        <label for="site_terms">Site Slogan (pdf,text file):</label>
+                        <label for="site_terms">Site Terms (pdf,text file):</label>
                         <input title="site terms of usage" id="site_terms" type="file" name="site_terms" class="form-control">
                     </div>
                 </div>
