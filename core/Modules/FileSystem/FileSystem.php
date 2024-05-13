@@ -186,6 +186,19 @@ class FileSystem implements ConnectorInterface
         // Confirm we have required table
         $this->confirmStorage();
 
+        //check if empty files
+        if(empty($files)) {
+            return;
+        }
+
+        $today_folder = (new \DateTime('now'))->format('d-F-Y');
+        if(!is_dir($this->private_dir. $today_folder)) {
+            mkdir($this->private_dir. $today_folder);
+        }
+        if(!is_dir($this->public_dir. $today_folder)) {
+            mkdir($this->public_dir. $today_folder);
+        }
+
         // Checking if we are working with links.
         $assoc_creation = [];
         if(!$upload_from_form) {
@@ -303,9 +316,11 @@ class FileSystem implements ConnectorInterface
     {
         $styles = (new FileImageStyles())->getStyles();
         $extend = null;
+        $today_folder = (new \DateTime('now'))->format('d-F-Y');
+
         $fullPath = preg_replace('/[^A-Za-z0-9]/', '_', $filename) . '.' . $extension;
         up:
-        $writable_file = trim($this->save_as) .$extend. $fullPath;
+        $writable_file  =  trim($this->save_as).$today_folder .'/' .$extend. $fullPath;
         // Make sure we are not overriding file.
         if(file_exists($writable_file)) {
           $extend = time();
@@ -314,15 +329,22 @@ class FileSystem implements ConnectorInterface
         if(file_put_contents($writable_file, file_get_contents($path))) {
 
             // Let's populate images of different styles.
-            array_filter($this->allowed_extensions,function ($extension_enum) use ($extension, $styles, $fullPath, $writable_file,$extend) {
+            array_filter($this->allowed_extensions,function ($extension_enum) use ($extension, $styles, $fullPath, $writable_file,$extend, $today_folder) {
                 $list = explode('/', $extension_enum->value);
                 if($extension_enum instanceof FileTypeEnum && strtolower(end($list)) === strtolower($extension)) {
                     $directory =  trim($this->save_as);
                     foreach ($styles as $style=>$value) {
                         $style_dir = $directory .trim(preg_replace('/[^A-Za-z0-9]/', '_', $style).'/') . '/';
+                       
                         if(!is_dir($style_dir)) {
                             mkdir(trim($style_dir,'/'));
                         }
+
+                        $style_dir = $style_dir . '/' . $today_folder.'/';
+                        if(!is_dir($style_dir)) {
+                            mkdir(trim($style_dir,'/'));
+                        }
+
                         $new_image = null;
                         if(end($list) === 'png') {
                             $new_image = $this->resizeImagePng($writable_file,$value['width'],$value['height'],$style_dir.$extend.$fullPath);
@@ -450,7 +472,7 @@ class FileSystem implements ConnectorInterface
                     $query = "INSERT INTO file_managed ($keys) VALUES($values)";
                     $statement = $this->connector->getConnection()->prepare($query);
                     $statement->execute();
-                    $this->upload['fid'] = $this->connector->getConnection()->lastInsertId();
+                    $this->upload[]['fid'] = $this->connector->getConnection()->lastInsertId();
                 }
             }
         }

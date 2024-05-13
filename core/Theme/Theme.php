@@ -225,10 +225,16 @@ class Theme
 
         $inputs = $dom->getElementsByTagName('input');
 
+        $file_input_exist = false;
+
         foreach ($inputs as $index => $input) {
             // Get input type and name
             $type = strtolower($input->getAttribute('type'));
             $name = $input->getAttribute('name');
+
+            if($type === 'file') {
+                $file_input_exist = true;
+            }
 
             // Generate unique ID for input element
             $inputId = $input->hasAttribute('id') ? $input->getAttribute('id') : 'input-' . $index;
@@ -249,7 +255,17 @@ class Theme
             $input->setAttribute('aria-labelledby', trim($inputId));
         }
         // Return the modified HTML content
-        return $dom->saveHTML();
+
+        $file_script = null;
+        if($file_input_exist) {
+            $file_script = "<script type='text/javascript'>".file_get_contents('../core/default/themes/mini_cms/assets/js/file_manager.js') . "</script>";
+        }
+
+        $dom_content = $dom->saveHTML();
+
+        // Add default assets.
+        $dom_content = str_replace('{{DEFAULTS_ASSETS}}', $file_script, $dom_content);
+        return $dom_content;
     }
 
 }

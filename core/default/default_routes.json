@@ -83,5 +83,22 @@
         "description": "\"Registration of user\"",
         "url": "\/user\/register",
         "handler": "Mini\\Cms\\default\\Controllers\\UserRegistration"
+    },
+    {
+        "id": "145772de-0349-4d59-a452-2bb657ca7a70",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "*"
+            ]
+        },
+        "name": "FilesUploader",
+        "url": "\/files\/assets\/uploader",
+        "description": "File uploader",
+        "handler": "Mini\\Cms\\default\\Controllers\\FilesUploader"
     }
 ]

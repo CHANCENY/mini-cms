@@ -89,6 +89,7 @@ class Response
                                        <section class='main-content'>{{CONTENT_BODY}}</section> 
                                        <footer class='footer-content'>{{FOOTER}}</footer>
                                        {{APPEND_ASSETS}}
+                                       {{DEFAULTS_ASSETS}}
                                      </body>
                                      </html>";
 

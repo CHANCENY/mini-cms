@@ -1,4 +1,17 @@
 {
+    "file_auto_uploader": {
+      "is_active": true,
+      "file_type": [
+          "image/png",
+          "image/gif",
+          "image/jpeg",
+          "image/svg",
+          "image/jpg",
+          "application/pdf"
+      ],
+      "file_size": "20011000",
+      "is_public": true
+    },
     "maintain_mode": {
         "is_active": true
     },
