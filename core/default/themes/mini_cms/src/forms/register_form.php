@@ -1,5 +1,5 @@
 <div class="container mt-lg-5">
-    <div class="p-5 col-md-10">
+    <div class="bordered rounded bg-light col-md-10 p-5">
         <form class="form" enctype="multipart/form-data" method="post">
             <div class="p-2 m-2 bordered rounded">
                 <div class="row">
@@ -49,8 +49,8 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col mt-lg-5 text-center">
-                        <input type="submit" name="user" value="Submit" class="btn btn-primary">
+                    <div class="col mt-lg-5">
+                        <input type="submit" name="user" value="Submit" class="btn btn-secondary">
                     </div>
                 </div>
             </div>

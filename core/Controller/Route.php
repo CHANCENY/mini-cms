@@ -1,11 +1,11 @@
 <?php
+
 namespace Mini\Cms\Controller;
 
 use Mini\Cms\Modules\MetaTag\MetaTag;
 use Mini\Cms\Modules\Storage\Tempstore;
 use Mini\Cms\Routing\RouteBuilder;
 use Mini\Cms\Routing\URIMatcher;
-use Mini\Cms\Services\Services;
 use Mini\Cms\Theme\Footer;
 use Mini\Cms\Theme\Menus;
 use Mini\Cms\Theme\Theme;
@@ -109,7 +109,7 @@ class Route
                 if($this->controllerHandler->isAccessAllowed()) {
 
                     // Will are calling writeBody method on controller class.
-                    // so that we can have response.
+                    // so that we can have a response.
                     $this->controllerHandler->writeBody();
                     // TODO: calling hooks.
                     // TODO: Writing response.

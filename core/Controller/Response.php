@@ -7,9 +7,9 @@ use Mini\Cms\Theme\Theme;
 
 class Response
 {
-    private StatusCodeEnum $statusCode;
+    private StatusCode $statusCode;
 
-    private ContentTypeEnum $contentType;
+    private ContentType $contentType;
     private string $redirectUrl;
 
     private mixed $body;
@@ -19,21 +19,21 @@ class Response
 
     public function __construct()
     {
-        $this->contentType = ContentTypeEnum::TEXT_HTML;
+        $this->contentType = ContentType::TEXT_HTML;
         $this->responseType = 'normal';
         $this->generator = "Mini CMS";
-        $this->statusCode = StatusCodeEnum::OK;
+        $this->statusCode = StatusCode::OK;
         $this->cacheHeader = 'max-age=' . (60 * 60 * 24 * 365);
         $this->body = '';
     }
 
-    public function setStatusCode(StatusCodeEnum $status_code): Response
+    public function setStatusCode(StatusCode $status_code): Response
     {
         $this->statusCode = $status_code;
         return $this;
     }
 
-    public function setContentType(ContentTypeEnum $content_type): Response
+    public function setContentType(ContentType $content_type): Response
     {
         $this->contentType = $content_type;
         return $this;
@@ -75,7 +75,7 @@ class Response
             }
 
             // Making sure that on txt/html we are sending all required html content.
-            if($this->contentType === ContentTypeEnum::TEXT_HTML) {
+            if($this->contentType === ContentType::TEXT_HTML) {
 
                 $title = $route->getLoadedRoute()->getRouteTitle();
                 $in_response_data = "<!DOCTYPE html><html {{ATTRIBUTES}}>
@@ -127,7 +127,7 @@ class Response
             else {
                 // Lets response request with other content type.
                 // Checking if we are responding with json data.
-                if($this->contentType === ContentTypeEnum::APPLICATION_JSON) {
+                if($this->contentType === ContentType::APPLICATION_JSON) {
                     if(gettype($this->body) === 'array') {
                         $this->body = json_encode($this->body);
                     }

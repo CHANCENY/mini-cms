@@ -10,10 +10,11 @@
       "title": "Dashboard"
     },
     "options": {
-      "roles": ["administrator"]
+      "roles": ["administrator"],
+      "permission": ["administrator_access"]
     }
   },
-  "menu_content_type": {
+  "menu_installation": {
     "label": "Installation",
     "link": "/install",
     "icon": "installation",
@@ -26,7 +27,76 @@
       "title": "Installation of new MiniCMS"
     },
     "options": {
-      "roles": ["*"]
+      "roles": ["*"],
+      "permission": ["anonymous_access"]
+    }
+  },
+  "menu_login": {
+    "label": "Login",
+    "link": "/user/login",
+    "icon": "login",
+    "children": [
+
+    ],
+    "attributes": {
+      "class": "nav-item",
+      "id": "nav-item-login",
+      "title": "Login User to MiniCMS"
+    },
+    "options": {
+      "roles": ["*"],
+      "permission": ["anonymous_access"]
+    }
+  },
+  "menu_register": {
+    "label": "Register",
+    "link": "/user/register",
+    "icon": "register",
+    "children": [
+
+    ],
+    "attributes": {
+      "class": "nav-item",
+      "id": "nav-item-register",
+      "title": "Register User to MiniCMS"
+    },
+    "options": {
+      "roles": ["*"],
+      "permission": ["anonymous_access", "authenticated_access"]
+    }
+  },
+  "menu_logout": {
+    "label": "Logout",
+    "link": "/user/logout",
+    "icon": "logout",
+    "children": [
+
+    ],
+    "attributes": {
+      "class": "nav-item",
+      "id": "nav-item-logout",
+      "title": "Logout User to MiniCMS"
+    },
+    "options": {
+      "roles": ["*"],
+      "permission": ["authenticated_access"]
+    }
+  },
+  "menu_structure_content_type": {
+    "label": "Content Types",
+    "link": "/structure/content-type",
+    "icon": "content-type",
+    "children": [
+
+    ],
+    "attributes": {
+      "class": "nav-item",
+      "id": "nav-item-content",
+      "title": "Content listing and creation page on MiniCMS"
+    },
+    "options": {
+      "roles": ["administrator"],
+      "permission": ["administrator_access"]
     }
   }
 }

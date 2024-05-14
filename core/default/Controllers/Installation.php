@@ -4,11 +4,11 @@ namespace Mini\Cms\default\Controllers;
 
 use Mini\Cms\Configurations\ConfigFactory;
 use Mini\Cms\Connections\Database\Database;
-use Mini\Cms\Controller\ContentTypeEnum;
+use Mini\Cms\Controller\ContentType;
 use Mini\Cms\Controller\ControllerInterface;
 use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Response;
-use Mini\Cms\Controller\StatusCodeEnum;
+use Mini\Cms\Controller\StatusCode;
 use Mini\Cms\Modules\Storage\Tempstore;
 use Mini\Cms\Services\Services;
 use Mini\Cms\Theme\Theme;
@@ -22,7 +22,7 @@ class Installation implements ControllerInterface
 
     public function __construct(private Request &$request, private Response &$response)
     {
-        $this->response->setContentType(ContentTypeEnum::TEXT_HTML);
+        $this->response->setContentType(ContentType::TEXT_HTML);
         $this->options = [
             'current_route' => Tempstore::load('current_route'),
         ];
@@ -54,21 +54,21 @@ class Installation implements ControllerInterface
                 ];
                 $config->set('database', $database);
                 if($config->save(true)) {
-                    $this->response->setStatusCode(StatusCodeEnum::PERMANENT_REDIRECT);
-                    (new RedirectResponse('/site-configuration',StatusCodeEnum::PERMANENT_REDIRECT->value))->send();
+                    $this->response->setStatusCode(StatusCode::PERMANENT_REDIRECT);
+                    (new RedirectResponse('/site-configuration',StatusCode::PERMANENT_REDIRECT->value))->send();
                     exit;
                 }
             }
 
         }
-        $this->response->setStatusCode(StatusCodeEnum::NOT_FOUND);
+        $this->response->setStatusCode(StatusCode::NOT_FOUND);
         $theme = Tempstore::load('theme_loaded');
 
         if (!empty($theme) && $theme instanceof Theme) {
             $view = $theme->view('install_form.php',$this->options);
 
             if($view) {
-                $this->response->setStatusCode(StatusCodeEnum::OK);
+                $this->response->setStatusCode(StatusCode::OK);
                 $this->response->write($view);
             }
         }

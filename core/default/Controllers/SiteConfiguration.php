@@ -3,11 +3,11 @@
 namespace Mini\Cms\default\Controllers;
 
 use Mini\Cms\Connections\Database\Database;
-use Mini\Cms\Controller\ContentTypeEnum;
+use Mini\Cms\Controller\ContentType;
 use Mini\Cms\Controller\ControllerInterface;
 use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Response;
-use Mini\Cms\Controller\StatusCodeEnum;
+use Mini\Cms\Controller\StatusCode;
 use Mini\Cms\Modules\FileSystem\FileSizeEnum;
 use Mini\Cms\Modules\FileSystem\FileSystem;
 use Mini\Cms\Modules\FileSystem\FileTypeEnum;
@@ -91,15 +91,15 @@ class SiteConfiguration implements ControllerInterface
             ]
             );
             if($site->save()) {
-                (new RedirectResponse('/user/register',StatusCodeEnum::PERMANENT_REDIRECT->value))->send();
+                (new RedirectResponse('/user/register',StatusCode::PERMANENT_REDIRECT->value))->send();
                 exit;
             }
 
         }
         $theme = Tempstore::load('theme_loaded');
         if($theme instanceof Theme) {
-            $this->response->setStatusCode(StatusCodeEnum::OK);
-            $this->response->setContentType(ContentTypeEnum::TEXT_HTML);
+            $this->response->setStatusCode(StatusCode::OK);
+            $this->response->setContentType(ContentType::TEXT_HTML);
             $this->response->write($theme->view('site_configurations.php'));
         }
     }

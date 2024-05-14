@@ -2,6 +2,12 @@
 
 namespace Mini\Cms\Modules\MetaTag;
 
+use Mini\Cms\Controller\Route;
+use Mini\Cms\Modules\FileSystem\File;
+use Mini\Cms\Modules\Site\Site;
+use Mini\Cms\Modules\Storage\Tempstore;
+use Mini\Cms\Services\Services;
+
 class MetaTag
 {
     private array $metaTags;
@@ -9,35 +15,51 @@ class MetaTag
     public function __construct()
     {
         //TODO: bring in site config
-        $config_site = [];
-        $this->metaTags = [
-            MetagEnum::Title->name => [
-                'value' => $config_site['site_title'] ?? 'Mini CMS',
-                'tag' => MetagEnum::Title
-            ],
-            MetagEnum::Description->name => [
-                'value' => $config_site['site_description'] ?? 'This is mini cms site description',
-                'tag' => MetagEnum::Description
-            ],
-            MetagEnum::Author->name => [
-                'value' => $config_site['site_author'] ?? 'Chance',
-                'tag' => MetagEnum::Author
-            ],
-            MetagEnum::Icon->name => [
-                'value' => $config_site['site_icon'] ?? 'http://localhost/favicon.ico',
-                'type' => 'ico',
-                'tag' => MetagEnum::Icon
-            ],
-            MetagEnum::Canonical->name => [
-                'value' => $config_site['site_canonical'] ?? 'http://localhost/',
-                'tag' => MetagEnum::Canonical
-            ]
-        ];
+        $config_site = Services::create('config.site');
+        if($config_site instanceof Site) {
+            $file = File::load($config_site->getBrandingAssets('Logo')['fid'] ?? 0);
+            $logo = null;
+            if($file instanceof File) {
+                $logo = $file->resolveStyleUri();
+            }
+            $route = Tempstore::load('current_route');
+            $url = null;
+            if($route instanceof Route) {
+                $url = $route->getCurrentUri();
+
+            }
+            $this->metaTags = [
+                MetagEnum::Title->name => [
+                    'value' => $config_site->getBrandingAssets('name'),
+                    'tag' => MetagEnum::Title
+                ],
+                MetagEnum::Description->name => [
+                    'value' => $config_site->getBrandingAssets('Slogan'),
+                    'tag' => MetagEnum::Description
+                ],
+                MetagEnum::Author->name => [
+                    'value' => $config_site->getBrandingAssets('Name'),
+                    'tag' => MetagEnum::Author
+                ],
+                MetagEnum::Icon->name => [
+                    'value' => $logo,
+                    'type' => 'ico',
+                    'tag' => MetagEnum::Icon
+                ],
+                MetagEnum::Canonical->name => [
+                    'value' => $url,
+                    'tag' => MetagEnum::Canonical
+                ]
+            ];
+        }
     }
 
     public function set(MetagEnum $meta, $value): void
     {
-        $this->metaTags[$meta->name] = $value;
+        $this->metaTags[$meta->name] = [
+            'value' => $value,
+            'tag' => MetagEnum::Title
+        ];
     }
 
     public function remove(MetagEnum $meta): bool

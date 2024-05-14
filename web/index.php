@@ -1,13 +1,13 @@
 <?php
-@session_start();
+require_once '../vendor/autoload.php';
+
+session_start();
 
 /**
  * Loading module and libraries.
  */
 
 use Mini\Cms\Controller\Route;
-
-require_once '../vendor/autoload.php';
 
 /**
  * App start here.
@@ -22,8 +22,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 $error = new \Mini\Cms\Modules\ErrorSystem();
 if($error->isOn()) {
     try {
-
-        // Loading app in save mode where error are getting caught.
+        // Loading app in save mode where error is getting caught.
         Route::app($method, $parse_url);
     }
     catch (Throwable $e) {
@@ -44,4 +43,3 @@ else {
     Route::app($method, $parse_url);
 }
 exit;
-

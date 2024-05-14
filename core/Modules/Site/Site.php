@@ -93,7 +93,7 @@ class Site
     }
 
     // Getter method for ContactInformation
-    public function getContactInformation(string $type): ?string
+    public function getContactInformation(string $type): mixed
     {
         $type = ucfirst($type); // Capitalize the type name
         return $this->siteInformation['ContactInformation'][$type] ?? null;
@@ -107,7 +107,7 @@ class Site
     }
 
     // Getter method for BrandingAssets
-    public function getBrandingAssets(string $asset): ?string
+    public function getBrandingAssets(string $asset): mixed
     {
         $asset = ucfirst($asset); // Capitalize the asset name
         return $this->siteInformation['BrandingAssets'][$asset] ?? null;

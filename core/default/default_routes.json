@@ -100,5 +100,38 @@
         "url": "\/files\/assets\/uploader",
         "description": "File uploader",
         "handler": "Mini\\Cms\\default\\Controllers\\FilesUploader"
+    },
+    {
+        "id": "b61763e1-9193-45a4-8a7e-61c7235b50ad",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "*"
+            ]
+        },
+        "name": "Login",
+        "description": "Login user to user",
+        "url": "\/user\/login",
+        "handler": "Mini\\Cms\\default\\Controllers\\Login"
+    },
+    {
+        "id": "70ddc081-3a9c-4d7a-b047-810165a64c32",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "*"
+            ]
+        },
+        "name": "LogOut",
+        "description": "Logut user from mini",
+        "url": "\/user\/logout",
+        "handler": "Mini\\Cms\\default\\Controllers\\LogOut"
     }
 ]

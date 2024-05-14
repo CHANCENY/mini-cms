@@ -33,7 +33,7 @@ if(fileInputTags){
                                 span.title = 'remove';
                                 span.ariaLabel = "remove";
                                 span.textContent = 'x';
-                                span.data = item.id;
+                                span.setAttribute('data',item.id);
                                 span.addEventListener('click',(e)=>{
                                     const list = field.value.split(',');
                                     const thisId = span.getAttribute('data');

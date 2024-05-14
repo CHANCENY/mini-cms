@@ -3,7 +3,10 @@
 namespace Mini\Cms\Theme;
 
 
+use Mini\Cms\Configurations\ConfigFactory;
+use Mini\Cms\Modules\CurrentUser\CurrentUser;
 use Mini\Cms\Routing\URIMatcher;
+use Mini\Cms\Services\Services;
 
 class Menus
 {
@@ -31,6 +34,125 @@ class Menus
         }
         if(file_exists($this->custom_menu)) {
             $this->custom_menus = json_decode(file_get_contents($this->custom_menu) ?? '{}', true) ?? [];
+        }
+
+        $config = Services::create('config.factory');
+        $currentUser = Services::create('current.user');
+
+        // Remove unauthorized menus
+        foreach ($this->default_menus as $k=>$menu) {
+
+           if(!empty($menu['options']['roles'])) {
+
+               if($currentUser instanceof CurrentUser) {
+
+                   $roles = $menu['options']['roles'];
+                   if(!in_array('*', $roles)) {
+
+                       if(!array_intersect($roles,$currentUser->getRoles()))
+                       {
+                           unset($this->default_menus[$k]);
+                       }
+                   }
+               }
+
+               if($config instanceof ConfigFactory) {
+                   $database = $config->get('database');
+                   if(!empty($database) && $k === 'menu_installation') {
+                       unset($this->default_menus[$k]);
+                   }
+               }
+           }
+
+            if(!empty($menu['options']['permission'])) {
+                $permissions = $menu['options']['permission'];
+                if($currentUser instanceof CurrentUser) {
+
+                    $flag = false;
+                    if(in_array('administrator_access', $permissions)) {
+                        if(!$currentUser->isAdmin()) {
+                            $flag = true;
+                        }
+                    }
+
+                    if(in_array('authenticated_access', $permissions)) {
+                        if(!$currentUser->isAuthenticated()) {
+                            $flag = true;
+                        }
+                    }
+
+                    if($flag) {
+                        if(!in_array('anonymous_access', $permissions)) {
+                            unset($this->default_menus[$k]);
+                        }
+                    }
+
+                    if(count($permissions)  === 1 && $permissions[0] === 'anonymous_access') {
+
+                        if(!empty($currentUser->id())) {
+                            unset($this->default_menus[$k]);
+                        }
+                    }
+                }
+            }
+
+        }
+        foreach ($this->custom_menus as $k=>$menu) {
+
+            if(!empty($menu['options']['roles'])) {
+
+                if($currentUser instanceof CurrentUser) {
+
+                    $roles = $menu['options']['roles'];
+                    if(!in_array('*', $roles)) {
+
+                        if(!array_intersect($roles,$currentUser->getRoles()))
+                        {
+                            unset($this->default_menus[$k]);
+                        }
+                    }
+                }
+
+                if($config instanceof ConfigFactory) {
+                    $database = $config->get('database');
+                    if(!empty($database) && $k === 'menu_installation') {
+                        unset($this->default_menus[$k]);
+                    }
+                }
+            }
+
+            if(!empty($menu['options']['permission'])) {
+                $permissions = $menu['options']['permission'];
+                if($currentUser instanceof CurrentUser) {
+
+                    $flag = false;
+                    if(in_array('administrator_access', $permissions)) {
+                        if(!$currentUser->isAdmin()) {
+                            $flag = true;
+                        }
+                    }
+
+                    if(in_array('authenticated_access', $permissions)) {
+                        if(!$currentUser->isAuthenticated()) {
+                            $flag = true;
+                        }
+                    }
+
+                    if($flag) {
+                        if(!in_array('anonymous_access', $permissions)) {
+                            unset($this->default_menus[$k]);
+                        }
+                    }
+
+                    if(count($permissions)  === 1 && $permissions[0] === 'anonymous_access') {
+
+                        if(!empty($currentUser->id())) {
+                            unset($this->default_menus[$k]);
+                        }
+                    }
+                }
+            }
+
         }
 
         // TODO: check if current user is admin

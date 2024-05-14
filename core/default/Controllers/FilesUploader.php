@@ -4,7 +4,7 @@ namespace Mini\Cms\default\Controllers;
 
 use Mini\Cms\Configurations\ConfigFactory;
 use Mini\Cms\Connections\Database\Database;
-use Mini\Cms\Controller\ContentTypeEnum;
+use Mini\Cms\Controller\ContentType;
 use Mini\Cms\Controller\ControllerInterface;
 use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Response;
@@ -32,7 +32,7 @@ class FilesUploader implements ControllerInterface
     public function writeBody(): void
     {
         // TODO: Implement writeBody() method.
-        $this->response->setContentType(ContentTypeEnum::APPLICATION_JSON);
+        $this->response->setContentType(ContentType::APPLICATION_JSON);
 
         // Lets uploaded files
         $config = new ConfigFactory();

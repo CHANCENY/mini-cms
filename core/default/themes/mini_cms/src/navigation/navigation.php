@@ -35,7 +35,6 @@
     }
 
     .admin-nav .nav-item {
-        flex-direction: row-reverse;
         font-size: 0.8999rem;
         line-height: 1rem;
         align-items: center;

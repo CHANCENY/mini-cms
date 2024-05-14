@@ -2,11 +2,11 @@
 
 namespace Mini\Cms\default\Controllers;
 
-use Mini\Cms\Controller\ContentTypeEnum;
+use Mini\Cms\Controller\ContentType;
 use Mini\Cms\Controller\ControllerInterface;
 use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Response;
-use Mini\Cms\Controller\StatusCodeEnum;
+use Mini\Cms\Controller\StatusCode;
 
 class ContactUs implements ControllerInterface
 {
@@ -29,8 +29,8 @@ class ContactUs implements ControllerInterface
     public function writeBody(): void
     {
 
-        $this->response->setStatusCode(StatusCodeEnum::OK)
-            ->setContentType(ContentTypeEnum::TEXT_HTML)
+        $this->response->setStatusCode(StatusCode::OK)
+            ->setContentType(ContentType::TEXT_HTML)
             ->write("<p>Hello am implement new cms</p>");
     }
 }

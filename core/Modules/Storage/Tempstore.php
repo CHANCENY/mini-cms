@@ -1,5 +1,6 @@
 <?php
 
+
 namespace Mini\Cms\Modules\Storage;
 
 class Tempstore
@@ -9,14 +10,14 @@ class Tempstore
     public function __construct()
     {
         $this->session = $_SESSION['temp_store'] ?? [];
-
-        foreach ($this->session as $key=>$value){
-            $expire_date = $value['expire_time'] ?? 0;
-            if(time() > $expire_date) {
-                unset($this->session[$key]);
-                unset($_SESSION['temp_store'][$key]);
-            }
-        }
+//        foreach ($this->session as $key=>$value){
+//            $expire_date = $value['expire_time'] ?? 0;
+//
+//            if($expire_date < time()) {
+//                unset($this->session[$key]);
+//                unset($_SESSION['temp_store'][$key]);
+//            }
+//        }
     }
 
     public function set(string $key, mixed $data, int $time = 0): bool
@@ -46,7 +47,7 @@ class Tempstore
 
     public static function save(string $key, mixed $data, int $how_long = 0): bool
     {
-        return (new Tempstore())->set($key,$data, empty($how_long) ? time() * 60 : $how_long);
+        return (new Tempstore())->set($key,$data, empty($how_long) ? time() * 60 * 24 : $how_long);
     }
 
     public static function load(string $key): mixed

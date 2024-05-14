@@ -25,46 +25,29 @@ class Services implements ServiceInterface
         if(isset($this->servicePath) && file_exists($this->servicePath)) {
             $this->services = json_decode(file_get_contents($this->servicePath), true);
         }
-        $this->bootServices();
-    }
-
-    /**
-     * Boot up services once.
-     * @return void
-     * @throws ServiceProvideClassNotFound
-     */
-    private function bootServices(): void
-    {
-
-        foreach ($this->services as $service_name=>$service) {
-            if(class_exists($service)) {
-                $service = new $service();
-                $this->services[$service_name] = $service;
-            }
-            else {
-                throw new ServiceProvideClassNotFound($service_name .' services has invalid class');
-            }
-        }
     }
 
     /**
      * Creating service.
      * @param string $service_name
      * @return mixed
+     * @throws \Exception
      */
-    public static function create(string $service_name)
+    public static function create(string $service_name): mixed
     {
         $service = new Services();
         return $service->get($service_name);
     }
 
     /**
-     * Getting service object.
+     * Getting a service object.
      * @param string $service_name
      * @return mixed|null
+     * @throws \Exception
      */
-    private function get(string $service_name)
+    private function get(string $service_name): mixed
     {
-        return is_object($this->services[$service_name]) ? $this->services[$service_name] : null;
+        $found = $this->services[$service_name] ?? throw new \Exception("Service '$service_name' not found");
+        return new $found();
     }
 }
