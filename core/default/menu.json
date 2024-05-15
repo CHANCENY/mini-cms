@@ -98,5 +98,22 @@
       "roles": ["administrator"],
       "permission": ["administrator_access"]
     }
+  },
+  "menu_password": {
+    "label": "Forgot Password",
+    "link": "/user/password",
+    "icon": "password",
+    "children": [
+
+    ],
+    "attributes": {
+      "class": "nav-item",
+      "id": "nav-item-password",
+      "title": "Password changing"
+    },
+    "options": {
+      "roles": ["*"],
+      "permission": ["anonymous_access", "authenticated_access", "administrator_access"]
+    }
   }
 }

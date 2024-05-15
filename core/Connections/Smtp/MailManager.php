@@ -4,6 +4,8 @@ namespace Mini\Cms\Connections\Smtp;
 
 use Mini\Cms\Modules\Site\Site;
 use Mini\Cms\Services\Services;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 
 class MailManager
 {
@@ -17,7 +19,9 @@ class MailManager
 
     private string $host;
 
-    public function __construct()
+    private string $site_name;
+
+    public function __construct(private Receiver $reciever, private Attachments|null $attachments=null, private Bcc|null $bcc = null, private CC|null $cc = null)
     {
         $site = Services::create('config.site');
         if($site instanceof Site) {
@@ -29,48 +33,51 @@ class MailManager
                 $this->port = (int) $smtp['smtp_port'] ?? 465;
                 $this->username = $smtp['smtp_username'] ?? '';
                 $this->email_address = $site->getContactInformation('Email');
+                $this->site_name = $site->getBrandingAssets('Name');
             }
 
         }
     }
 
-    public function send()
+    public function send(array $params): bool
     {
         //Create an instance; passing `true` enables exceptions
         $mail = new PHPMailer(true);
         try {
             //Server settings
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-            $mail->isSMTP();                                            //Send using SMTP
-            $mail->Host       = 'smtp.example.com';                     //Set the SMTP server to send through
-            $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-            $mail->Username   = 'user@example.com';                     //SMTP username
-            $mail->Password   = 'secret';                               //SMTP password
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-            $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+            $mail->SMTPDebug = SMTP::DEBUG_OFF;
+            $mail->isSMTP();
+            $mail->Host       = $this->host;
+            $mail->SMTPAuth   = true;
+            $mail->Username   = $this->username;
+            $mail->Password   = $this->password;
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            $mail->Port = $this->port ?? 465;
 
             //Recipients
-            $mail->setFrom('from@example.com', 'Mailer');
-            $mail->addAddress('joe@example.net', 'Joe User');     //Add a recipient
-            $mail->addAddress('ellen@example.com');               //Name is optional
-            $mail->addReplyTo('info@example.com', 'Information');
-            $mail->addCC('cc@example.com');
-            $mail->addBCC('bcc@example.com');
+            $mail->setFrom($this->email_address, $this->site_name);
+            $this->reciever->addReceivers($mail);
+
+           // $mail->addReplyTo('info@example.com', 'Information');
+            $this->cc?->addBccMail($mail);
+            $this->bcc?->addBccMail($mail);
+
 
             //Attachments
-            $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
-            $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
-
+            $this->attachments?->attachFiles($mail);
             //Content
-            $mail->isHTML(true);                                  //Set email format to HTML
-            $mail->Subject = 'Here is the subject';
-            $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
-            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-            $mail->send();
-            echo 'Message has been sent';
-        } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            $mail->isHTML(true);
+            $mail->Subject = $params['subject'] ?? '';
+            $mail->Body    = $params['body'] ?? '';
+            $mail->AltBody = $params['alt_body'] ?? '';
+            return $mail->send();
+        } catch (\Exception $e) {
+           return false;
         }
+    }
+
+    public static function mail(Receiver $reciever, Attachments|null $attachments=null, Bcc|null $bcc = null, CC|null $cc = null): MailManager
+    {
+        return new self($reciever, $attachments, $bcc, $cc);
     }
 }

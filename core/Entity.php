@@ -3,6 +3,7 @@
 namespace Mini\Cms;
 
 
+use Mini\Cms\Connections\Database\Database;
 use Mini\Cms\StorageManager\Connector;
 use Mini\Cms\StorageManager\FieldRequirementNotFulFilledException;
 
@@ -140,5 +141,32 @@ class Entity implements ConnectorInterface
     public function entityId()
     {
         return $this->entity_definitions['entity_type_id'] ?? null;
+    }
+
+    public static function entities(): array
+    {
+        $query = Database::database()->prepare("SELECT entity_type_name FROM entity_types");
+        $query->execute();
+        $entity_definitions = $query->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach ($entity_definitions as $key=>$entity_definition) {
+            $entity_definitions[$key] = self::load($entity_definition['entity_type_name'], new Connector(external_connection: Database::database()));
+        }
+        return $entity_definitions;
+    }
+
+    public function getEntityTypeName(): string
+    {
+        return $this->entity_definitions['entity_type_name'] ?? '';
+    }
+
+    public function getEntityLabel(): string
+    {
+        return $this->entity_definitions['entity_label'] ?? '';
+    }
+
+    public function getEntityTypeDescription(): string
+    {
+        return $this->entity_definitions['entity_type_description'] ?? '';
     }
 }

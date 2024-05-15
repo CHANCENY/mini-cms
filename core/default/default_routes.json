@@ -133,5 +133,105 @@
         "description": "Logut user from mini",
         "url": "\/user\/logout",
         "handler": "Mini\\Cms\\default\\Controllers\\LogOut"
+    },
+    {
+        "id": "b24ae4bf-a371-419b-9d7a-a22da61c9e96",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "*"
+            ]
+        },
+        "name": "UserVerification",
+        "description": "This is for verifying new user",
+        "url": "\/user\/verify\/{token}",
+        "handler": "Mini\\Cms\\default\\Controllers\\UserVerification"
+    },
+    {
+        "id": "ce4f51da-f0a9-4b4e-9793-d74cfef42a8e",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "*"
+            ]
+        },
+        "name": "Password",
+        "description": "This is changing password",
+        "url": "\/user\/password",
+        "handler": "Mini\\Cms\\default\\Controllers\\Password"
+    },
+    {
+        "id": "80185310-6a54-4753-8add-cd03a38c7dce",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "*"
+            ]
+        },
+        "name": "Password Change",
+        "description": "This is for changing password",
+        "url": "\/user\/reset-password\/{token}",
+        "handler": "Mini\\Cms\\default\\Controllers\\PasswordChange"
+    },
+    {
+        "id": "032eb437-c9b3-4ca8-9f38-47928dd22af6",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Content Types Structures",
+        "description": "This is content type page",
+        "url": "\/structure\/content-type",
+        "handler": "Mini\\Cms\\default\\Controllers\\ContentStructures"
+    },
+    {
+        "id": "61540f20-07ba-4749-9114-d56de7a84220",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Content Type Definition Creation",
+        "description": "this is for creating content type definitions",
+        "url": "\/structure\/content-type\/new",
+        "handler": "Mini\\Cms\\default\\Controllers\\ContentStructureCreation"
+    },
+    {
+        "id": "38fe45cb-86df-4ff6-8da0-d73e46f22396",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Content type definition viewing",
+        "description": "this is for viewing content type",
+        "url": "\/structure\/content-type\/view\/{content_type_name}",
+        "handler": "Mini\\Cms\\default\\Controllers\\ContentStructureView"
     }
 ]

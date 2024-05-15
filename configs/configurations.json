@@ -27,10 +27,10 @@
         }
     ],
     "database": {
-        "db_host": "localhost",
-        "db_user": "root",
-        "db_password": "",
-        "db_name": "mini_db",
+        "db_host": "database",
+        "db_user": "lamp",
+        "db_password": "lamp",
+        "db_name": "lamp",
         "db_type": "mysql"
     },
     "site_information": {
@@ -56,12 +56,12 @@
             }
         },
         "ContactInformation": {
-            "Email": "chan@gmail.com",
+            "Email": "ecommerce@streamstudios.online",
             "Smtp": {
-                "smtp_server": "hostigner",
+                "smtp_server": "smtp.hostinger.com",
                 "smtp_port": 465,
-                "smtp_username": null,
-                "smtp_password": ""
+                "smtp_username": "ecommerce@streamstudios.online",
+                "smtp_password": "Testing@1234."
             }
         },
         "SocialMediaIntegration": {

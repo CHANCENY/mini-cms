@@ -6,6 +6,7 @@ use Mini\Cms\Modules\MetaTag\MetaTag;
 use Mini\Cms\Modules\Storage\Tempstore;
 use Mini\Cms\Routing\RouteBuilder;
 use Mini\Cms\Routing\URIMatcher;
+use Mini\Cms\Services\Services;
 use Mini\Cms\Theme\Footer;
 use Mini\Cms\Theme\Menus;
 use Mini\Cms\Theme\Theme;
@@ -97,7 +98,7 @@ class Route
 
             // Current user here.
             // TODO: actual roles.
-            $currentUserRoles = ["*"];
+            $currentUserRoles = Services::create('current.user')->getRoles();
             if(!$this->loadedRoute->isUserAllowed($currentUserRoles)) {
                 throw new AccessDeniedRouteException("Route is not allowed to be access by user with ".implode(',', $currentUserRoles). 'roles RD: '.$this->loadedRoute->getRouteId());
             }

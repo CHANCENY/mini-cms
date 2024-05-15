@@ -3,16 +3,21 @@
 namespace Mini\Cms\default\Controllers;
 
 use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Connections\Smtp\MailManager;
+use Mini\Cms\Connections\Smtp\Receiver;
 use Mini\Cms\Controller\ContentType;
 use Mini\Cms\Controller\ControllerInterface;
 use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Response;
 use Mini\Cms\Controller\StatusCode;
 use Mini\Cms\Entities\User;
+use Mini\Cms\Modules\CurrentUser\Authenticator;
 use Mini\Cms\Modules\FileSystem\File;
 use Mini\Cms\Modules\FileSystem\FileSizeEnum;
 use Mini\Cms\Modules\FileSystem\FileSystem;
 use Mini\Cms\Modules\FileSystem\FileTypeEnum;
+use Mini\Cms\Modules\Messenger\Messenger;
+use Mini\Cms\Modules\Site\Site;
 use Mini\Cms\Modules\Storage\Tempstore;
 use Mini\Cms\Routing\RouteBuilder;
 use Mini\Cms\Services\Services;
@@ -58,8 +63,21 @@ class UserRegistration implements ControllerInterface
                 );
 
                 if($user) {
-                     //TODO: sending email of verification.
+                    $verify = new Authenticator();
+                    $site = new Site();
+                    $verification_url = $this->request->getSchemeAndHttpHost() . $verify->verificationToken($user);
+                   $mail = MailManager::mail(
+                        new Receiver([[
+                            'mail' => $payload->get('email'),
+                            'name' => $payload->get('firstname') . ' ' . $payload->get('lastname'),
+                        ]])
+                    );
 
+                   $mail->send([
+                       'subject' => 'Welcome to '. $site->getBrandingAssets('Name'),
+                       'body' => '<p>Welcome to '.$site->getBrandingAssets("Name").'. Your account has been created. you are requested to activate your account.</p>
+                                   <p><a href="' . $verification_url . '">Click here to activate your account</a></p>',
+                   ]);
                 }
             }
         }
@@ -70,15 +88,5 @@ class UserRegistration implements ControllerInterface
         $this->response->setContentType(ContentType::TEXT_HTML)
             ->setStatusCode(StatusCode::OK)
             ->write($content);
-//        dump(User::load(User::create([
-//            'name' => 'chance12',
-//            'email' => 'chance12@gmail.com',
-//            'password' => 'chance12',
-//            'role' => 'admin',
-//            'firstname' => 'Chance',
-//            'lastname' => 'Nyasulu',
-//            'active' => true,
-//            'image' => $file->getUpload()['fid'] ?? null
-//        ])));
     }
 }
