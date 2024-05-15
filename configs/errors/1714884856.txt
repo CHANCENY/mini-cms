@@ -1,9 +1,0 @@
-{
-    "message": "Cannot assign int to property Mini\\Cms\\Controller\\Response::$statusCode of type Mini\\Cms\\Controller\\StatusCodeEnum",
-    "line": 19,
-    "code": 0,
-    "file": "C:\\xampp\\htdocs\\Mini_cms\\core\\Controller\\Response.php",
-    "trace": "#0 C:\\xampp\\htdocs\\Mini_cms\\core\\Controller\\Route.php(47): Mini\\Cms\\Controller\\Response->__construct()\n#1 C:\\xampp\\htdocs\\Mini_cms\\core\\Controller\\Route.php(92): Mini\\Cms\\Controller\\Route->match('GET', '\/contact-us')\n#2 C:\\xampp\\htdocs\\Mini_cms\\web\\index.php(26): Mini\\Cms\\Controller\\Route::app('GET', '\/contact-us')\n#3 {main}",
-    "report_on": 1714884856,
-    "type": "critical"
-}

@@ -1,9 +1,0 @@
-{
-    "message": "Call to private method Symfony\\Component\\HttpFoundation\\Request::createRequestFromFactory() from scope Mini\\Cms\\Controller\\Request",
-    "line": 12,
-    "code": 0,
-    "file": "C:\\xampp\\htdocs\\Mini_cms\\core\\Controller\\Request.php",
-    "trace": "#0 C:\\xampp\\htdocs\\Mini_cms\\core\\Controller\\Route.php(86): Mini\\Cms\\Controller\\Request::createFromGlobals()\n#1 C:\\xampp\\htdocs\\Mini_cms\\core\\Controller\\Route.php(133): Mini\\Cms\\Controller\\Route->match('GET', '\/user\/register')\n#2 C:\\xampp\\htdocs\\Mini_cms\\web\\index.php(27): Mini\\Cms\\Controller\\Route::app('GET', '\/user\/register')\n#3 {main}",
-    "report_on": 1715448456,
-    "type": "critical"
-}

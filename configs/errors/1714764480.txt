@@ -1,9 +1,0 @@
-{
-    "message": "Method GET is not allowed for route CD: 0414768b-b67a-42df-ba94-0ba9f07a4f32",
-    "line": 55,
-    "code": 0,
-    "file": "C:\\xampp\\htdocs\\Mini_cms\\core\\Controller\\Route.php",
-    "trace": "#0 C:\\xampp\\htdocs\\Mini_cms\\core\\Controller\\Route.php(92): Mini\\Cms\\Controller\\Route->match('GET', '\/contact-us')\n#1 C:\\xampp\\htdocs\\Mini_cms\\web\\index.php(26): Mini\\Cms\\Controller\\Route::app('GET', '\/contact-us')\n#2 {main}",
-    "report_on": 1714764480,
-    "type": "critical"
-}
