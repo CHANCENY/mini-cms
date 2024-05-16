@@ -2,6 +2,8 @@
 
 namespace Mini\Cms;
 
+use Mini\Cms\StorageManager\ConnectorInterface;
+
 interface NodeInterface extends ConnectorInterface
 {
     public function id();

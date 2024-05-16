@@ -2,14 +2,16 @@
 
 namespace Mini\Cms\default\Controllers;
 
+use Mini\Cms\Controller\ContentType;
 use Mini\Cms\Controller\ControllerInterface;
 use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Response;
+use Mini\Cms\Controller\StatusCode;
 
 class HomePage implements ControllerInterface
 {
 
-    public function __construct(Request &$request, Response &$response)
+    public function __construct(private Request &$request, private Response &$response)
     {
     }
 
@@ -23,6 +25,8 @@ class HomePage implements ControllerInterface
 
     public function writeBody(): void
     {
-        // TODO: Implement writeBody() method.
+        $this->response->setStatusCode(StatusCode::OK)
+            ->setContentType(ContentType::TEXT_HTML)
+            ->write("<h1>Home</h1>");
     }
 }

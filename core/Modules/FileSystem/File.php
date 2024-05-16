@@ -4,11 +4,10 @@ namespace Mini\Cms\Modules\FileSystem;
 
 
 use Mini\Cms\Connections\Database\Database;
-use Mini\Cms\ConnectorInterface;
 use Mini\Cms\Modules\Streams\MiniWrapper;
 use Mini\Cms\StorageManager\Connector;
 
-class File implements ConnectorInterface
+class File
 {
     private Connector $connector;
     /**

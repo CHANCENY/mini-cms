@@ -4,10 +4,9 @@ namespace Mini\Cms\Modules\FileSystem;
 
 
 use Mini\Cms\Connections\Database\Database;
-use Mini\Cms\ConnectorInterface;
 use Mini\Cms\StorageManager\Connector;
 
-class FileSystem implements ConnectorInterface
+class FileSystem
 {
 
     private array $upload;
@@ -78,7 +77,7 @@ class FileSystem implements ConnectorInterface
 
     public function isPublic(bool $public = true): bool
     {
-        $this->is_public = $public;
+        return $this->save_as;
     }
 
     public function setTotalFiles(int $total_files): void

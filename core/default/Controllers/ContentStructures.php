@@ -2,7 +2,6 @@
 
 namespace Mini\Cms\default\Controllers;
 
-use Mini\Cms\Connections\Database\Database;
 use Mini\Cms\Controller\ContentType;
 use Mini\Cms\Controller\ControllerInterface;
 use Mini\Cms\Controller\Request;
@@ -10,7 +9,6 @@ use Mini\Cms\Controller\Response;
 use Mini\Cms\Controller\StatusCode;
 use Mini\Cms\Entity;
 use Mini\Cms\Services\Services;
-use Mini\Cms\StorageManager\Connector;
 
 class ContentStructures implements ControllerInterface
 {

@@ -4,16 +4,25 @@ namespace Mini\Cms;
 
 
 use Mini\Cms\Connections\Database\Database;
-use Mini\Cms\StorageManager\Connector;
+use Mini\Cms\Fields\FileField;
+use Mini\Cms\Fields\ReferenceField;
+use Mini\Cms\Fields\TextAreaField;
+use Mini\Cms\Fields\TextField;
 use Mini\Cms\StorageManager\FieldRequirementNotFulFilledException;
+use Throwable;
 
-class Entity implements ConnectorInterface
+class Entity
 {
     private array $entity_definitions;
 
-    private Connector $connector;
+    private array|false $entity_fields;
 
-    public function make(array $entity): int|null
+    public function getEntityFields(): false|array
+    {
+        return $this->entity_fields;
+    }
+
+    public function make(array $entity): Entity|null
     {
         $this->entity_definitions = [];
         if(array_key_exists('entity_type_name', $entity)) {
@@ -21,7 +30,7 @@ class Entity implements ConnectorInterface
             $this->entity_definitions['entity_type_name'] = strtolower($clean_name);
             $this->entity_definitions['entity_label'] = $entity['entity_label'] ?? 'No Label';
             $this->entity_definitions['entity_type_description'] = $entity['entity_type_description'] ?? '';
-
+            return $this;
         }else {
             throw new EntityNotAvailableException();
         }
@@ -35,12 +44,8 @@ class Entity implements ConnectorInterface
      */
     public  function save(): int|null
     {
-        if(!isset($this->connector)) {
-            $this->connector = new Connector();
-        }
-
         $query = "SELECT * FROM entity_types WHERE entity_type_name = :entity_type_name";
-        $statement = $this->connector->getConnection()->prepare($query);
+        $statement = Database::database()->prepare($query);
         $statement->execute(['entity_type_name' => $this->entity_definitions['entity_type_name']]);
         $entity_definitions = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -65,80 +70,80 @@ class Entity implements ConnectorInterface
 
         $query = "INSERT INTO entity_types (".implode(',', $fieldColumns).") VALUES ".$placeholders;
 
-        $statement = $this->connector->getConnection()->prepare($query);
+        $statement = Database::database()->prepare($query);
         foreach ($fieldColumns as $fieldColumn) {
             $statement->bindParam(':' . $fieldColumn, $this->entity_definitions[$fieldColumn]);
         }
 
         // Making table presentation of field
         $statement->execute();
-        return $this->connector->getConnection()->lastInsertId();
+        return Database::database()->lastInsertId();
     }
 
-    /**
-     * Connector setter
-     * @param Connector $connector Connector class object.
-     * @return void
-     */
-    public function connector(Connector $connector): void
-    {
-        $this->connector = $connector;
-    }
 
     /**
      * Finding entity
      * @param string $entity_name Entity machine name.
-     * @return void
+     * @return Entity|null
      */
-    public function find(string $entity_name): void
+    public function find(string $entity_name): Entity|null
     {
         $query = "SELECT * FROM entity_types WHERE entity_type_name = :entity_type_name";
-        $statement = $this->connector->getConnection()->prepare($query);
+        $statement = Database::database()->prepare($query);
         $statement->execute(['entity_type_name' => $entity_name]);
         $entity_types = $statement->fetchAll(\PDO::FETCH_ASSOC)[0] ?? [];
         $this->entity_definitions = $entity_types;
+
+        $entity_id = $this->entityId();
+        $query = Database::database()->prepare("SELECT * FROM entity_types_fields WHERE entity_type_id = :id");
+        $query->execute(['id' => $entity_id]);
+        $this->entity_fields = $query->fetchAll(\PDO::FETCH_ASSOC);
+        if($this->entity_fields) {
+            foreach ($this->entity_fields as $k=>$field) {
+
+                if($field['field_type'] == 'short_text') {
+                    $this->entity_fields[$k] = (new TextField())->load($field['field_name']);
+                }
+                if($field['field_type'] == 'long_text') {
+                    $this->entity_fields[$k] = (new TextAreaField())->load($field['field_name']);
+                }
+                if($field['field_type'] == 'file') {
+                    $this->entity_fields[$k] = (new FileField())->load($field['field_name']);
+                }
+                if($field['field_type'] == 'reference') {
+                    $this->entity_fields[$k] = (new ReferenceField())->load($field['field_name']);
+                }
+            }
+        }
+        return $this;
     }
 
     /**
      * Create New entity.
-     * @param array $entity_definitions array of definitons
+     * @param array $entity_definitions array of definitions
      * @param mixed|null $connector Connector class object
      * @return Entity
      * @throws EntityNotAvailableException
      */
     public static function create(array $entity_definitions, mixed $connector = null): Entity
     {
-        $entity = new static();
-        if($connector instanceof Connector) {
-            $entity->connector = $connector;
-        }
-        $entity->make($entity_definitions);
-        return $entity;
+        return (new Entity())->make($entity_definitions);
     }
 
     /**
      * @param string $entity_name Entity machine name
-     * @param mixed|null $connector Connector class object.
      * @return Entity
      */
-    public static function load(string $entity_name, mixed $connector = null): Entity
+    public static function load(string $entity_name): Entity
     {
-        $entity = new static();
-        if ($connector instanceof Connector) {
-            $entity->connector = $connector;
-        }else {
-            $entity->connector = new Connector();
-        }
-
-        $entity->find($entity_name);
-        return $entity;
+        return (new Entity())->find($entity_name);
     }
 
     /**
      * Entity id.
      * @return mixed|null
      */
-    public function entityId()
+    public function entityId(): mixed
     {
         return $this->entity_definitions['entity_type_id'] ?? null;
     }
@@ -150,7 +155,7 @@ class Entity implements ConnectorInterface
         $entity_definitions = $query->fetchAll(\PDO::FETCH_ASSOC);
 
         foreach ($entity_definitions as $key=>$entity_definition) {
-            $entity_definitions[$key] = self::load($entity_definition['entity_type_name'], new Connector(external_connection: Database::database()));
+            $entity_definitions[$key] = self::load($entity_definition['entity_type_name']);
         }
         return $entity_definitions;
     }
@@ -168,5 +173,73 @@ class Entity implements ConnectorInterface
     public function getEntityTypeDescription(): string
     {
         return $this->entity_definitions['entity_type_description'] ?? '';
+    }
+
+    public function setEntityTypeName(string $entity_type_name): void
+    {
+        $this->entity_definitions['entity_type_name'] = $entity_type_name;
+    }
+
+    public function setEntityLabel(string $entity_label): void
+    {
+        $this->entity_definitions['entity_label'] = $entity_label;
+    }
+
+    public function setEntityTypeDescription(string $entity_type_description): void
+    {
+        $this->entity_definitions['entity_type_description'] = $entity_type_description;
+    }
+
+    /**
+     * Update entity.
+     * @return bool
+     */
+    public function update(): bool
+    {
+        $query = Database::database()->prepare("UPDATE entity_types SET entity_label = :entity_label, entity_type_description = :entity_type_description WHERE entity_type_name = :entity_type_name");
+        return $query->execute([
+            'entity_label' => $this->entity_definitions['entity_label'],
+            'entity_type_name' => $this->entity_definitions['entity_type_name'],
+            'entity_type_description' => $this->entity_definitions['entity_type_description']
+        ]);
+    }
+
+    public function delete(): bool
+    {
+        // Load all fields attached to this entity.
+        $entity_id = $this->entityId();
+        $query = Database::database()->prepare("SELECT entity_type_field_id, field_name FROM entity_types_fields WHERE entity_type_id = :id");
+        $query->execute(['id' => $entity_id]);
+        $data = $query->fetchAll(\PDO::FETCH_ASSOC);
+        $flag = false;
+        if($data) {
+            foreach ($data as $key=>$value) {
+                try {
+                    $table = "field__".$value['field_name'];
+                    $field_id = $value['entity_type_field_id'];
+                    $query = Database::database()->prepare("DROP TABLE $table");
+                    $query->execute();
+                    $query = Database::database()->prepare("DELETE FROM entity_types_fields WHERE entity_type_field_id = :id");
+                    $query->execute(['id' => $field_id]);
+                    $flag = true;
+                }catch (Throwable $exception) {
+                    return false;
+                }
+            }
+        }
+        else {
+            $flag = true;
+        }
+        if($flag) {
+            $bundle = $this->getEntityTypeName();
+            $query = Database::database()->prepare("DELETE FROM entity_node_data WHERE bundle = :bundle");
+            $query->execute(['bundle' => $bundle]);
+
+
+            $query = Database::database()->prepare("DELETE FROM entity_types WHERE entity_type_name = :entity");
+            $query->execute(['entity' => $bundle]);
+            return true;
+        }
+        return false;
     }
 }

@@ -80,7 +80,7 @@
             ]
         },
         "name": "UserRegistration",
-        "description": "\"Registration of user\"",
+        "description": "Registration of user",
         "url": "\/user\/register",
         "handler": "Mini\\Cms\\default\\Controllers\\UserRegistration"
     },
@@ -130,7 +130,7 @@
             ]
         },
         "name": "LogOut",
-        "description": "Logut user from mini",
+        "description": "Logout user from mini",
         "url": "\/user\/logout",
         "handler": "Mini\\Cms\\default\\Controllers\\LogOut"
     },
@@ -233,5 +233,54 @@
         "description": "this is for viewing content type",
         "url": "\/structure\/content-type\/view\/{content_type_name}",
         "handler": "Mini\\Cms\\default\\Controllers\\ContentStructureView"
+    },
+    {
+        "id": "b17977c4-654f-4115-b849-7afee62b40f3",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Content Structure Edit",
+        "description": "This is for editing content type",
+        "url": "\/structure\/content-type\/{content_type_name}\/edit",
+        "handler": "Mini\\Cms\\default\\Controllers\\ContentStructureEdit"
+    },
+    {
+        "id": "068c4d03-a8b9-4bfc-b9ed-173ab6e360a2",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Content Structure Deletion",
+        "description": "This is for delete content type",
+        "url": "\/structure\/content-type\/{content_type_name}\/delete",
+        "handler": "Mini\\Cms\\default\\Controllers\\ContentStructureDelete"
+    },
+    {
+        "id": "60d97a07-21dc-4d32-a902-f6b8b80d3485",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "ContentStructuresFieldsListing",
+        "description": "This is for listing content type fields",
+        "url": "\/structure\/content-type\/{content_type_name}\/fields",
+        "handler": "Mini\\Cms\\default\\Controllers\\ContentStructuresFieldsListing"
     }
 ]

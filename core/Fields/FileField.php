@@ -2,9 +2,10 @@
 
 namespace Mini\Cms\Fields;
 
-use Chance\Entity\Fields\FieldInterface;
-use Chance\Entity\StorageManager\Connector;
-use Chance\Entity\StorageManager\FieldRequirementNotFulFilledException;
+
+use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\StorageManager\Connector;
+use Mini\Cms\StorageManager\FieldRequirementNotFulFilledException;
 
 class FileField implements FieldInterface
 {
@@ -60,15 +61,13 @@ class FileField implements FieldInterface
         return $this->field['field_required'] === 'NOT NULL';
     }
 
-    public function load(string $field): void
+    public function load(string $field): FieldInterface
     {
-        if(!isset($this->connector)) {
-            $this->connector = new Connector();
-        }
         $query = "SELECT * FROM entity_types_fields WHERE field_name = :field_name";
-        $statement = $this->connector->getConnection()->prepare($query);
+        $statement = Database::database()->prepare($query);
         $statement->execute(['field_name' => $field]);
         $this->field = $statement->fetchAll(\PDO::FETCH_ASSOC)[0] ?? [];
+        return $this;
     }
 
     public function setName(string $name): void
@@ -80,12 +79,8 @@ class FileField implements FieldInterface
 
     public function save(): bool
     {
-        if(!isset($this->connector)) {
-            $this->connector = new Connector();
-        }
-
         $query = "SELECT * FROM entity_types_fields WHERE field_name = :field_name";
-        $statement = $this->connector->getConnection()->prepare($query);
+        $statement = Database::database()->prepare($query);
         $statement->execute(['field_name' => $this->field['field_name']]);
         $fields = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -110,7 +105,7 @@ class FileField implements FieldInterface
 
         $query = "INSERT INTO entity_types_fields (".implode(',', $fieldColumns).") VALUES ".$placeholders;
 
-        $statement = $this->connector->getConnection()->prepare($query);
+        $statement = Database::database()->prepare($query);
         foreach ($fieldColumns as $fieldColumn) {
             $statement->bindParam(':' . $fieldColumn, $this->field[$fieldColumn]);
         }
@@ -120,17 +115,19 @@ class FileField implements FieldInterface
             $table = "field__".strtolower($this->field['field_name']);
             $size = json_decode($this->field['field_settings'],true)['field_size'] ?? 255;
             $required = json_decode($this->field['field_settings'],true)['field_required'] ?? NULL;
-            $field = "field_id INTEGER PRIMARY KEY AUTOINCREMENT, entity_id INT(11), {$table}__value INTEGER $required";
+            $database = new Database();
+            $field = null;
+            if($database->getDatabaseType() === 'sqlite') {
+                $field = "field_id INTEGER PRIMARY KEY AUTOINCREMENT, entity_id INT(11), {$table}__value INTEGER $required";
+            }
+            if($database->getDatabaseType() === 'mysql') {
+                $field = "field_id INT(11) PRIMARY KEY AUTOINCREMENT, entity_id INT(11), {$table}__value INTEGER $required";
+            }
             $query = "CREATE TABLE IF NOT EXISTS $table (".$field.")";
-            $statement = $this->connector->getConnection()->prepare($query);
+            $statement = Database::database()->prepare($query);
             return $statement->execute();
         }
         return false;
-    }
-
-    public function connector(Connector $connector): void
-    {
-        $this->connector = $connector;
     }
 
     public function setEntityID(int $entityID): void

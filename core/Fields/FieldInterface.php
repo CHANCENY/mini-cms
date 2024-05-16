@@ -2,10 +2,9 @@
 
 namespace Mini\Cms\Fields;
 
-use Chance\Entity\ConnectorInterface;
-use Chance\Entity\StorageManager\Connector;
+use Mini\Cms\StorageManager\Connector;
 
-interface FieldInterface extends ConnectorInterface
+interface FieldInterface
 {
     public function getType();
 
@@ -22,13 +21,11 @@ interface FieldInterface extends ConnectorInterface
 
     public function isRequired();
 
-    public function load(string $field);
+    public function load(string $field): FieldInterface;
 
     public function setName(string $name);
 
     public function save();
-
-    public function connector(Connector $connector);
 
     public function setEntityID(int $entityID);
 
