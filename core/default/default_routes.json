@@ -282,5 +282,71 @@
         "description": "This is for listing content type fields",
         "url": "\/structure\/content-type\/{content_type_name}\/fields",
         "handler": "Mini\\Cms\\default\\Controllers\\ContentStructuresFieldsListing"
+    },
+    {
+        "id": "a5f72888-077d-4ba3-a509-bac2b9e592aa",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Field Creation",
+        "description": "This is for creation of fields",
+        "url": "\/structure\/content-type\/field\/{content_type_name}\/new",
+        "handler": "Mini\\Cms\\default\\Controllers\\FieldCreation"
+    },
+    {
+        "id": "0bb64ac7-0049-431e-90c8-277d76f79567",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Field View",
+        "description": "this is for viewing field information",
+        "url": "\/structure\/content-type\/field\/{field_name}\/view",
+        "handler": "Mini\\Cms\\default\\Controllers\\FieldView"
+    },
+    {
+        "id": "d5fea50b-9fdf-4509-86b7-4927467a0d01",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Field Edit",
+        "description": "This is for editing field",
+        "url": "\/structure\/content-type\/field\/{field_name}\/edit",
+        "handler": "Mini\\Cms\\default\\Controllers\\FieldEdit"
+    },
+    {
+        "id": "cf1d501b-d59c-490f-b5ec-d44326380832",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Field Deletion",
+        "description": "This is for deleting field",
+        "url": "\/structure\/content-type\/field\/{field_name}\/delete",
+        "handler": "Mini\\Cms\\default\\Controllers\\FieldDelete"
     }
 ]

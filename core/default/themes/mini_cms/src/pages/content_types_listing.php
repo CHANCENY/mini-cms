@@ -39,7 +39,7 @@
                     <?php else: ?>
                      <tr>
                          <td></td>
-                         <td>No Content typed found</td>
+                         <td>No Content type found</td>
                          <td></td>
                      </tr>
                     <?php endif; ?>

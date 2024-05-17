@@ -119,7 +119,7 @@ class TextAreaField implements FieldInterface
                 $field = "field_id INTEGER PRIMARY KEY AUTOINCREMENT, entity_id INT(11), {$table}__value TEXT $required";
             }
             if($database->getDatabaseType() === 'mysql') {
-                $field = "field_id INT(11) PRIMARY KEY AUTOINCREMENT, entity_id INT(11), {$table}__value TEXT $required";
+                $field = "field_id INT(11) PRIMARY KEY AUTO_INCREMENT, entity_id INT(11), {$table}__value TEXT $required";
             }
             $query = "CREATE TABLE IF NOT EXISTS $table (".$field.")";
             $statement = Database::database()->prepare($query);
@@ -162,5 +162,29 @@ class TextAreaField implements FieldInterface
     public function setRequired(bool $required): void
     {
         $this->field['field_settings']['field_required'] = $required === true ? 'NOT NULL' : 'NULL';
+    }
+
+    public function update(): bool
+    {
+        $query = Database::database()->prepare("UPDATE entity_types_fields SET field_description = :field_description, field_label = :field_label WHERE field_name = :field_name");
+        return $query->execute([
+            'field_description' => $this->field['field_description'],
+            'field_label' => $this->field['field_label'],
+            'field_name' => $this->field['field_name'],
+        ]);
+    }
+
+    public function delete(): bool
+    {
+        $table = "field__".$this->field['field_name'];
+        try {
+            $query = "DELETE FROM entity_types_fields WHERE field_name = :field_name";
+            $statement = Database::database()->prepare($query);
+            $statement->execute(['field_name' => $this->field['field_name']]);
+            $query = Database::database()->prepare("DROP TABLE IF EXISTS $table");
+            return $query->execute();
+        }catch (Throwable $exception){
+            return false;
+        }
     }
 }

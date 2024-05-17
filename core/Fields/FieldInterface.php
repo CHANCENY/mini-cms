@@ -31,4 +31,8 @@ interface FieldInterface
 
     public function getFieldDefinition();
 
+    public function update(): bool;
+
+    public function delete(): bool;
+
 }

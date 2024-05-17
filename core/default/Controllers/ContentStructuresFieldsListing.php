@@ -31,9 +31,9 @@ class ContentStructuresFieldsListing implements ControllerInterface
     {
         $content_type = $this->request->get('content_type_name');
         $entity = Entity::load($content_type);
-       
+        $fields = $entity->getEntityFields();
         $this->response->setContentType(ContentType::TEXT_HTML)
             ->setStatusCode(StatusCode::OK)
-            ->write(Services::create('render')->render('content_types_fields_listing.php',['entity' => $entity]));
+            ->write(Services::create('render')->render('content_types_fields_listing.php',['entity' => $entity, 'fields' => $fields]));
     }
 }

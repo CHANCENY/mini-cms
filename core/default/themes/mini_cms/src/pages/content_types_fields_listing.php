@@ -1,7 +1,7 @@
 <div class="container-fluid mt-lg-5">
     <div class="bordered bg-light p-3">
         <div class="d-block">
-            <a class="text-decoration-none btn btn-info" href="/structure/content-type/field/type_name/new">Add Field</a>
+            <a class="text-decoration-none btn btn-info" href="/structure/content-type/field/<?= $content['entity']?->getEntityTypeName(); ?>/new">Add Field</a>
         </div>
         <div class="d-block mt-2">
             <form method="get" class="w-25 d-inline-flex pt-3">
@@ -23,17 +23,19 @@
                           <th>Actions</th>
                       </tr>
                     </thead>
-                    <?php if(!empty($content['entities'])): ?>
-                    <?php foreach ($content['entities'] as $entity): ?>
-                      <?php if($entity instanceof \Mini\Cms\Entity): ?>
+                    <?php if(!empty($content['fields'])): ?>
+                    <?php foreach ($content['fields'] as $field): ?>
+                      <?php if($field instanceof \Mini\Cms\Fields\FieldInterface): ?>
                             <tr>
-                                <td><a class="text-decoration-none" href="/structure/content-type/view/<?= $entity->getEntityTypeName(); ?>"><?= $entity->getEntityLabel() ?></a></td>
-                                <td><?= $entity->getEntityTypeDescription() ?></td>
+                                <td><a class="text-decoration-none" href="/structure/content-type/field/<?= $field->getName(); ?>/view"><?= $field->getLabel() ?></a></td>
+                                <td><?= $field->getName() ?></td>
+                                <td><?= $field->getDescription() ?></td>
+                                <td><a class="text-decoration-none" href="/structure/content-type/<?= $content['entity']?->getEntityTypeName(); ?>/view"><?= $content['entity']?->getEntityLabel() ?></a></td>
+                                <td><?= $field->getType() ?></td>
                                 <td>
                                     <div class="action-button">
-                                        <a title="edit content type" aria-label="edit content type" class="text-decoration-none" href="/structure/content-type/<?= $entity->getEntityTypeName(); ?>/edit"><i class="fa-solid fa-pen-to-square"></i></a>
-                                        <a title="delete content type" aria-label="delete content type" class="text-decoration-none mx-2 ms-2" href="/structure/content-type/<?= $entity->getEntityTypeName(); ?>/delete"><i class="fa-solid fa-trash"></i></a>
-                                        <a title="manager content fields" aria-label="manager content fields" class="text-decoration-none" href="/structure/content-type/<?= $entity->getEntityTypeName(); ?>/fields"><i class="fa-solid fa-list"></i></a>
+                                        <a title="edit content field" aria-label="edit content field" class="text-decoration-none" href="/structure/content-type/field/<?= $field->getName(); ?>/edit"><i class="fa-solid fa-pen-to-square"></i></a>
+                                        <a title="delete content field" aria-label="delete content field" class="text-decoration-none mx-2 ms-2" href="/structure/content-type/field/<?= $field->getName(); ?>/delete"><i class="fa-solid fa-trash"></i></a>
                                     </div>
                                 </td>
                             </tr>
@@ -42,7 +44,7 @@
                     <?php else: ?>
                      <tr>
                          <td></td>
-                         <td>No Content typed found</td>
+                         <td>No Content fields found</td>
                          <td></td>
                          <td></td>
                          <td></td>
