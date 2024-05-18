@@ -47,7 +47,7 @@
                 "administrator"
             ]
         },
-        "name": "SiteConfiguration",
+        "name": "Site Configuration",
         "description": "Configuration of site",
         "url": "\/site-configuration",
         "handler": "Mini\\Cms\\default\\Controllers\\SiteConfiguration"
@@ -66,7 +66,7 @@
                 "administrator"
             ]
         },
-        "name": "HomePage",
+        "name": "Home",
         "description": "Home page of mini cms",
         "url": "\/",
         "handler": "Mini\\Cms\\default\\Controllers\\HomePage"
@@ -85,7 +85,7 @@
                 "administrator"
             ]
         },
-        "name": "UserRegistration",
+        "name": "User Registration",
         "description": "Registration of user",
         "url": "\/user\/register",
         "handler": "Mini\\Cms\\default\\Controllers\\UserRegistration"
@@ -103,7 +103,7 @@
                 "administrator"
             ]
         },
-        "name": "FilesUploader",
+        "name": "Files Uploader",
         "url": "\/files\/assets\/uploader",
         "description": "File uploader",
         "handler": "Mini\\Cms\\default\\Controllers\\FilesUploader"
@@ -135,10 +135,11 @@
                 "GET"
             ],
             "roles": [
-                "anonymous"
+                "authenticated",
+                "administrator"
             ]
         },
-        "name": "LogOut",
+        "name": "Logout",
         "description": "Logout user from mini",
         "url": "\/user\/logout",
         "handler": "Mini\\Cms\\default\\Controllers\\LogOut"
@@ -155,7 +156,7 @@
                 "administrator"
             ]
         },
-        "name": "UserVerification",
+        "name": "User Verification",
         "description": "This is for verifying new user",
         "url": "\/user\/verify\/{token}",
         "handler": "Mini\\Cms\\default\\Controllers\\UserVerification"
@@ -288,7 +289,7 @@
                 "administrator"
             ]
         },
-        "name": "ContentStructuresFieldsListing",
+        "name": "Content Structures Fields Listing",
         "description": "This is for listing content type fields",
         "url": "\/structure\/content-type\/{content_type_name}\/fields",
         "handler": "Mini\\Cms\\default\\Controllers\\ContentStructuresFieldsListing"
