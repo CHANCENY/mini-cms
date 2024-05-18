@@ -5,13 +5,16 @@ namespace Mini\Cms\Modules\Access;
 use Mini\Cms\Configurations\ConfigFactory;
 use Mini\Cms\Services\Services;
 
-class Roles
+class Role
 {
-    private array $roles = [];
+    /**
+     * @var false|mixed
+     */
+    private mixed $role;
 
-    public function __construct()
+    public function __construct(string $role)
     {
-        $this->roles = [
+        $roles = [
             [
                 'name' => 'administrator',
                 'label' => 'Administrator',
@@ -37,44 +40,23 @@ class Roles
             ]
         ];
         $roles_in_config = Services::create('config.factory')?->get('access')['roles'] ?? [];
-        $this->roles = array_merge($this->roles, $roles_in_config);
-        $this->roles = $this->uniqueByName($this->roles);
-    }
+        $roles = array_merge($roles, $roles_in_config);
+        $roles = $this->uniqueByName($roles);
 
-    public function getRoles(): array
-    {
-        return array_map(function ($item){
-            return new Role($item['name']);
-        },$this->roles);
-    }
-
-    public function getRole(string $name): Role|null
-    {
-        $found = array_filter($this->roles,function ($item) use ($name){
-           return $item['name'] === $name;
+        $this->role = array_filter($roles, function($item) use ($role) {
+            return $item['name'] === $role;
         });
-        $found = reset($found);
-        return $found ? new Role($found['name']) : null;
+        $this->role = reset($this->role);
     }
 
-    /**
-     * @param array $roles
-     */
-    public function setRoles(array $roles): void
+    public function getName(): string
     {
-        $this->roles[] = $roles;
+        return $this->role['name'] ?? '';
     }
 
-    public function saveRole(): bool
+    public function getLabel(): string
     {
-        $config = Services::create('config.factory');
-        if($config instanceof ConfigFactory) {
-            $access = $config->get('access');
-            $access['roles'] = $this->roles;
-            $config->set('access', $access);
-            return $config->save();
-        }
-        return false;
+        return $this->role['label'] ?? '';
     }
 
     private function uniqueByName($array): array
@@ -98,9 +80,8 @@ class Roles
         return $new_array;
     }
 
-    public function getPermissions(string $role): array
+    public function getPermissions(): array
     {
-        return $this->getRole($role)['permissions'] ?? ['anonymous_access'];
+        return $this->role['permissions'] ?? ['anonymous_access'];
     }
-
 }

@@ -8,7 +8,7 @@
                 "POST"
             ],
             "roles": [
-                "*"
+                "administrator"
             ]
         },
         "name": "Dashboard",
@@ -25,7 +25,7 @@
                 "POST"
             ],
             "roles": [
-                "*"
+                "anonymous"
             ]
         },
         "name": "Installation",
@@ -42,7 +42,9 @@
                 "POST"
             ],
             "roles": [
-                "*"
+                "anonymous",
+                "authenticated",
+                "administrator"
             ]
         },
         "name": "SiteConfiguration",
@@ -59,7 +61,9 @@
                 "POST"
             ],
             "roles": [
-                "*"
+                "anonymous",
+                "authenticated",
+                "administrator"
             ]
         },
         "name": "HomePage",
@@ -76,7 +80,9 @@
                 "POST"
             ],
             "roles": [
-                "*"
+                "anonymous",
+                "authenticated",
+                "administrator"
             ]
         },
         "name": "UserRegistration",
@@ -93,7 +99,8 @@
                 "POST"
             ],
             "roles": [
-                "*"
+                "anonymous",
+                "administrator"
             ]
         },
         "name": "FilesUploader",
@@ -110,7 +117,9 @@
                 "POST"
             ],
             "roles": [
-                "*"
+                "anonymous",
+                "authenticated",
+                "administrator"
             ]
         },
         "name": "Login",
@@ -126,7 +135,7 @@
                 "GET"
             ],
             "roles": [
-                "*"
+                "anonymous"
             ]
         },
         "name": "LogOut",
@@ -142,7 +151,8 @@
                 "GET"
             ],
             "roles": [
-                "*"
+                "authenticated",
+                "administrator"
             ]
         },
         "name": "UserVerification",
@@ -159,7 +169,7 @@
                 "POST"
             ],
             "roles": [
-                "*"
+                "anonymous"
             ]
         },
         "name": "Password",
@@ -176,7 +186,7 @@
                 "POST"
             ],
             "roles": [
-                "*"
+                "anonymous"
             ]
         },
         "name": "Password Change",

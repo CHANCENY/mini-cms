@@ -32,10 +32,15 @@
                     </div>
                     <div class="form-group col">
                         <label for="role">Role:</label>
-                        <select name="role" class="form-control" id="role">
-                            <option value="authenticated" selected>Authenticated</option>
-                            <option value="administrator">Administrator</option>
-                        </select>
+                        <?php if(!empty($content['roles'])): ?>
+                            <select name="role" class="form-control" id="role">
+                                <?php foreach($content['roles'] as $role): ?>
+                                    <?php if($role instanceof \Mini\Cms\Modules\Access\Role): ?>
+                                        <option value="<?= $role->getName(); ?>" selected><?= $role->getLabel(); ?></option>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            </select>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <div class="row mt-lg-2">

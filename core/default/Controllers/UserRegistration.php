@@ -82,8 +82,9 @@ class UserRegistration implements ControllerInterface
             }
         }
 
+        $roles = Services::create('config.roles')?->getRoles();
         if($theme instanceof Theme) {
-            $content = $theme->view('register_form.php', []);
+            $content = $theme->view('register_form.php', ['roles' => $roles]);
         }
         $this->response->setContentType(ContentType::TEXT_HTML)
             ->setStatusCode(StatusCode::OK)

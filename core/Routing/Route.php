@@ -2,6 +2,8 @@
 
 namespace Mini\Cms\Routing;
 
+use Mini\Cms\Modules\Access\Role;
+
 class Route
 {
     /**
@@ -142,9 +144,17 @@ class Route
         return $this->route['options']['headers'][$header] ?? '';
     }
 
-    public function getPermission()
+    public function getPermission(): array
     {
-        return $this->route['permission'] ?? null;
+        $roles = $this->getRoles();
+        $permissions = [];
+        foreach ($roles as $role) {
+            $role = new Role($role);
+            if($role->getName()) {
+                $permissions[$role->getName()] = $role->getPermissions();
+            }
+        }
+        return $permissions;
     }
 
     public function isAccessible()
@@ -154,7 +164,7 @@ class Route
 
     public function getRoles()
     {
-        return $this->route['options']['roles'] ?? ['*'];
+        return $this->route['options']['roles'] ?? ['anonymous'];
     }
 
     public function isMethod(string $method): bool

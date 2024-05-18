@@ -38,7 +38,11 @@ class CurrentUser
 
     public function getRoles(): array
     {
-        return explode(',',$this->current_user['role'] ?? '');
+        $roles = explode(',',$this->current_user['role'] ?? '');
+        if(empty(reset($roles))) {
+            return ['anonymous'];
+        }
+        return $roles;
     }
 
     public function getFirstName(): string

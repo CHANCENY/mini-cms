@@ -2,6 +2,7 @@
 
 namespace Mini\Cms\Controller;
 
+use Mini\Cms\Modules\Access\AccessMiddleRunner;
 use Mini\Cms\Modules\MetaTag\MetaTag;
 use Mini\Cms\Modules\Storage\Tempstore;
 use Mini\Cms\Routing\RouteBuilder;
@@ -38,6 +39,14 @@ class Route
         return $this->currentUri;
     }
 
+    /**
+     * @throws PageNotFoundException
+     * @throws TemporaryUnAvailableException
+     * @throws AccessDeniedRouteException
+     * @throws ControllerMissingException
+     * @throws ControllerHandlerNotFoundException
+     * @throws BadGateWayException
+     */
     public function match(string $method, string $path): void
     {
         // Prepare uri
@@ -87,6 +96,13 @@ class Route
             $this->request = Request::createFromGlobals();
             $this->response = new Response();
 
+            // Middlewares calling.
+            $access_middle_response = (new AccessMiddleRunner($this->loadedRoute, $this->response))->runMiddleWares();
+            if($access_middle_response) {
+                $access_middle_response->send();
+                exit;
+            }
+
             // Before calling handle lets check options
             if(!$this->loadedRoute->isAccessible()) {
                 throw new TemporaryUnAvailableException("This controller can not be access at moment CD". $this->loadedRoute->getRouteId());
@@ -97,10 +113,9 @@ class Route
             }
 
             // Current user here.
-            // TODO: actual roles.
             $currentUserRoles = Services::create('current.user')->getRoles();
             if(!$this->loadedRoute->isUserAllowed($currentUserRoles)) {
-                throw new AccessDeniedRouteException("Route is not allowed to be access by user with ".implode(',', $currentUserRoles). 'roles RD: '.$this->loadedRoute->getRouteId());
+                throw new AccessDeniedRouteException("Route is not allowed to be access by user with ".implode(',', $currentUserRoles). ' roles RD: '.$this->loadedRoute->getRouteId());
             }
 
             // Making handler object.

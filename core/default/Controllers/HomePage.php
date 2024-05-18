@@ -7,6 +7,7 @@ use Mini\Cms\Controller\ControllerInterface;
 use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Response;
 use Mini\Cms\Controller\StatusCode;
+use Mini\Cms\Modules\Access\Roles;
 
 class HomePage implements ControllerInterface
 {
