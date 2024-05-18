@@ -20,7 +20,7 @@ class MetaTag
             $file = File::load($config_site->getBrandingAssets('Logo')['fid'] ?? 0);
             $logo = null;
             if($file instanceof File) {
-                $logo = $file->resolveStyleUri();
+                $logo = "/". $file->getFilePath();
             }
             $route = Tempstore::load('current_route');
             $url = null;
