@@ -170,7 +170,9 @@
                 "POST"
             ],
             "roles": [
-                "anonymous"
+                "anonymous",
+                "authenticated",
+                "administrator"
             ]
         },
         "name": "Password",
@@ -187,7 +189,9 @@
                 "POST"
             ],
             "roles": [
-                "anonymous"
+                "anonymous",
+                "authenticated",
+                "administrator"
             ]
         },
         "name": "Password Change",
@@ -359,5 +363,38 @@
         "description": "This is for deleting field",
         "url": "\/structure\/content-type\/field\/{field_name}\/delete",
         "handler": "Mini\\Cms\\default\\Controllers\\FieldDelete"
+    },
+    {
+        "id": "cf1d501b-d59c-490f-b5ec-d80832",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Content",
+        "description": "This is for creating content",
+        "url": "\/structure\/content-type\/{content_type_name}\/content-form",
+        "handler": "Mini\\Cms\\default\\Controllers\\CreationContentForm"
+    },
+    {
+        "id": "e80990d1-a5ae-492e-b63a-0108ec819260",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Contents",
+        "description": "This is content listing route",
+        "url": "\/structure\/contents",
+        "handler": "Mini\\Cms\\default\\Controllers\\StructuresContents"
     }
 ]

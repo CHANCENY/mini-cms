@@ -53,9 +53,9 @@ class ReferenceField implements FieldInterface
         $this->field['field_description'] = $description;
     }
 
-    public function isRequired(): false
+    public function isRequired(): bool
     {
-        return $this->field['field_settings']['field_required'] === 'NOT NULL';
+        return !empty($this->field['field_settings']['field_required']) && $this->field['field_settings']['field_required'] === 'NOT NULL';
     }
 
     public function load(string $field): FieldInterface
@@ -64,6 +64,9 @@ class ReferenceField implements FieldInterface
         $statement = Database::database()->prepare($query);
         $statement->execute(['field_name' => $field]);
         $this->field = $statement->fetchAll(\PDO::FETCH_ASSOC)[0] ?? [];
+        if(!empty($this->field['field_settings'])) {
+            $this->field['field_settings'] = json_decode($this->field['field_settings'], true);
+        }
         return $this;
     }
 

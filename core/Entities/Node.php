@@ -2,9 +2,9 @@
 
 namespace Mini\Cms\Entities;
 
-use Cassandra\Date;
-use Chance\Entity\NodeInterface;
-use Chance\Entity\StorageManager\Connector;
+use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Modules\CurrentUser\CurrentUser;
+use Mini\Cms\NodeInterface;
 use PDO;
 
 class Node implements NodeInterface
@@ -12,8 +12,6 @@ class Node implements NodeInterface
     private array $data;
 
     private array $fields;
-
-    private Connector $connector;
 
     public function __construct()
     {
@@ -28,6 +26,21 @@ class Node implements NodeInterface
     public function type()
     {
         return $this->data['#node']['bundle']['value'];
+    }
+
+    public function updatedOn(string $format)
+    {
+        return date($format,(int)$this->data['#node']['updated']['value']);
+    }
+
+    public function createdOn(string $format)
+    {
+        return date($format,(int)$this->data['#node']['created']['value']);
+    }
+
+    public function author(): User
+    {
+        return User::load((int) $this->data['#node']['uid']['value']);
     }
 
     public function getValues()
@@ -47,15 +60,7 @@ class Node implements NodeInterface
                 }
             }
             else {
-                try {
-                    if(!empty($this->getValue($key))) {
-                        $this->data['#values'][$key][0]['value'] = $value;
-                    }else {
-                        $this->data['#values'][$key]['value'] = $value;
-                    }
-                }catch (\Chance\Entity\Entities\FieldNotFoundException $exception) {
-                    $this->data['#values'][$key][]['value'] = $value;
-                }
+                $this->data['#values'][$key]['value'] = $value;
             }
         }
     }
@@ -72,7 +77,7 @@ class Node implements NodeInterface
     public function make(string $entity_name): Node|null
     {
         $query = "SELECT * FROM entity_types WHERE entity_type_name = :entity_name";
-        $statement = $this->connector->getConnection()->prepare($query);
+        $statement = Database::database()->prepare($query);
         $statement->bindValue(':entity_name', $entity_name);
         $statement->execute();
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC)[0] ?? [];
@@ -82,10 +87,10 @@ class Node implements NodeInterface
             $this->data['#node']['created']['value'] = (new \DateTime('now'))->getTimestamp();
             $this->data['#node']['updated']['value'] = (new \DateTime('now'))->getTimestamp();
             $this->data['#node']['deleted']['value'] = 0;
-            $this->data['#node']['uid']['value'] = 1;
+            $this->data['#node']['uid']['value'] = (new CurrentUser())->id();
 
             $query = "SELECT * FROM entity_types_fields WHERE entity_type_id = :id";
-            $statement = $this->connector->getConnection()->prepare($query);
+            $statement = Database::database()->prepare($query);
             $statement->bindValue(':id', $result['entity_type_id']);
             $statement->execute();
             $result = $statement->fetchAll(\PDO::FETCH_ASSOC) ?? [];
@@ -113,7 +118,7 @@ class Node implements NodeInterface
     public function find(int $node_id)
     {
         $query = "SELECT * FROM entity_node_data WHERE node_id = :id";
-        $statement = $this->connector->getConnection()->prepare($query);
+        $statement = Database::database()->prepare($query);
         $statement->bindValue(':id', $node_id);
         $statement->execute();
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC)[0] ?? [];
@@ -135,14 +140,14 @@ class Node implements NodeInterface
         if(!empty($node_id) && !empty($entity_type)) {
 
             $query = "SELECT * FROM entity_types WHERE entity_type_name = :entity_name";
-            $statement = $this->connector->getConnection()->prepare($query);
+            $statement = Database::database()->prepare($query);
             $statement->bindValue(':entity_name', $entity_type);
             $statement->execute();
             $result = $statement->fetchAll(\PDO::FETCH_ASSOC)[0] ?? [];
 
             if(!empty($result)) {
                 $query = "SELECT * FROM entity_types_fields WHERE entity_type_id = :id";
-                $statement = $this->connector->getConnection()->prepare($query);
+                $statement = Database::database()->prepare($query);
                 $statement->bindValue(':id', $result['entity_type_id']);
                 $statement->execute();
                 $result = $statement->fetchAll(\PDO::FETCH_ASSOC) ?? [];
@@ -159,6 +164,7 @@ class Node implements NodeInterface
             }
         }
 
+
         if(!empty($this->fields)) {
             $tables = array_map(function ($field){
                 return 'field__'.$field['#name'];
@@ -168,7 +174,7 @@ class Node implements NodeInterface
                 foreach ($tables as $table) {
                     $valueField = $table . '__value';
                     $query = "SELECT $valueField, field_id FROM $table WHERE entity_id = :id";
-                    $statement = $this->connector->getConnection()->prepare($query);
+                    $statement = Database::database()->prepare($query);
                     $statement->bindValue(':id', $node_id);
                     $statement->execute();
                     $result = $statement->fetchAll(\PDO::FETCH_ASSOC) ?? [];
@@ -190,25 +196,23 @@ class Node implements NodeInterface
     }
 
     /**
-     * @param Connector $connector
-     * @return void
-     */
-    public function connector(Connector $connector): void
-    {
-        $this->connector = $connector;
-    }
-
-    /**
      * @return mixed Title of node.
      */
     public function getTitle(): mixed
     {
         return $this->data['#node']['title']['value'];
     }
+    
+
+    public function published(): bool
+    {
+        return $this->data['#node']['status']['value'] === 'Yes';
+    }
 
     public function setTitle(string $title)
     {
         // TODO: Implement setTitle() method.
+        $this->data['#node']['title']['value'] = $title;
     }
 
     /**
@@ -298,20 +302,21 @@ class Node implements NodeInterface
         $placeholders = rtrim($placeholders, ', ');
         $node_fields_line = rtrim($node_fields_line, ', ');
         $query = "INSERT INTO entity_node_data ($node_fields_line) VALUES ($placeholders)";
-
+    
         // Insert in entity_node_data
-        $statement = $this->connector->getConnection()->prepare($query);
+        $con = Database::database();
+        $statement = $con->prepare($query);
         foreach ($node_fields as $node_field) {
             $statement->bindParam(':'.$node_field, $this->data['#node'][$node_field]['value']);
         }
         $statement->execute();
-        $node_id = $this->connector->getConnection()->lastInsertId();
+        $node_id = $con->lastInsertId();
 
         // Now since we have saved node lets add or other fields
         $tables_notifier = function ($field) {
             try {
                 $query = "SELECT * FROM $field LIMIT 1";
-                $statement = $this->connector->getConnection()->prepare($query);
+                $statement = Database::database()->prepare($query);
                 $statement->execute();
                 return true;
             }catch (\PDOException $e){
@@ -334,7 +339,7 @@ class Node implements NodeInterface
                 $fields_line = rtrim($fields_line, ', ');
                 $query = "INSERT INTO $table ($fields_line) VALUES ($placeholders)";
 
-                $statement = $this->connector->getConnection()->prepare($query);
+                $statement = Database::database()->prepare($query);
                 foreach ($fields as $field => $value) {
                     $statement->bindParam(':'.$field, $fields[$field]);
                 }
@@ -373,7 +378,7 @@ class Node implements NodeInterface
     public function delete()
     {
         $query = "UPDATE entity_node_data SET deleted = 1 WHERE node_id = :id";
-        $statement = $this->connector->getConnection()->prepare($query);
+        $statement = Database::database()->prepare($query);
         $statement->bindValue(':id',$this->id());
         return $statement->execute();
     }
@@ -400,20 +405,20 @@ class Node implements NodeInterface
 
         $updater = function ($field, $value) use ($node_id) {
             $query = "SELECT * FROM $field WHERE entity_id = :node_id LIMIT 1";
-            $statement = $this->connector->getConnection()->prepare($query);
+            $statement = Database::database()->prepare($query);
             $statement->bindValue(':node_id',$node_id);
             $statement->execute();
             $data = $statement->fetch(PDO::FETCH_ASSOC);
             $fieldValue = $field . '__value';
             if(empty($data)) {
                 $query = "INSERT INTO $field ('entity_id', $fieldValue) VALUES (:node_id, :field)";
-                $statement = $this->connector->getConnection()->prepare($query);
+                $statement = Database::database()->prepare($query);
                 $statement->bindValue(':node_id',$node_id);
                 $statement->bindValue(':field',$value);
                 return $statement->execute();
             }else {
                 $query = "UPDATE $field SET $fieldValue = :field WHERE entity_id = :node_id";
-                $statement = $this->connector->getConnection()->prepare($query);
+                $statement = Database::database()->prepare($query);
                 $statement->bindValue(':field', $value);
                 $statement->bindValue(':node_id', $node_id);
                 return $statement->execute();
@@ -433,7 +438,7 @@ class Node implements NodeInterface
             else {
                 $query = "UPDATE entity_node_data SET $field = :field WHERE node_id = :node_id";
                 if($field !== 'node_id' && $field !== 'updated' && $field !== 'created') {
-                    $statement = $this->connector->getConnection()->prepare($query);
+                    $statement = Database::database()->prepare($query);
                     $statement->bindValue(':field', $value[0]['value']);
                     $statement->bindValue(':node_id', $node_id);
                     $statement->execute();
@@ -442,7 +447,7 @@ class Node implements NodeInterface
         }
         // Let's change updated
         $query = "UPDATE entity_node_data SET updated = :uo WHERE node_id = :id";
-        $statement = $this->connector->getConnection()->prepare($query);
+        $statement = Database::database()->prepare($query);
         $updated = (new \DateTime('now'))->getTimestamp();
         $statement->bindValue(':uo', $updated);
         $statement->bindValue(':id', $node_id);
@@ -461,14 +466,12 @@ class Node implements NodeInterface
 
     /**
      * @param string $entity_name Entity name
-     * @param mixed|null $connector Database connection.
      * @return Node|null
      * Node is return
      */
-    public static function create(string $entity_name, mixed $connector = null): Node|null
+    public static function create(string $entity_name): Node|null
     {
         $entity = new Node();
-        $entity->connector($connector);
         return $entity->make($entity_name);
     }
 
@@ -482,7 +485,6 @@ class Node implements NodeInterface
     public static function load(int $node_id, mixed $connector = null): Node|null
     {
         $entity = new Node();
-        $entity->connector($connector);
         return $entity->find($node_id);
     }
 
@@ -508,9 +510,23 @@ class Node implements NodeInterface
     public function unDelete(): bool
     {
         $query = "UPDATE entity_node_data SET deleted = 0 WHERE node_id = :id";
-        $statement = $this->connector->getConnection()->prepare($query);
+        $statement = Database::database()->prepare($query);
         $statement->bindValue(':id',$this->id());
         return $statement->execute();
+    }
+
+
+    public static function all(): array|false
+    {
+        $query = Database::database()->prepare("SELECT node_id FROM entity_node_data ORDER BY updated DESC");
+        $nodes = $query->execute();
+        $nodes = $query->fetchAll();
+        if($nodes) {
+            foreach ($nodes as $key=>$node) {
+                $nodes[$key] = Node::load($node['node_id']);
+            }
+        }
+        return $nodes;
     }
 
 }

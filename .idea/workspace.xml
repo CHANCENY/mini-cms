@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="94f10dfb-8858-44c2-a819-3faaa754f477" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/core/Modules/Form/FormBase.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/default/Controllers/CreationContentForm.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/src/forms/content_form.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/src/pages/structure_contents.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/new-install.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/Mini_cms.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Connections/Database/Database.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Connections/Database/Database.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Controller/Route.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Controller/Route.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Entities/Node.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Entities/Node.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/FileField.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/FileField.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/FileFieldMarkUp.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/MarkUp/FileFieldMarkUp.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/TextAreaFieldMarkUp.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/MarkUp/TextAreaFieldMarkUp.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/TextFieldMarkUp.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/MarkUp/TextFieldMarkUp.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/ReferenceField.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/ReferenceField.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/TextAreaField.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/TextAreaField.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/TextField.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/TextField.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Modules/CurrentUser/CurrentUser.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/CurrentUser/CurrentUser.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Modules/FileSystem/File.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/FileSystem/File.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Modules/FileSystem/FileSystem.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/FileSystem/FileSystem.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/NodeInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/NodeInterface.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/Controllers/SiteConfiguration.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/Controllers/SiteConfiguration.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/Controllers/UserRegistration.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/Controllers/UserRegistration.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/default_routes.json" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/default_routes.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/menu.json" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/menu.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/pages/content_types_listing.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/src/pages/content_types_listing.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/autoload.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/autoload.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/composer/ClassLoader.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/ClassLoader.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/composer/InstalledVersions.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/InstalledVersions.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/composer/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/composer/autoload_classmap.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/autoload_classmap.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/composer/autoload_files.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/autoload_files.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/composer/autoload_namespaces.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/autoload_namespaces.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/composer/autoload_psr4.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/autoload_psr4.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/composer/autoload_real.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/autoload_real.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/composer/autoload_static.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/autoload_static.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/composer/installed.json" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/installed.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/composer/installed.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/installed.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vendor/composer/platform_check.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/platform_check.php" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerConfigs">
+    <option name="configs">
+      <option value="$PROJECT_DIR$/web/themes/global/tinymce/composer.json" />
+    </option>
+  </component>
+  <component name="ComposerSettings" synchronizationState="SYNCHRONIZE">
+    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
+    <execution />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="LLMProjectSettings">
+    <option name="aiignore_manually_set" value="true" />
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\xampp\php\php.exe">
+    <include_path>
+      <path value="$PROJECT_DIR$/vendor/ramsey/uuid" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php83" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/vendor/symfony/var-dumper" />
+      <path value="$PROJECT_DIR$/vendor/symfony/http-foundation" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php80" />
+      <path value="$PROJECT_DIR$/vendor/composer" />
+      <path value="$PROJECT_DIR$/vendor/brick/math" />
+      <path value="$PROJECT_DIR$/vendor/ramsey/collection" />
+      <path value="$PROJECT_DIR$/vendor/phpmailer/phpmailer" />
+    </include_path>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2gePlDMvGcnyJu6Z8F4ePpt5ALZ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/xampp/htdocs/mini-cms&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\mini-cms\web\core" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-cb551a44b0f8-JavaScript-PS-242.10180.24" />
+        <option value="bundled-php-predefined-ba97393d7c68-12a71d8b1e64-com.jetbrains.php.sharedIndexes-PS-242.10180.24" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="94f10dfb-8858-44c2-a819-3faaa754f477" name="Changes" comment="" />
+      <created>1716055232470</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1716055232470</updated>
+      <workItem from="1716055234074" duration="177000" />
+      <workItem from="1716055524177" duration="6028000" />
+      <workItem from="1716100084548" duration="13357000" />
+      <workItem from="1716194553127" duration="5035000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

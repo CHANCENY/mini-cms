@@ -15,7 +15,8 @@
     "require": {
 "ramsey/uuid": "^4.7",
         "symfony/http-foundation": "^7.0",
-      "ext-pdo": "*"
+      "ext-pdo": "*",
+        "phpmailer/phpmailer": "^6.9"
     },
     "autoload": {
         "psr-4": {

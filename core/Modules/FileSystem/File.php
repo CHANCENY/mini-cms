@@ -21,6 +21,7 @@ class File
     {
         $this->styles = new FileImageStyles();
         $this->connector = new Connector(external_connection: Database::database());
+        (new FileSystem())->prepareUpload([]);
     }
 
     /**

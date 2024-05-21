@@ -24,7 +24,7 @@
                     <?php foreach ($content['entities'] as $entity): ?>
                       <?php if($entity instanceof \Mini\Cms\Entity): ?>
                             <tr>
-                                <td><a class="text-decoration-none" href="/structure/content-type/view/<?= $entity->getEntityTypeName(); ?>"><?= $entity->getEntityLabel() ?></a></td>
+                                <td><a class="text-decoration-none" href="/structure/content-type/<?= $entity->getEntityTypeName(); ?>/content-form"><?= $entity->getEntityLabel() ?></a></td>
                                 <td><?= $entity->getEntityTypeDescription() ?></td>
                                 <td>
                                     <div class="action-button">

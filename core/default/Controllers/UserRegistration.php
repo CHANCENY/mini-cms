@@ -44,9 +44,9 @@ class UserRegistration implements ControllerInterface
     {
         $theme = Tempstore::load('theme_loaded');
         $content = null;
+        $payload = $this->request->getPayload();
 
-        if($this->request->isMethod(\Symfony\Component\HttpFoundation\Request::METHOD_POST)) {
-            $payload = $this->request->getPayload();
+        if($this->request->isMethod(\Symfony\Component\HttpFoundation\Request::METHOD_POST) && !empty($payload->get('user'))) {
 
             if($payload->get('password') === $payload->get('confirm')) {
 

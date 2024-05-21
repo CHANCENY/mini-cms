@@ -83,7 +83,6 @@ class CurrentUser
        }
 
        $file = File::load((int) $mid);
-       $file->connector(Connector::connect(external_connection: Database::database()));
        return $file->resolveStyleUri();
     }
 }

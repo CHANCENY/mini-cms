@@ -115,5 +115,20 @@
       "roles": ["*"],
       "permission": ["anonymous_access", "authenticated_access", "administrator_access"]
     }
+  },
+  "menu_content": {
+    "label": "Contents",
+    "link": "/structure/contents",
+    "icon": "contents",
+    "children": [],
+    "attributes": {
+      "class": "nav-item",
+      "id": "nav-item-contents",
+      "title": "Contents"
+    },
+    "options": {
+      "roles": ["administrator"],
+      "permission": ["administrator_access"]
+    }
   }
 }

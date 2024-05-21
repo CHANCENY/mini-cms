@@ -2,6 +2,7 @@
 
 namespace Mini\Cms\Controller;
 
+use Mini\Cms\Configurations\ConfigFactory;
 use Mini\Cms\Modules\Access\AccessMiddleRunner;
 use Mini\Cms\Modules\MetaTag\MetaTag;
 use Mini\Cms\Modules\Storage\Tempstore;
@@ -11,6 +12,7 @@ use Mini\Cms\Services\Services;
 use Mini\Cms\Theme\Footer;
 use Mini\Cms\Theme\Menus;
 use Mini\Cms\Theme\Theme;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class Route
 {
@@ -156,7 +158,17 @@ class Route
 
     public function __construct()
     {
+
         stream_wrapper_register('public', 'Mini\Cms\Modules\Streams\MiniWrapper', STREAM_IS_URL);
         stream_wrapper_register('private', 'Mini\Cms\Modules\Streams\MiniWrapper', STREAM_IS_URL);
+
+        $config = Services::create('config.factory');
+        if($config instanceof ConfigFactory) {
+            $database = $config->get('database');
+            if(empty($database)) {
+                (new RedirectResponse('/new-install.php'))->send();
+                exit;
+            }
+        }
     }
 }

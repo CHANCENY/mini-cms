@@ -34,7 +34,7 @@ class SiteConfiguration implements ControllerInterface
 
     public function writeBody(): void
     {
-        if($this->request->getMethod() === 'POST') {
+        if($this->request->getMethod() === 'POST' && !empty($this->request->getPayload()->get('op'))) {
             $payload = $this->request->getPayload();
             $site = new Site();
             $site->setContactInformation('Email', $payload->get('site_email'));
@@ -46,31 +46,46 @@ class SiteConfiguration implements ControllerInterface
                 'smtp_password' => $payload->get('smtp_password'),
             ]);
 
-            $file = new FileSystem();
-            $file->connector(Connector::connect(external_connection: Database::database()));
-            $file->setAllowedExtension(FileTypeEnum::FILE_TEXT);
-            $file->setAllowedExtension(FileTypeEnum::FILE_PDF);
-            $file->setAllowedSize(FileSizeEnum::XX_MEDIUM_FILES);
-            $file->prepareUpload($_FILES['site_privacy']);
-            $file->save();
-            $site_privacy = $file->getUpload();
+            if(!empty($_FILES['site_privacy'])){
+                $file = new FileSystem();
+                $file->connector(Connector::connect(external_connection: Database::database()));
+                $file->setAllowedExtension(FileTypeEnum::FILE_TEXT);
+                $file->setAllowedExtension(FileTypeEnum::FILE_PDF);
+                $file->setAllowedSize(FileSizeEnum::XX_MEDIUM_FILES);
+                $file->prepareUpload($_FILES['site_privacy']);
+                $file->save();
+                $site_privacy = $file->getUpload();
+            }
+            else{
+                $site_privacy['fid'] = trim($payload->get('site_privacy'),',' );
+            }
 
-            $file = new FileSystem();
-            $file->connector(Connector::connect(external_connection: Database::database()));
-            $file->setAllowedExtension(FileTypeEnum::FILE_TEXT);
-            $file->setAllowedExtension(FileTypeEnum::FILE_PDF);
-            $file->setAllowedSize(FileSizeEnum::XX_MEDIUM_FILES);
-            $file->prepareUpload($_FILES['site_terms']);
-            $file->save();
-            $site_terms = $file->getUpload();
+            if(!empty($_FILES['site_terms'])) {
+                $file = new FileSystem();
+                $file->connector(Connector::connect(external_connection: Database::database()));
+                $file->setAllowedExtension(FileTypeEnum::FILE_TEXT);
+                $file->setAllowedExtension(FileTypeEnum::FILE_PDF);
+                $file->setAllowedSize(FileSizeEnum::XX_MEDIUM_FILES);
+                $file->prepareUpload($_FILES['site_terms']);
+                $file->save();
+                $site_terms = $file->getUpload();
+            }
+            else {
+                $site_terms['fid'] = trim($payload->get('site_terms'), ',');
+            }
 
-            $file = new FileSystem();
-            $file->connector(Connector::connect(external_connection: Database::database()));
-            $file->setAllowedExtension(FileTypeEnum::FILE_TEXT);
-            $file->setAllowedExtension(FileTypeEnum::FILE_PDF);
-            $file->setAllowedSize(FileSizeEnum::XX_MEDIUM_FILES);
-            $file->prepareUpload($_FILES['site_logo']);
-            $site_logo = $file->getUpload();
+            if(!empty($_FILES['site_logo'])) {
+                $file = new FileSystem();
+                $file->connector(Connector::connect(external_connection: Database::database()));
+                $file->setAllowedExtension(FileTypeEnum::FILE_TEXT);
+                $file->setAllowedExtension(FileTypeEnum::FILE_PDF);
+                $file->setAllowedSize(FileSizeEnum::XX_MEDIUM_FILES);
+                $file->prepareUpload($_FILES['site_logo']);
+                $site_logo = $file->getUpload();
+            }
+            else {
+                $site_logo['fid'] = $payload->get('site_logo');
+            }
 
             $site->setLegalInformation('PrivacyPolicy', $site_privacy);
             $site->setLegalInformation('TermsOfService', $site_terms);

@@ -28,6 +28,10 @@ class ComposerStaticInitfc8ac1f0fec9c62c58f7c435eaecc013
             'Ramsey\\Uuid\\' => 12,
             'Ramsey\\Collection\\' => 18,
         ),
+        'P' => 
+        array (
+            'PHPMailer\\PHPMailer\\' => 20,
+        ),
         'M' => 
         array (
             'Mini\\Cms\\Web\\Controllers\\' => 25,
@@ -67,6 +71,10 @@ class ComposerStaticInitfc8ac1f0fec9c62c58f7c435eaecc013
         'Ramsey\\Collection\\' => 
         array (
             0 => __DIR__ . '/..' . '/ramsey/collection/src',
+        ),
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
         'Mini\\Cms\\Web\\Controllers\\' => 
         array (

@@ -13,6 +13,7 @@ return array(
     'Symfony\\Component\\HttpFoundation\\' => array($vendorDir . '/symfony/http-foundation'),
     'Ramsey\\Uuid\\' => array($vendorDir . '/ramsey/uuid/src'),
     'Ramsey\\Collection\\' => array($vendorDir . '/ramsey/collection/src'),
+    'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
     'Mini\\Cms\\Web\\Controllers\\' => array($baseDir . '/web/controllers'),
     'Mini\\Cms\\' => array($baseDir . '/core'),
     'Brick\\Math\\' => array($vendorDir . '/brick/math/src'),

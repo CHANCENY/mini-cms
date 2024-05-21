@@ -116,12 +116,12 @@ class FileSystem
         $database = new Database();
         if($database->getDatabaseType() === 'sqlite') {
             $query = "CREATE TABLE IF NOT EXISTS `file_managed` (fid INTEGER PRIMARY KEY AUTOINCREMENT, uri TEXT NOT NULL, size INTEGER DEFAULT 0, width INTEGER DEFAULT 0, height INTEGER DEFAULT 0, file_name TEXT NOT NULL, type TEXT NOT NULL, alt TEXT NOT NULL, uploaded_on TEXT NOT NULL)";
-            $statement = $this->connector->getConnection()->prepare($query);
+            $statement = Database::database()->prepare($query);
             $statement->execute();
         }
         if($database->getDatabaseType() === 'mysql') {
             $query = "CREATE TABLE IF NOT EXISTS `file_managed` (fid INT(11) PRIMARY KEY AUTO_INCREMENT, uri TEXT NOT NULL, size INTEGER DEFAULT 0, width INTEGER DEFAULT 0, height INTEGER DEFAULT 0, file_name TEXT NOT NULL, type TEXT NOT NULL, alt TEXT NOT NULL, uploaded_on TEXT NOT NULL)";
-            $statement = $this->connector->getConnection()->prepare($query);
+            $statement = Database::database()->prepare($query);
             $statement->execute();
         }
     }
@@ -468,10 +468,11 @@ class FileSystem
                     $values = implode(', ', array_map(function ($value) {
                         return '"' . $value . '"';
                     },$values));
+                    $con = Database::database();
                     $query = "INSERT INTO file_managed ($keys) VALUES($values)";
-                    $statement = $this->connector->getConnection()->prepare($query);
+                    $statement = $con->prepare($query);
                     $statement->execute();
-                    $this->upload[]['fid'] = $this->connector->getConnection()->lastInsertId();
+                    $this->upload[]['fid'] = $con->lastInsertId();
                 }
             }
         }
