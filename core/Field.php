@@ -6,6 +6,7 @@ use Mini\Cms\Configurations\ConfigFactory;
 use Mini\Cms\Connections\Database\Database;
 use Mini\Cms\Fields\FieldInterface;
 use Mini\Cms\Fields\FieldMarkUpInterface;
+use Mini\Cms\Fields\FieldViewDisplay\FieldViewDisplayInterface;
 use Mini\Cms\Fields\FileField;
 use Mini\Cms\Fields\MarkUp\FileFieldMarkUp;
 use Mini\Cms\Fields\MarkUp\ReferenceFieldMarkUp;
@@ -73,6 +74,12 @@ class Field
 
     public function getSupportedFields(): array
     {
+        foreach($this->supported_fields as $key=>&$field) {
+            $f = Field::create($field['field_type']);
+            if($f instanceof FieldViewDisplayInterface) {
+                $field['display_settings'] = $f->displayType();
+            }
+        }
         return $this->supported_fields;
     }
     public function addSupportedField(array $field): void

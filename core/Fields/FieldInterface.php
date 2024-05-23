@@ -35,4 +35,10 @@ interface FieldInterface
 
     public function delete(): bool;
 
+    public function setDisplayFormat(array $displayFormat):void;
+
+    public function setLabelVisible(bool $visible):void;
+
+    public function isLabelVisible(): bool;
+
 }

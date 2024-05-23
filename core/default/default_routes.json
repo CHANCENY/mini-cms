@@ -396,5 +396,21 @@
         "description": "This is content listing route",
         "url": "\/structure\/contents",
         "handler": "Mini\\Cms\\default\\Controllers\\StructuresContents"
+    },
+    {
+        "id": "5848928c-8af6-4ca0-a810-eb4c98d211bf",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Content View",
+        "description": "This is for displaying content",
+        "url": "\/structure\/content\/node\/{node_id}",
+        "handler": "Mini\\Cms\\default\\Controllers\\ContentView"
     }
 ]

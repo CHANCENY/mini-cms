@@ -56,7 +56,7 @@ class Theme
         if(!empty($view_file[0]) && file_exists($view_file[0])) {
             ob_start();
             extract($variables);
-            require_once $view_file[0];
+            require $view_file[0];
             return ob_get_clean();
         }
         return null;

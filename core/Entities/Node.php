@@ -13,6 +13,16 @@ class Node implements NodeInterface
 
     private array $fields;
 
+    public function getFields(): array
+    {
+        return $this->fields['#fields'] ?? [];
+    }
+
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
     public function __construct()
     {
         $this->data = [];
@@ -67,6 +77,7 @@ class Node implements NodeInterface
 
     public function get(string $key)
     {
+        $key = str_starts_with($key,'field__') ? $key : 'field__'.$key;
         return $this->data['#values'][$key] ?? throw new FieldNotFoundException('Field not found');
     }
 

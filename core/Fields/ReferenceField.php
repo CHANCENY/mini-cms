@@ -4,9 +4,10 @@ namespace Mini\Cms\Fields;
 
 
 use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Fields\FieldViewDisplay\FieldViewDisplayInterface;
 use Mini\Cms\StorageManager\FieldRequirementNotFulFilledException;
 
-class ReferenceField implements FieldInterface
+class ReferenceField implements FieldInterface, FieldViewDisplayInterface
 {
     private array $field = array();
 
@@ -167,11 +168,12 @@ class ReferenceField implements FieldInterface
 
     public function update(): bool
     {
-        $query = Database::database()->prepare("UPDATE entity_types_fields SET field_description = :field_description, field_label = :field_label WHERE field_name = :field_name");
+        $query = Database::database()->prepare("UPDATE entity_types_fields SET field_description = :field_description, field_label = :field_label, field_settings = :field_settings WHERE field_name = :field_name");
         return $query->execute([
             'field_description' => $this->field['field_description'],
             'field_label' => $this->field['field_label'],
             'field_name' => $this->field['field_name'],
+            'field_settings'=>json_encode($this->field['field_settings'],JSON_PRETTY_PRINT),
         ]);
     }
 
@@ -187,5 +189,35 @@ class ReferenceField implements FieldInterface
         }catch (Throwable $exception){
             return false;
         }
+    }
+
+    public function setDisplayFormat(array $displayFormat): void
+    {
+        // TODO: Implement setDisplayFormat() method.
+    }
+
+    public function setLabelVisible(bool $visible): void
+    {
+        // TODO: Implement setLabelVisible() method.
+    }
+
+    public function displayType(): array
+    {
+        return [];
+    }
+
+    public function getDisplayType(): array
+    {
+        return [];
+    }
+
+    public function markUp(array $field_value): string
+    {
+        return '';
+    }
+
+    public function isLabelVisible(): bool
+    {
+        return $this->field['field_settings']['field_label_visible'] ?? false;
     }
 }

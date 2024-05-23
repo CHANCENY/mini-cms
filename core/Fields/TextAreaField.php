@@ -4,9 +4,11 @@ namespace Mini\Cms\Fields;
 
 
 use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Fields\FieldViewDisplay\FieldViewDisplayInterface;
+use Mini\Cms\Services\Services;
 use Mini\Cms\StorageManager\FieldRequirementNotFulFilledException;
 
-class TextAreaField implements FieldInterface
+class TextAreaField implements FieldInterface, FieldViewDisplayInterface
 {
     private array $field = array();
 
@@ -169,11 +171,12 @@ class TextAreaField implements FieldInterface
 
     public function update(): bool
     {
-        $query = Database::database()->prepare("UPDATE entity_types_fields SET field_description = :field_description, field_label = :field_label WHERE field_name = :field_name");
+        $query = Database::database()->prepare("UPDATE entity_types_fields SET field_description = :field_description, field_label = :field_label, field_settings = :field_settings WHERE field_name = :field_name");
         return $query->execute([
             'field_description' => $this->field['field_description'],
             'field_label' => $this->field['field_label'],
             'field_name' => $this->field['field_name'],
+            'field_settings'=>json_encode($this->field['field_settings'],JSON_PRETTY_PRINT),
         ]);
     }
 
@@ -189,5 +192,75 @@ class TextAreaField implements FieldInterface
         }catch (Throwable $exception){
             return false;
         }
+    }
+
+    public function displayType(): array
+    {
+        return [
+            [
+               'name'=> 'trimmed',
+                'label'=> 'Trimmed',
+            ],
+            [
+                'name'=> 'full_text',
+                'label'=> 'Full Text',
+            ],
+            [
+                'name'=> 'full_html',
+                'label'=> 'Full HTML',
+            ],
+            [
+                'name'=> 'plain_text',
+                'label'=> 'Plain Text',
+            ]
+        ];
+    }
+
+    public function getDisplayType(): array
+    {
+        return $this->field['field_settings']['field_display_type'] ?? [
+            'type' => 'Trimmed',
+            'name' => 'trimmed',
+        ];
+    }
+
+    public function markUp(array $field_value): string
+    {
+        $setting = [
+            'label' => $this->field['field_label'],
+            'label_visible' => $this->field['field_settings']['field_label_visible'] ?? true,
+            'label_name' => $this->getName(),
+        ];
+        $displayType = $this->getDisplayType();
+        $display_name = $displayType['name'];
+        $field_value = reset($field_value);
+        if($display_name === 'trimmed') {
+            $field_value = trim(substr($field_value['value'], 0, 255));
+        }
+        if($display_name === 'full_html') {
+            $field_value = html_entity_decode($field_value['value']);
+        }
+        if($display_name === 'full_text') {
+            $field_value = trim($field_value['value']);
+        }
+        if($display_name === 'plain_text') {
+            $field_value = htmlspecialchars(strip_tags(html_entity_decode($field_value['value'])));
+        }
+        return Services::create('render')->render('textarea_field_display_markup.php',['value' => $field_value, 'setting' => $setting]);
+    }
+
+    public function setDisplayFormat(array $displayFormat): void
+    {
+        $this->field['field_settings']['field_display_type'] = $displayFormat;
+    }
+
+    public function setLabelVisible(bool $visible): void
+    {
+        $this->field['field_settings']['field_label_visible'] = $visible;
+    }
+
+    public function isLabelVisible(): bool
+    {
+        return $this->field['field_settings']['field_label_visible'] ?? false;
     }
 }
