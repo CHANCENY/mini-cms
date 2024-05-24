@@ -412,5 +412,21 @@
         "description": "This is for displaying content",
         "url": "\/structure\/content\/node\/{node_id}",
         "handler": "Mini\\Cms\\default\\Controllers\\ContentView"
+    },
+    {
+        "id": "5332dfbc-0339-4d3b-bd81-46bad1b35e3d",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Prashant Page",
+        "description": "ghg",
+        "url": "\/prashant",
+        "handler": "Mini\\Cms\\default\\Controllers\\ContactUs"
     }
 ]

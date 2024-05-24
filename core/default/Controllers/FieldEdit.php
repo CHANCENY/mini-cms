@@ -66,7 +66,6 @@ class FieldEdit implements ControllerInterface
 
         $field = Field::load($field_name);
         $displays = $field instanceof FieldViewDisplayInterface ? $field->displayType() : [];
-        dump($displays);
         $this->response->setContentType(ContentType::TEXT_HTML)
             ->setStatusCode(StatusCode::OK)
             ->write(Services::create('render')->render('content_types_field_editing.php',['field' => $field, 'displays' => $displays]));

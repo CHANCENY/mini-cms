@@ -2,7 +2,7 @@
     <div class="field-group">
         <?php if($content['setting']['label_visible']): ?>
             <div class="label field-label-<?= $content['setting']['label_name']; ?>">
-                < class="label"><strong><?php echo $content['setting']['label']; ?>:</strong></p>
+                <p class="label"><strong><?php echo $content['setting']['label']; ?>:</strong></p>
             </div>
         <?php endif; ?>
         <div class="field-value">

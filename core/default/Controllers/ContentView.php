@@ -47,6 +47,6 @@ class ContentView implements ControllerInterface
         }
         $this->response->setContentType(ContentType::TEXT_HTML)
             ->setStatusCode(StatusCode::OK)
-            ->write(Services::create('render')->render('node_node_view_content.php',['markup_line'=>$markup_line]));
+            ->write(Services::create('render')->render('node_node_view_content.php',['markup_line'=>$markup_line, 'node'=>$node]));
     }
 }
