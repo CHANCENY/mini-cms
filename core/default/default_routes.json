@@ -447,5 +447,37 @@
         "description": "This route is for autocomplete api call",
         "url": "\/filters\/autocomplete",
         "handler": "Mini\\Cms\\default\\Controllers\\AutoComplete"
+    },
+    {
+        "id": "ae4816ff-059e-4bf9-ad5c-370d9e8644bb",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Content Edit",
+        "description": "This is from deleting content",
+        "url": "\/structure\/content\/node\/{node}\/edit",
+        "handler": "Mini\\Cms\\default\\Controllers\\ContentEdit"
+    },
+    {
+        "id": "721c4657-04c2-4455-b6be-59edb8112483",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Content Delete",
+        "description": "This is for deleting content",
+        "url": "\/structure\/content\/node\/{node}\/delete",
+        "handler": "Mini\\Cms\\default\\Controllers\\ContentDelete"
     }
 ]

@@ -4,19 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="94f10dfb-8858-44c2-a819-3faaa754f477" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/core/default/Controllers/AutoComplete.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/src/fields/reference_field_display_markup.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Entity.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Entity.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/ReferenceFieldMarkUp.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/MarkUp/ReferenceFieldMarkUp.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/ReferenceField.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/ReferenceField.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Vocabulary.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Vocabulary.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/VocabularyInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/VocabularyInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/default/Controllers/FieldCreation.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/Controllers/FieldCreation.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/default/default_routes.json" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/default_routes.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/forms/content_type_field_creation_form.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/src/forms/content_type_field_creation_form.php" afterDir="false" />
-    </list>
+    <list default="true" id="94f10dfb-8858-44c2-a819-3faaa754f477" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -101,7 +89,7 @@
       <workItem from="1716615482733" duration="9831000" />
       <workItem from="1716641923656" duration="2700000" />
       <workItem from="1716647049357" duration="4762000" />
-      <workItem from="1716702469228" duration="1660000" />
+      <workItem from="1716702469228" duration="2732000" />
     </task>
     <servers />
   </component>
