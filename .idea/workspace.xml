@@ -5,12 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="94f10dfb-8858-44c2-a819-3faaa754f477" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/core/default/Controllers/ContentView.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/Controllers/ContentView.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/default/Controllers/FieldEdit.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/Controllers/FieldEdit.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/default/Controllers/AutoComplete.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/src/fields/reference_field_display_markup.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Entity.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Entity.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/ReferenceFieldMarkUp.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/MarkUp/ReferenceFieldMarkUp.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/ReferenceField.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/ReferenceField.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Vocabulary.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Vocabulary.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/VocabularyInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/VocabularyInterface.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/Controllers/FieldCreation.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/Controllers/FieldCreation.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/default/default_routes.json" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/default_routes.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/fields/text_field_display_markup.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/src/fields/text_field_display_markup.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/fields/textarea_field_display_markup.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/src/fields/textarea_field_display_markup.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/pages/node_node_view_content.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/src/pages/node_node_view_content.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/forms/content_type_field_creation_form.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/src/forms/content_type_field_creation_form.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,7 +97,11 @@
       <workItem from="1716055524177" duration="6028000" />
       <workItem from="1716100084548" duration="13357000" />
       <workItem from="1716194553127" duration="5035000" />
-      <workItem from="1716566283689" duration="367000" />
+      <workItem from="1716566283689" duration="4519000" />
+      <workItem from="1716615482733" duration="9831000" />
+      <workItem from="1716641923656" duration="2700000" />
+      <workItem from="1716647049357" duration="4762000" />
+      <workItem from="1716702469228" duration="1660000" />
     </task>
     <servers />
   </component>

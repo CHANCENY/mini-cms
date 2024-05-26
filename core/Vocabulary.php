@@ -2,14 +2,12 @@
 
 namespace Mini\Cms;
 
-use Mini\Cms\StorageManager\Connector;
+use Mini\Cms\Connections\Database\Database;
 
 class Vocabulary implements VocabularyInterface
 {
 
     private array $vocabulary = [];
-
-    private Connector $connector;
 
     public function getVocabulary()
     {
@@ -36,7 +34,7 @@ class Vocabulary implements VocabularyInterface
     public function load(string $vocabulary): null|Vocabulary
     {
        $query = "SELECT * FROM `vocabularies` WHERE `vocabulary_name` = :vocabulary";
-       $statement = $this->connector->getConnection()->prepare($query);
+       $statement = Database::database()->prepare($query);
        $statement->execute(['vocabulary' => $vocabulary]);
        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
        if(empty($data)) {
@@ -49,18 +47,30 @@ class Vocabulary implements VocabularyInterface
        }
        return $this;
     }
+    
+    public static function vocabularies(): false|array
+    {
+        $query = "SELECT * FROM `vocabularies`"; 
+        $query = Database::database()->prepare($query);
+        $query->execute();
+        $voc = $query->fetchAll();
+        foreach ($voc as &$value) {
+            $value = Vocabulary::vocabulary($value['vocabulary_name']);
+        }
+        return $voc;
+    }
 
 
     public function save()
     {
         $query = "SELECT * FROM `vocabularies` WHERE `vocabulary_name` = :vocabulary";
-        $statement = $this->connector->getConnection()->prepare($query);
+        $statement = Database::database()->prepare($query);
         $statement->bindValue(':vocabulary', $this->vocabulary['#values']['name'] ?? $this->vocabulary['#values']['vocabulary_name']);
         $statement->execute();
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
         if(empty($data)) {
             $query = "INSERT INTO vocabularies (vocabulary_name, vocabulary_label) VALUES (:vocabulary_name, :label)";
-            $statement = $this->connector->getConnection()->prepare($query);
+            $statement = Database::database()->prepare($query);
 
             $statement->bindValue(':vocabulary_name', $this->vocabulary['#values']['name'] ?? $this->vocabulary['#values']['vocabulary_name']);
             $statement->bindValue(':label', $this->vocabulary['#values']['label'] ?? $this->vocabulary['#values']['vocabulary_label']);
@@ -70,24 +80,16 @@ class Vocabulary implements VocabularyInterface
     }
 
 
-    public static function create(string $name, mixed $connector = null): bool
+    public static function create(string $name): bool
     {
         $vocabulary = new Vocabulary();
-        $vocabulary->connector($connector);
         $vocabulary->setVocabulary($name);
         return $vocabulary->save();
     }
 
-
-    public function connector(Connector $connector): void
-    {
-        $this->connector = $connector;
-    }
-
-    public static function vocabulary(string $name, mixed $connector): Vocabulary|null
+    public static function vocabulary(string $name): Vocabulary|null
     {
         $vocabulary = new Vocabulary();
-        $vocabulary->connector($connector);
         return $vocabulary->load($name);
     }
 }

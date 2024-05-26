@@ -55,6 +55,15 @@ class FieldCreation implements ControllerInterface
             $field_label_visible = $data->get('field_label_visible');
             $field_size = $data->get('field_size');
             $field_default_value = $data->get('field_default_value');
+            $reference_settings = [];
+            if($field_type === 'reference') {
+                $ref = $data->get('reference_setting');
+                $refList = explode('|', $ref);
+                $reference_settings = [
+                    'reference_type' => $refList[0],
+                    'reference_name' => $refList[1]
+                ];
+            }
 
             if(!empty($field_type) && !empty($field_name) && !empty($field_description) && !empty($field_size)) {
                $field = Field::create($field_type);
@@ -72,6 +81,9 @@ class FieldCreation implements ControllerInterface
                    });
                    $field->setDisplayFormat(reset($settings));
                    $field->setLabelVisible(!empty($field_label_visible));
+                   if(!empty($reference_settings)) {
+                       $field->setReferenceSettings($reference_settings);
+                   }
                    if($field->save()) {
                        (new RedirectResponse('/structure/content-type/'.$entity->getEntityTypeName(). '/fields'))->send();
                    }

@@ -4,8 +4,12 @@ namespace Mini\Cms\Fields;
 
 
 use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Entities\Node;
 use Mini\Cms\Fields\FieldViewDisplay\FieldViewDisplayInterface;
+use Mini\Cms\Services\Services;
 use Mini\Cms\StorageManager\FieldRequirementNotFulFilledException;
+use Mini\Cms\Vocabulary;
+use Throwable;
 
 class ReferenceField implements FieldInterface, FieldViewDisplayInterface
 {
@@ -151,6 +155,36 @@ class ReferenceField implements FieldInterface, FieldViewDisplayInterface
         $this->field['field_settings']['field_default_value'] = $defaultValue;
     }
 
+    public function setReferenceSettings(array $reference_settings): void
+    {
+        $this->field['field_settings']['reference_settings'] = $reference_settings;
+    }
+    
+    public function getReferenceSettings(): array
+    {
+        return $this->field['field_settings']['reference_settings'] ?? [];
+    }
+    
+    public function referenceResults(string $search_string): array|false
+    {
+        $settings = $this->getReferenceSettings();
+        $query = null;
+        $ref_name = null;
+        if($settings['reference_type'] === 'entity') {
+            $ref_name = $settings['reference_name'];
+            $query = "SELECT title AS name,node_id AS id FROM entity_node_data WHERE bundle = :id AND title LIKE '%$search_string%' LIMIT 10";
+        }
+        elseif ($settings['reference_type'] === 'vocabulary') {
+            $voc = Vocabulary::vocabulary($settings['reference_name']);
+            $ref_name = $voc->vid();
+            $query = "SELECT term_name AS name, FROM terms WHERE vocabulary_id = :id AND term_name LIKE '%$search_string%' LIMIT 10";
+        }
+        $query = Database::database()->prepare($query);
+        $query->bindParam(':id', $ref_name);
+        $query->execute();
+        return $query->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     public function getDefaultValue(): ?string
     {
         return $this->field['field_settings']['field_default_value'] ?? null;
@@ -193,27 +227,66 @@ class ReferenceField implements FieldInterface, FieldViewDisplayInterface
 
     public function setDisplayFormat(array $displayFormat): void
     {
-        // TODO: Implement setDisplayFormat() method.
+        $this->field['field_settings']['field_display_type'] = $displayFormat;
     }
 
     public function setLabelVisible(bool $visible): void
     {
-        // TODO: Implement setLabelVisible() method.
+        $this->field['field_settings']['field_label_visible'] = $visible;
     }
 
     public function displayType(): array
     {
-        return [];
+        return [
+            [
+                'label' => 'Link',
+                'name' => 'link',
+            ],
+            [
+                'label' => 'Text',
+                'name' => 'text',
+            ]
+        ];
     }
 
     public function getDisplayType(): array
     {
-        return [];
+        return $this->field['field_settings']['field_display_type'] ?? [
+            'label' => 'Link',
+            'name' => 'link',
+        ];
     }
 
     public function markUp(array $field_value): string
     {
-        return '';
+        $setting = [
+            'label' => $this->field['field_label'],
+            'label_visible' => $this->field['field_settings']['field_label_visible'] ?? false,
+            'label_name' => $this->getName(),
+        ];
+        $displayType = $this->getDisplayType();
+        $display_name = $displayType['name'];
+        $field_value = reset($field_value);
+
+        $set = $this->getReferenceSettings();
+
+
+        if($set['reference_type'] === 'entity') {
+
+            $node = Node::load((int) $field_value['value']);
+            if($node instanceof Node) {
+                if($display_name === 'link') {
+                    $field_value = "<a class='link' title='{$node->getTitle()}' href='/structure/content/node/{$node->id()}'>{$node->getTitle()}</a>";
+                }
+                elseif ($display_name === 'text') {
+                    $field_value = "<p>{$node->getTitle()}</p>";
+                }
+            }
+        }
+        elseif ($set['reference_type'] === 'vocabulary') {
+            //TODO: handle terms here.
+        }
+        return Services::create('render')->render('reference_field_display_markup.php',['value' => $field_value, 'setting' => $setting]);
     }
 
     public function isLabelVisible(): bool

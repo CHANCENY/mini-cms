@@ -428,5 +428,24 @@
         "description": "ghg",
         "url": "\/prashant",
         "handler": "Mini\\Cms\\default\\Controllers\\ContactUs"
+    },
+    {
+        "id": "e59e452a-1f65-4bcf-8ebb-147647fe9e32",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator",
+                "authenticated",
+                "anonymous"
+            ]
+        },
+        "name": "Auto Complete",
+        "description": "This route is for autocomplete api call",
+        "url": "\/filters\/autocomplete",
+        "handler": "Mini\\Cms\\default\\Controllers\\AutoComplete"
     }
 ]

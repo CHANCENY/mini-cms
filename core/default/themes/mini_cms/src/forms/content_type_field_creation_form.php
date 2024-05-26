@@ -77,5 +77,54 @@
            }
        }
        xhr.send();
+       field_reference_settings(event);
+    }
+
+    function field_reference_settings(event) {
+
+      const parentEl = event.parentElement.parentElement;
+        if(event.value === 'reference') {
+
+            const selectRef = document.createElement('select');
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', '/filters/autocomplete?action=ref_types', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function () {
+                if(this.status === 200) {
+                    try {
+                        const types = JSON.parse(this.responseText);
+                        Array.from(types).forEach((item)=>{
+                            const option = document.createElement('option');
+                            option.value = item.type+'|'+item.name;
+                            option.textContent = item.type +' '+item.label;
+                            selectRef.appendChild(option);
+                        });
+                    }catch (e) {
+
+                    }
+                }
+            }
+            xhr.send();
+
+            selectRef.name =  'reference_setting';
+            selectRef.id = 'reference_setting';
+            selectRef.className = 'form-control';
+            const label = document.createElement('label');
+            label.for = 'reference_setting';
+            label.textContent = "Reference Settings";
+
+            const div = document.createElement('div');
+            div.className = 'form-group mt-3';
+            div.appendChild(label);
+            div.appendChild(selectRef);
+
+            parentEl.insertBefore(div,event.parentElement.nextSibling);
+        }
+        else {
+            const ref = document.getElementById('reference_setting');
+            if(ref) {
+                ref.parentElement.remove();
+            }
+        }
     }
 </script>

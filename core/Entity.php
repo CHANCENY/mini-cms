@@ -80,7 +80,6 @@ class Entity
         return Database::database()->lastInsertId();
     }
 
-
     /**
      * Finding entity
      * @param string $entity_name Entity machine name.

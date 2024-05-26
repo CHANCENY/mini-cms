@@ -19,5 +19,4 @@ interface VocabularyInterface
 
     public static function create(string $vocabulary);
 
-    public function connector(Connector $connector);
 }
