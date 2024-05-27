@@ -119,4 +119,10 @@ class File
         $path = $style_resolved ?$this->resolveStyleUri() : $this->getUri();
         return $file->getRealPath($path);
     }
+
+    public function delete(): bool
+    {
+        $query = Database::database()->prepare("DELETE FROM file_managed WHERE fid = :id");
+        return $query->execute(['id'=>$this->file_data['fid']]);
+    }
 }

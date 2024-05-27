@@ -453,7 +453,8 @@
         "options": {
             "unauthorized_access": true,
             "methods": [
-                "GET"
+                "GET",
+                "POST"
             ],
             "roles": [
                 "administrator"

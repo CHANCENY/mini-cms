@@ -4,7 +4,7 @@ namespace Mini\Cms\Fields;
 
 interface FieldMarkUpInterface
 {
-    public function buildMarkup(FieldInterface $field): self;
+    public function buildMarkup(FieldInterface $field, array|null $default_value): self;
 
     public function getMarkup(): string;
 

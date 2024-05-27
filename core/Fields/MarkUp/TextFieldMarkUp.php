@@ -12,8 +12,9 @@ class TextFieldMarkUp implements FieldMarkUpInterface
 
     private FieldInterface $field;
 
-    public function buildMarkup(FieldInterface $field): FieldMarkUpInterface
+    public function buildMarkup(FieldInterface $field, array|null $default_value): FieldMarkUpInterface
     {
+        $default_value = $default_value['value'] ?? null;
         $this->field = $field;
         $is_required = !empty($field->isRequired()) ? 'required' : null;
         $size = $this->field->getSize();
@@ -21,7 +22,7 @@ class TextFieldMarkUp implements FieldMarkUpInterface
                <div class="form-group field-markup mt-3">
                <label for="field-{$this->field->getName()}">{$this->field->getLabel()}</label>
                <input type="text" name="{$this->field->getName()}" id="field-{$this->field->getName()}" class="form-control input-field-text"
-                $is_required size="$size">
+                $is_required size="$size" value="{$default_value}">
                </div>
 FIELD_MARKUP;
         return $this;

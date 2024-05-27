@@ -78,7 +78,7 @@ class Node implements NodeInterface
     public function get(string $key)
     {
         $key = str_starts_with($key,'field__') ? $key : 'field__'.$key;
-        return $this->data['#values'][$key] ?? throw new FieldNotFoundException('Field not found');
+        return $this->data['#values'][$key] ?? [];
     }
 
     /**
@@ -422,7 +422,7 @@ class Node implements NodeInterface
             $data = $statement->fetch(PDO::FETCH_ASSOC);
             $fieldValue = $field . '__value';
             if(empty($data)) {
-                $query = "INSERT INTO $field ('entity_id', $fieldValue) VALUES (:node_id, :field)";
+                $query = "INSERT INTO `$field` (`entity_id`, `$fieldValue`) VALUES (:node_id, :field)";
                 $statement = Database::database()->prepare($query);
                 $statement->bindValue(':node_id',$node_id);
                 $statement->bindValue(':field',$value);
@@ -439,10 +439,10 @@ class Node implements NodeInterface
         foreach ($data as $field=>$value) {
             if(str_starts_with($field,'field__field')) {
                 if(count($value) === 1) {
-                    $updater($field, $value[0]['value']);
+                    $updater($field, $value[0]['value'] ?? $value['values'][0]);
                 }else {
                     foreach ($value as $key=>$valueItem) {
-                        $updater($field, $valueItem['value']);
+                        $updater($field, gettype($valueItem) === 'array' ? $valueItem['value'] ?? $valueItem['values'] : $valueItem);
                     }
                 }
             }

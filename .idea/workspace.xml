@@ -4,7 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="94f10dfb-8858-44c2-a819-3faaa754f477" name="Changes" comment="" />
+    <list default="true" id="94f10dfb-8858-44c2-a819-3faaa754f477" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Entities/Node.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Entities/Node.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/FieldMarkUpInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/FieldMarkUpInterface.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/FileFieldMarkUp.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/MarkUp/FileFieldMarkUp.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/ReferenceFieldMarkUp.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/MarkUp/ReferenceFieldMarkUp.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/TextAreaFieldMarkUp.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/MarkUp/TextAreaFieldMarkUp.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/TextFieldMarkUp.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/MarkUp/TextFieldMarkUp.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Modules/FileSystem/File.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/FileSystem/File.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Modules/Form/FormBase.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/Form/FormBase.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/Controllers/ContentDelete.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/Controllers/ContentDelete.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/Controllers/ContentEdit.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/Controllers/ContentEdit.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/Controllers/FilesUploader.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/Controllers/FilesUploader.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/default_routes.json" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/default_routes.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/assets/js/file_manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/assets/js/file_manager.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -89,7 +104,8 @@
       <workItem from="1716615482733" duration="9831000" />
       <workItem from="1716641923656" duration="2700000" />
       <workItem from="1716647049357" duration="4762000" />
-      <workItem from="1716702469228" duration="2732000" />
+      <workItem from="1716702469228" duration="3369000" />
+      <workItem from="1716716279196" duration="15981000" />
     </task>
     <servers />
   </component>

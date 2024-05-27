@@ -18,7 +18,7 @@ class ContentDelete implements ControllerInterface
      */
     public function isAccessAllowed(): bool
     {
-        // TODO: Implement isAccessAllowed() method.
+        return true;
     }
 
     public function writeBody(): void

@@ -29,12 +29,16 @@ if(fileInputTags){
                                 aTag.textContent = item.name;
                                 aTag.target = '_blank';
                                 const span = document.createElement('span');
+                                const f = field.name;
                                 span.className = "remove float-end text-danger";
+                                span.style.cursor = "pointer";
+                                span.setAttribute('field',f);
                                 span.title = 'remove';
                                 span.ariaLabel = "remove";
                                 span.textContent = 'x';
                                 span.setAttribute('data',item.id);
                                 span.addEventListener('click',(e)=>{
+                                    remove_file(span);
                                     const list = field.value.split(',');
                                     const thisId = span.getAttribute('data');
                                     const filtered = list.map((item)=> {
@@ -64,4 +68,25 @@ if(fileInputTags){
             });
         }
     });
+
+    const removeTags = document.getElementsByClassName('remove');
+    if(removeTags) {
+        Array.from(removeTags).forEach((item)=>{
+            item.addEventListener('click',(e)=>{
+                remove_file(item);
+            })
+        });
+    }
+
+    function remove_file(item) {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '/files/assets/uploader?id='+item.getAttribute('data') + '&field='+item.getAttribute('field'), true);
+        xhr.onload = function () {
+            if(this.status === 200) {
+                item.parentElement.remove();
+                console.log(this.responseText);
+            }
+        }
+        xhr.send();
+    }
 }
