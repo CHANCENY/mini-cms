@@ -80,14 +80,7 @@ class ContentEdit implements ControllerInterface
                         if(!empty($data['title'])) {
                             $new_node = $node;
                             foreach ($data as $key=>$value) {
-
-                                if($key === 'title') {
-
-                                    $new_node->set($key,$value);
-                                }
-                                else {
-                                    $new_node->set('field__'. $key, $value);
-                                }
+                               $new_node->set($key, $value);
                             }
                             $new_node->update();
                         }

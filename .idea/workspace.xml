@@ -5,20 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="94f10dfb-8858-44c2-a819-3faaa754f477" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/core/default/Controllers/VocabularyDelete.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/default/Controllers/VocabularyEdit.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/src/forms/vocabulary_form.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/src/forms/vocabulary_form_edit.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/Entities/Node.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Entities/Node.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/FieldMarkUpInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/FieldMarkUpInterface.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/FieldInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/FieldInterface.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/FileField.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/FileField.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/FileFieldMarkUp.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/MarkUp/FileFieldMarkUp.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/ReferenceFieldMarkUp.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/MarkUp/ReferenceFieldMarkUp.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/TextAreaFieldMarkUp.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/MarkUp/TextAreaFieldMarkUp.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/TextFieldMarkUp.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/MarkUp/TextFieldMarkUp.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Modules/FileSystem/File.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/FileSystem/File.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Modules/Form/FormBase.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/Form/FormBase.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/ReferenceField.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/ReferenceField.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/TextAreaField.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/TextAreaField.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/TextField.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/TextField.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Vocabulary.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Vocabulary.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/Controllers/AutoComplete.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/Controllers/AutoComplete.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/default/Controllers/ContentDelete.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/Controllers/ContentDelete.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/default/Controllers/ContentEdit.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/Controllers/ContentEdit.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/default/Controllers/FilesUploader.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/Controllers/FilesUploader.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/Controllers/ContentView.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/Controllers/ContentView.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/Controllers/CreationContentForm.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/Controllers/CreationContentForm.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/default/default_routes.json" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/default_routes.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/assets/js/file_manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/assets/js/file_manager.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/menu.json" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/menu.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/fields/reference_field_display_markup.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/src/fields/reference_field_display_markup.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,24 +65,30 @@
   &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="2gePlDMvGcnyJu6Z8F4ePpt5ALZ" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/xampp/htdocs/mini-cms&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/xampp/htdocs/mini-cms/core/default/themes/mini_cms/src/forms",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\mini-cms\core\default\themes\mini_cms\src\forms" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\mini-cms\web\core" />
     </key>
@@ -106,6 +119,7 @@
       <workItem from="1716647049357" duration="4762000" />
       <workItem from="1716702469228" duration="3369000" />
       <workItem from="1716716279196" duration="15981000" />
+      <workItem from="1716910205436" duration="4014000" />
     </task>
     <servers />
   </component>

@@ -8,7 +8,6 @@ use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Response;
 use Mini\Cms\Controller\StatusCode;
 use Mini\Cms\Entities\Node;
-use Mini\Cms\Field;
 use Mini\Cms\Services\Services;
 use Throwable;
 
@@ -34,12 +33,11 @@ class ContentView implements ControllerInterface
         if($node instanceof Node) {
             $fields = $node->getFields();
             foreach($fields as $key=>$field) {
-                $fieldObject = Field::load($field['#name']);
                 try {
-                   $field_value = $node->get($fieldObject->getName());
+                   $field_value = $node->get($field->getName());
 
                    // Displaying markup
-                    $markup_line .= $fieldObject->markUp($field_value);
+                    $markup_line .= $field->markUp($field_value);
                 }catch (Throwable $exception) {
 
                 }

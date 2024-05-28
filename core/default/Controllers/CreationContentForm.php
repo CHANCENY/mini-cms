@@ -78,13 +78,7 @@ class CreationContentForm implements ControllerInterface
                     if(!empty($data['title'])) {
                         $new_node = Node::create($entity->getEntityTypeName());
                         foreach ($data as $key=>$value) {
-
-                            if($key === 'title') {
-                                $new_node->set($key,$value);
-                            }
-                            else {
-                                $new_node->set('field__'. $key, $value);
-                            }
+                            $new_node->set($key,$value);
                         }
                     
                         $new_node->save();

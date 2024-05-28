@@ -3,6 +3,8 @@
 namespace Mini\Cms\Entities;
 
 use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Field;
+use Mini\Cms\Fields\FieldInterface;
 use Mini\Cms\Modules\CurrentUser\CurrentUser;
 use Mini\Cms\NodeInterface;
 use PDO;
@@ -60,25 +62,24 @@ class Node implements NodeInterface
 
     public function set(string $key, mixed $value): void
     {
-        if($key === 'title') {
-            $this->data['#node']['title']['value'] = $value;
-        }
-        else {
-            if(gettype($value) == 'array') {
-                foreach ($value as $item=>$d) {
-                    $this->data['#values'][$key]['values'][] = $d;
-                }
-            }
-            else {
-                $this->data['#values'][$key]['value'] = $value;
-            }
-        }
+        // Let's loop through all fields of this entity to check if $key is actual field.
+       if($this->fields['#fields']) {
+           foreach ($this->fields['#fields'] as $field) {
+               if($field instanceof FieldInterface && $key === $field->getName()) {
+                   $field->setData($value);
+               }
+           }
+       }
+
+       $default_fields = array_keys($this->data['#node']);
+       if(in_array($key, $default_fields)) {
+           $this->data['#node'][$key]['value'] = $value;
+       }
     }
 
     public function get(string $key)
     {
-        $key = str_starts_with($key,'field__') ? $key : 'field__'.$key;
-        return $this->data['#values'][$key] ?? [];
+        return $this->data['#values'][$key] ?? null;
     }
 
     /**
@@ -99,6 +100,7 @@ class Node implements NodeInterface
             $this->data['#node']['updated']['value'] = (new \DateTime('now'))->getTimestamp();
             $this->data['#node']['deleted']['value'] = 0;
             $this->data['#node']['uid']['value'] = (new CurrentUser())->id();
+            $this->data['#node']['title']['value'] = null;
 
             $query = "SELECT * FROM entity_types_fields WHERE entity_type_id = :id";
             $statement = Database::database()->prepare($query);
@@ -106,14 +108,7 @@ class Node implements NodeInterface
             $statement->execute();
             $result = $statement->fetchAll(\PDO::FETCH_ASSOC) ?? [];
             foreach ($result as $field=>$value) {
-                $this->fields['#fields'][] = [
-                    '#id' => $value['entity_type_field_id'],
-                    '#name' => $value['field_name'],
-                    '#type' => $value['field_type'],
-                    '#description' => $value['field_description'],
-                    '#label' => $value['field_label'],
-                    '#settings' => json_decode($value['field_settings'],true),
-                ];
+                $this->fields['#fields'][] = Field::load($value['field_name']);
             }
 
         }else {
@@ -163,14 +158,7 @@ class Node implements NodeInterface
                 $statement->execute();
                 $result = $statement->fetchAll(\PDO::FETCH_ASSOC) ?? [];
                 foreach ($result as $field=>$value) {
-                    $this->fields['#fields'][] = [
-                        '#id' => $value['entity_type_field_id'],
-                        '#name' => $value['field_name'],
-                        '#type' => $value['field_type'],
-                        '#description' => $value['field_description'],
-                        '#label' => $value['field_label'],
-                        '#settings' => json_decode($value['field_settings'],true),
-                    ];
+                    $this->fields['#fields'][] = Field::load($value['field_name']);
                 }
             }
         }
@@ -178,13 +166,13 @@ class Node implements NodeInterface
 
         if(!empty($this->fields)) {
             $tables = array_map(function ($field){
-                return 'field__'.$field['#name'];
+                return $field->getName();
             }, $this->fields['#fields']);
 
             if($tables) {
                 foreach ($tables as $table) {
-                    $valueField = $table . '__value';
-                    $query = "SELECT $valueField, field_id FROM $table WHERE entity_id = :id";
+                    $valueField = 'field__'.$table . '__value';
+                    $query = "SELECT $valueField, field_id FROM field__{$table} WHERE entity_id = :id";
                     $statement = Database::database()->prepare($query);
                     $statement->bindValue(':id', $node_id);
                     $statement->execute();
@@ -228,158 +216,37 @@ class Node implements NodeInterface
 
     /**
      * Saving new node.
-     * @return false|string
-     * @throws DefaultNodeFieldNotProvidedException
-     * @throws FieldDefaultValueNotFoundForRequiredException
-     * @throws FieldMaxSizeException
-     * @throws NodeTitleNotProvidedException
+     * @return int|null
      */
-    public function save()
+    public function save(): ?int
     {
-        // Validate node defaults fields
-        foreach ($this->data['#node'] as $field=>$value) {
-            if($field === 'title' && empty($value['value'])) {
-                throw new NodeTitleNotProvidedException('title cannot be empty');
-            }
-            if(empty($value['value']) && $field !== 'deleted') {
-                throw new DefaultNodeFieldNotProvidedException($field . ' cannot be empty');
-            }
-        }
+        $columns = array_keys($this->data['#node']);
+        $placeholders = array_map(function ($field) {
+            return ':'.$field;
+        },$columns);
 
-        // Validate fields data based on given field settings
-        foreach ($this->fields['#fields'] as $field=>$value) {
+        $columns2 = array_map(function ($field) {
+            return "`$field`";
+        },$columns);
 
-           $field_data = $this->data['#values'];
-            $settings = $value['#settings'];
-
-            if(!empty($field_data) && isset($value['#name'])) {
-               $field_name = "field__" .$value['#name'];
-               $settableValue = $field_data[$field_name]['value'] ?? $field_data[$field_name]['values'] ?? null;
-
-               $validateSettings = function ($settableValue, $destination = 'value', $index = null) use ($field_data, $value, $field_name, $settings) {
-
-                   // Required checking.
-                   if(!empty($settings['field_required']) && $settings['field_required'] === 'NOT NULL') {
-
-                       if(empty($settableValue)) {
-                           // find default value.
-                           $default_value = $settings['field_default_value'] ?? null;
-                           if(empty($default_value)) {
-                               throw new FieldDefaultValueNotFoundForRequiredException($field_name . ' cannot be empty');
-                           }
-                           if($destination === 'values') {
-                               $this->data['#values'][$field_name][$destination][$index] = $default_value;
-                           }else {
-                               $this->data['#values'][$field_name][$destination] = $default_value;
-                           }
-                       }
-                   }
-                   else {
-                       if($destination === 'values') {
-                           $this->data['#values'][$field_name][$destination][$index] = $settableValue;
-                       }else {
-                           $this->data['#values'][$field_name][$destination] = $settableValue;
-                       }
-                   }
-
-                   // Size checking.
-                   if(!empty($settings['field_size'])) {
-
-                       if(gettype($settableValue) === 'string' && $settings['field_size'] < strlen($settableValue)) {
-                           throw new FieldMaxSizeException($field_name . ' value cannot be greater than ' . $settings['field_size']);
-                       }
-                   }
-               };
-
-               // Now we have value set and field settings
-               if(gettype($settableValue) == 'array') {
-                   foreach ($settableValue as $key=>$settableValueItem) {
-                      $validateSettings($settableValueItem, 'values',$key);
-                   }
-               }
-               else {
-                   $validateSettings($settableValue, 'value');
-               }
-           }
-        }
-
-        // Now we can start saving node data
-        $node_fields = array_keys($this->data['#node']);
-        $node_fields_line = implode(', ', $node_fields);
-        $placeholders = null;
-        foreach ($node_fields as $node_field) {
-            $placeholders .= ":$node_field, ";
-        }
-        $placeholders = rtrim($placeholders, ', ');
-        $node_fields_line = rtrim($node_fields_line, ', ');
-        $query = "INSERT INTO entity_node_data ($node_fields_line) VALUES ($placeholders)";
-    
-        // Insert in entity_node_data
         $con = Database::database();
-        $statement = $con->prepare($query);
-        foreach ($node_fields as $node_field) {
-            $statement->bindParam(':'.$node_field, $this->data['#node'][$node_field]['value']);
+        $query = $con->prepare("INSERT INTO entity_node_data (".implode(',', $columns2).") VALUES (".implode(',', $placeholders).")");
+        foreach ($columns as $field) {
+            $query->bindValue(':'.$field, $this->data['#node'][$field]['value']);
         }
-        $statement->execute();
+        $query->execute();
         $node_id = $con->lastInsertId();
 
-        // Now since we have saved node lets add or other fields
-        $tables_notifier = function ($field) {
-            try {
-                $query = "SELECT * FROM $field LIMIT 1";
-                $statement = Database::database()->prepare($query);
-                $statement->execute();
-                return true;
-            }catch (\PDOException $e){
-                return false;
-            }
-        };
-
-        if($node_id) {
-            $inserter = function ($table, $value) use ($node_id) {
-                $fields = [
-                    $table . '__value' => $value,
-                    'entity_id' => $node_id
-                ];
-                $fields_line = implode(', ', array_keys($fields));
-                $placeholders = null;
-                foreach (array_keys($fields) as $field) {
-                    $placeholders .= ":$field, ";
-                }
-                $placeholders = rtrim($placeholders, ', ');
-                $fields_line = rtrim($fields_line, ', ');
-                $query = "INSERT INTO $table ($fields_line) VALUES ($placeholders)";
-
-                $statement = Database::database()->prepare($query);
-                foreach ($fields as $field => $value) {
-                    $statement->bindParam(':'.$field, $fields[$field]);
-                }
-                return $statement->execute();
-            };
-
-            // Inserting fields data.
-            foreach ($this->data['#values'] as $field=>$value) {
-                if($tables_notifier($field)) {
-
-                    // Working on found table
-
-                    // Inserting values for values key
-                    if(!empty($value['values']) && gettype($value['values']) === 'array') {
-                        foreach ($value['values'] as $valueItem) {
-                           $inserter($field, $valueItem);
-                        }
-                    }
-
-                    // Inserting values for value key
-                    if(!empty($value['value'])) {
-                       $inserter($field, $value['value']);
-                    }
-
+        // Now let's save fields data if node was created
+        if(!empty($node_id)) {
+            foreach ($this->fields['#fields'] as $field) {
+                if($field instanceof FieldInterface) {
+                    $field->dataSave($node_id);
                 }
             }
+            return $node_id;
         }
-
-        return $node_id;
+        return  null;
     }
 
     /**
@@ -388,7 +255,14 @@ class Node implements NodeInterface
      */
     public function delete()
     {
-        $query = "UPDATE entity_node_data SET deleted = 1 WHERE node_id = :id";
+        if($this->fields['#fields']) {
+            foreach ($this->fields['#fields'] as $field) {
+                if($field instanceof FieldInterface) {
+                    $field->dataDelete($this->id());
+                }
+            }
+        }
+        $query = "DELETE FROM entity_node_data WHERE node_id = :id";
         $statement = Database::database()->prepare($query);
         $statement->bindValue(':id',$this->id());
         return $statement->execute();
@@ -397,7 +271,6 @@ class Node implements NodeInterface
     /**
      * Checking if node is deleted.
      * @return bool
-     * @throws FieldNotFoundException
      */
     public function isDeleted(): bool
     {
@@ -410,65 +283,38 @@ class Node implements NodeInterface
      */
     public function update(): bool
     {
-        // Simple Lets target fields
-        $data = $this->getValues();
-        $node_id = $this->id();
+        $columns = array_keys($this->data['#node']);
+        $index = array_filter($columns,function($field){
+            return $field === 'node_id';
+        });
+        if($index) {
+            unset($columns[array_keys($index)[0]]);
+        }
+        $columns2 = array_map(function ($field) {
+            return "`$field` = :$field";
+        },$columns);
 
-        $updater = function ($field, $value) use ($node_id) {
-            $query = "SELECT * FROM $field WHERE entity_id = :node_id LIMIT 1";
-            $statement = Database::database()->prepare($query);
-            $statement->bindValue(':node_id',$node_id);
-            $statement->execute();
-            $data = $statement->fetch(PDO::FETCH_ASSOC);
-            $fieldValue = $field . '__value';
-            if(empty($data)) {
-                $query = "INSERT INTO `$field` (`entity_id`, `$fieldValue`) VALUES (:node_id, :field)";
-                $statement = Database::database()->prepare($query);
-                $statement->bindValue(':node_id',$node_id);
-                $statement->bindValue(':field',$value);
-                return $statement->execute();
-            }else {
-                $query = "UPDATE $field SET $fieldValue = :field WHERE entity_id = :node_id";
-                $statement = Database::database()->prepare($query);
-                $statement->bindValue(':field', $value);
-                $statement->bindValue(':node_id', $node_id);
-                return $statement->execute();
-            }
-        };
+        $con = Database::database();
+        $query = $con->prepare("UPDATE entity_node_data SET ".implode(',', $columns2)." WHERE node_id = :id");
 
-        foreach ($data as $field=>$value) {
-            if(str_starts_with($field,'field__field')) {
-                if(count($value) === 1) {
-                    $updater($field, $value[0]['value'] ?? $value['values'][0]);
-                }else {
-                    foreach ($value as $key=>$valueItem) {
-                        $updater($field, gettype($valueItem) === 'array' ? $valueItem['value'] ?? $valueItem['values'] : $valueItem);
-                    }
-                }
-            }
-            else {
-                $query = "UPDATE entity_node_data SET $field = :field WHERE node_id = :node_id";
-                if($field !== 'node_id' && $field !== 'updated' && $field !== 'created') {
-                    $statement = Database::database()->prepare($query);
-                    $statement->bindValue(':field', $value[0]['value']);
-                    $statement->bindValue(':node_id', $node_id);
-                    $statement->execute();
+        foreach ($columns as $field) {
+            $query->bindValue(':'.$field, $this->data['#node'][$field]['value']);
+        }
+        $query->bindValue(':id',$this->id());
+        $flags = [];
+        if($query->execute()) {
+            foreach ($this->fields['#fields'] as $field) {
+                if($field instanceof FieldInterface) {
+                    $flags[] = $field->dataUpdate($this->id());
                 }
             }
         }
-        // Let's change updated
-        $query = "UPDATE entity_node_data SET updated = :uo WHERE node_id = :id";
-        $statement = Database::database()->prepare($query);
-        $updated = (new \DateTime('now'))->getTimestamp();
-        $statement->bindValue(':uo', $updated);
-        $statement->bindValue(':id', $node_id);
-        return $statement->execute();
+        return in_array(true,$flags);
     }
 
     /**
      * Checking if node was updated.
      * @return bool True if was updated.
-     * @throws FieldNotFoundException
      */
     public function isUpdated(): bool
     {
@@ -503,7 +349,6 @@ class Node implements NodeInterface
      * Getting value of field.
      * @param string $field Field machine name.
      * @return mixed Array if multiple values found.
-     * @throws FieldNotFoundException
      */
     public function getValue(string $field): mixed
     {

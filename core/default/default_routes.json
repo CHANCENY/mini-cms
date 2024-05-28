@@ -480,5 +480,71 @@
         "description": "This is for deleting content",
         "url": "\/structure\/content\/node\/{node}\/delete",
         "handler": "Mini\\Cms\\default\\Controllers\\ContentDelete"
+    },
+    {
+        "id": "b6a246e2-b411-4921-817f-5346511d6038",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Vocabularies",
+        "description": "This is for listing Vocabularies",
+        "url": "\/structure\/vocabularies",
+        "handler": "Mini\\Cms\\default\\Controllers\\VocabularyListing"
+    },
+    {
+        "id": "8b5928bf-ccfe-44b9-90c2-7d3b4c2f985b",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Vocabulary Creation",
+        "description": "This is for creating vocabulary",
+        "url": "\/structure\/vocabularies\/new",
+        "handler": "Mini\\Cms\\default\\Controllers\\VocabularyCreation"
+    },
+    {
+        "id": "d2b0190c-a4a8-4ef5-b4ed-371239d4bb5b",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Vocabulary delete",
+        "description": "This is voca deletion",
+        "url": "\/structure\/vocabularies\/{vid}\/delete",
+        "handler": "Mini\\Cms\\default\\Controllers\\VocabularyDelete"
+    },
+    {
+        "id": "e7175e0d-24e1-418b-ae71-72eb6b356846",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Vocabulary Edit",
+        "description": "This is for deleting voca",
+        "url": "\/structure\/vocabularies\/{vid}\/edit",
+        "handler": "Mini\\Cms\\default\\Controllers\\VocabularyEdit"
     }
 ]

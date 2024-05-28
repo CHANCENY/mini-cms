@@ -20,14 +20,17 @@ class FileFieldMarkUp implements FieldMarkUpInterface
                 $file = File::load((int) $value['value']);
                 $default .= <<<FILE
 <div class="col px-5 ps-0 mt-1 mb-1">
-    <a href="/{$file->getFilePath()}" target="_blank">{$file->getName()}</a>
-    <span style="cursor: pointer;" field="{$field->getName()}" class="remove float-end text-danger" title="remove" aria-label="remove" data="{$value['value']}">x</span>
+    <a href="/{$file?->getFilePath()}" target="_blank">{$file?->getName()}</a>
+    <span style="cursor: pointer;" field="{$field?->getName()}" class="remove float-end text-danger" title="remove" aria-label="remove" data="{$value['value']}">x</span>
 </div>
 FILE;
             }
         }
         $this->field = $field;
         $is_required = !empty($field->isRequired()) ? 'required' : null;
+        if(!empty($default_value)) {
+            $is_required = null;
+        }
         $size = $this->field->getSize();
         $name = $size > 1 ? $this->field->getName() . '[]' : $this->field->getName();
         $multiple = $size > 1 ? 'multiple' : null;

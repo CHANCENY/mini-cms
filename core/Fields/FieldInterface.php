@@ -41,4 +41,14 @@ interface FieldInterface
 
     public function isLabelVisible(): bool;
 
+    public function dataSave(int $entity): array|int|null;
+
+    public function dataUpdate(int $entity): bool;
+
+    public function dataDelete(int $entity): bool;
+
+    public function fetchData(int $entity): array;
+
+    public function setData(mixed $data): FieldInterface;
+
 }

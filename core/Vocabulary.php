@@ -21,7 +21,7 @@ class Vocabulary implements VocabularyInterface
 
     public function getLabelName()
     {
-        return $this->vocabulary['#values']['vocabulary_label'] ?? $this->vocabulary['#values']['name'];
+        return $this->vocabulary['#values']['vocabulary_label'] ?? $this->vocabulary['#values']['label'];
     }
 
     public function setVocabulary($vocabulary): void
@@ -91,5 +91,18 @@ class Vocabulary implements VocabularyInterface
     {
         $vocabulary = new Vocabulary();
         return $vocabulary->load($name);
+    }
+
+    public function delete(): bool
+    {
+        $query = Database::database()->prepare("DELETE FROM vocabularies WHERE vocabulary_name = :vid");
+        $query->bindValue(':vid', $this->getVocabulary());
+        return $query->execute();
+    }
+
+    public function update(string $label): bool
+    {
+        $query = Database::database()->prepare("UPDATE vocabularies SET vocabulary_label = :label WHERE vocabulary_name = :vid");
+        return $query->execute(['label'=>$label, 'vid'=>$this->getVocabulary()]);
     }
 }

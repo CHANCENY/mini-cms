@@ -12,6 +12,8 @@ class TextAreaField implements FieldInterface, FieldViewDisplayInterface
 {
     private array $field = array();
 
+    private mixed $savable_data;
+
     public function __construct()
     {
         $this->field = [
@@ -262,5 +264,111 @@ class TextAreaField implements FieldInterface, FieldViewDisplayInterface
     public function isLabelVisible(): bool
     {
         return $this->field['field_settings']['field_label_visible'] ?? false;
+    }
+
+    public function dataSave(int $entity): array|int|null
+    {
+        $table = "field__".$this->field['field_name'];
+        $value_col = "field__".$this->field['field_name'].'__value';
+        $flags = [];
+        if(is_array($this->savable_data)) {
+            foreach($this->savable_data as $value) {
+                $value = is_array($value) ? reset($value) : $value;
+                $con = Database::database();
+                $query = $con->prepare("INSERT INTO $table (`$value_col`,`entity_id`) VALUES (:value, :entity_id)");
+                $query->execute(['value' => $value, 'entity_id' => $entity]);
+                $flags[] = $con->lastInsertId();
+            }
+        }else {
+            $con = Database::database();
+            $query = $con->prepare("INSERT INTO $table (`$value_col`,`entity_id`) VALUES (:value, :entity_id)");
+            $query->execute(['value' => $this->savable_data, 'entity_id' => $entity]);
+            $flags[] = $con->lastInsertId();
+        }
+        if(count($flags) === 0) {
+            return null;
+        }
+        elseif (count($flags) === 1) {
+            return $flags[0];
+        }
+        return $flags;
+    }
+
+    public function dataUpdate(int $entity): bool
+    {
+        $table = "field__".$this->field['field_name'];
+        $value_col = "field__".$this->field['field_name'].'__value';
+
+        if(empty($this->savable_data)) {
+            $this->dataDelete($entity);
+            return false;
+        }
+
+        $flags = [];
+        if(is_array($this->savable_data)) {
+            foreach($this->savable_data as $field) {
+                $value = is_array($field) ? reset($value) : $field;
+                $query = "SELECT * FROM $table WHERE $value_col = :value AND entity_id = :entity_id";
+                $query = Database::database()->prepare($query);
+                $query->execute(['value' => $value, 'entity_id' => $entity]);
+                if($query->rowCount() <= 0) {
+                    $query = "INSERT INTO $table (`$value_col`,`entity_id`) VALUES (:value, :entity_id)";
+                    $query = Database::database()->prepare($query);
+                    $query->execute(['value' => $value, 'entity_id' => $entity]);
+                }
+                else {
+                    $query = Database::database()->prepare("UPDATE $table SET $value_col = :value WHERE entity_id = :entity");
+                    if($query->execute(['value' => $value, 'entity' => $entity])) {
+                        $flags[] = true;
+                    }
+                }
+            }
+        }
+        else {
+            $query = "SELECT * FROM $table WHERE $value_col = :value AND entity_id = :entity_id";
+            $query = Database::database()->prepare($query);
+            $query->execute(['value' => $this->savable_data, 'entity_id' => $entity]);
+            if($query->rowCount() <= 0) {
+                $query = "INSERT INTO $table (`$value_col`,`entity_id`) VALUES (:value, :entity_id)";
+                $query = Database::database()->prepare($query);
+                $query->execute(['value' => $this->savable_data, 'entity_id' => $entity]);
+            }
+            else{
+                $query = Database::database()->prepare("UPDATE $table SET $value_col = :value WHERE entity_id = :entity");
+                if($query->execute(['value' => $this->savable_data, 'entity' => $entity])) {
+                    $flags[] = true;
+                }
+            }
+        }
+        return in_array(true, $flags);
+    }
+
+    public function dataDelete(int $entity): bool
+    {
+        $table = "field__".$this->field['field_name'];
+        $query = "DELETE FROM $table WHERE entity_id = :entity_id";
+        $statement = Database::database()->prepare($query);
+        return $statement->execute(['entity_id' => $entity]);
+    }
+
+    public function fetchData(int $entity): array
+    {
+        $table = "field__".$this->field['field_name'];
+        $query = Database::database()->prepare("SELECT * FROM $table WHERE entity_id = :entity_id");
+        $query->execute(['entity_id' => $entity]);
+        $data =  $query->fetchAll(PDO::FETCH_ASSOC);
+
+        $returnable = [];
+        foreach ($data as $value) {
+            $col = $table.'__value';
+            $returnable[] = $value[$col];
+        }
+        return $returnable;
+    }
+
+    public function setData(mixed $data): FieldInterface
+    {
+        $this->savable_data = $data;
+        return $this;
     }
 }

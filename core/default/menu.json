@@ -130,5 +130,20 @@
       "roles": ["administrator"],
       "permission": ["administrator_access"]
     }
+  },
+  "menu_vocabulary": {
+    "label": "Vocabulary",
+    "link": "/structure/vocabularies",
+    "icon": "vocabularies",
+    "children": [],
+    "attributes": {
+      "class": "nav-item",
+      "id": "nav-item-vocabularies",
+      "title": "vocabularies"
+    },
+    "options": {
+      "roles": ["administrator"],
+      "permission": ["administrator_access"]
+    }
   }
 }
