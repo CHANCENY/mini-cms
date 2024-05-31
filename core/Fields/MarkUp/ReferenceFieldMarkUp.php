@@ -22,20 +22,20 @@ class ReferenceFieldMarkUp implements FieldMarkUpInterface
         $this->markup = <<<FIELD_MARKUP
                <div class="form-group field-markup mt-3">
                <label for="field-{$this->field->getName()}">{$this->field->getLabel()}</label>
-               <input type="text" oninput="filter_autocomplete(this)" name="{$this->field->getName()}" id="field-{$this->field->getName()}" class="form-control input-field-text"
+               <input type="text" name="{$this->field->getName()}" id="field-{$this->field->getName()}" class="form-control input-field-text"
                 $is_required size="$size" value="{$default_value}">
                </div>
                 
                 <div class="d-none" style="border: 1px solid #eee;margin-top: 10px;padding: 5px;border-radius: 2px;">
-                  <div id="filter-results">
+                  <div id="filter-results-{$this->field->getName()}">
                   <ul></ul>
 </div>
                 </div>
                 <script type="application/javascript" nonce="$random">
-                function filter_autocomplete(event) {
-                  const data = {field: event.name, value: event.value};
+                document.getElementById('field-{$this->field->getName()}').addEventListener('input',(event)=> {
+                  const data = {field: event.target.name, value: event.target.value};
                   setTimeout(()=>{
-                       const parentEl = document.querySelector('#filter-results > ul');
+                       const parentEl = document.querySelector('#filter-results-{$this->field->getName()} > ul');
                       const xhr = new XMLHttpRequest();
                       xhr.open('GET', '/filters/autocomplete?'+ new URLSearchParams(data).toString(), true);
                       xhr.setRequestHeader('Content-Type', 'application/json');
@@ -60,7 +60,7 @@ class ReferenceFieldMarkUp implements FieldMarkUpInterface
                                       a.title = item.id; 
                                       a.addEventListener('click',(e)=>{
                                           e.preventDefault();
-                                          event.value = a.title;
+                                          event.target.value = a.title;
                                           parentEl.parentElement.parentElement.classList.add('d-none');
                                       });
                                       li.appendChild(a);
@@ -76,8 +76,9 @@ class ReferenceFieldMarkUp implements FieldMarkUpInterface
                           }
                       }
                       xhr.send();
-                  }, 2000)
-                }
+                  }, 2000)  
+                })
+              
 </script>
 FIELD_MARKUP;
         return $this;

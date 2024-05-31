@@ -28,6 +28,7 @@
                                     <td><?= $vocabulary->getVocabulary(); ?></td>
                                     <td>
                                         <div class="action-button">
+                                            <a title="edit vocabulary" aria-label="edit vocabulary" class="text-decoration-none" href="/vocabularies/<?= $vocabulary->getVocabulary(); ?>/term/list"><i class="fa-solid fa-list"></i></a>
                                             <a title="edit vocabulary" aria-label="edit vocabulary" class="text-decoration-none" href="/structure/vocabularies/<?= $vocabulary->getVocabulary(); ?>/edit"><i class="fa-solid fa-pen-to-square"></i></a>
                                             <a title="delete vocabulary" aria-label="delete vocabulary" class="text-decoration-none mx-2 ms-2" href="/structure/vocabularies/<?= $vocabulary->getVocabulary(); ?>/delete"><i class="fa-solid fa-trash"></i></a>
                                             <a title="add term" aria-label="add term" class="text-decoration-none mx-2 ms-2" href="/structure/vocabularies/<?= $vocabulary->getVocabulary(); ?>/term/new"><i class="fa-solid fa-plus"></i></a>

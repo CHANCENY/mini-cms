@@ -2,23 +2,26 @@
 
 namespace Mini\Cms\Entities;
 
-use Chance\Entity\ReferenceInterface;
-use Chance\Entity\StorageManager\Connector;
-use Chance\Entity\VocabularyNotFoundException;
+use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\ReferenceInterface;
+use Mini\Cms\Vocabulary;
+use Mini\Cms\VocabularyNotFoundException;
 
 class Term implements ReferenceInterface
 {
-    private $termData;
-    private Connector $connector;
+    private array $termData;
 
     public function getId()
     {
         return $this->termData['term_id'];
     }
 
-    public function load(string $vid)
+    public function load(int $term): static
     {
-        // TODO: Implement load() method.
+        $query = Database::database()->prepare("SELECT * FROM terms WHERE term_id = :id");
+        $query->execute(['id' => $term]);
+        $this->termData = $query->fetch();
+        return $this;
     }
 
     public function getTerm(): string
@@ -43,10 +46,15 @@ class Term implements ReferenceInterface
         }
     }
 
+    public static function term(int $termId): static
+    {
+       return (new static())->load($termId);
+    }
+
     public function save(): array
     {
         $query = "SELECT * FROM `vocabularies` WHERE `vid` = :vid";
-        $statement = $this->connector->getConnection()->prepare($query);
+        $statement =  Database::database()->prepare($query);
         $statement->bindValue(':vid', $this->termData['#values']['vid']);
         $statement->execute();
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC)[0]['vocabulary_name'] ?? null;
@@ -57,18 +65,18 @@ class Term implements ReferenceInterface
                 $vid = $this->termData['#values']['vid'];
 
                 $query = "SELECT * FROM terms WHERE vocabulary_id = :vid AND term_name = :term";
-                $statement = $this->connector->getConnection()->prepare($query);
+                $statement =  Database::database()->prepare($query);
                 $statement->bindValue(':vid', $vid);
                 $statement->bindValue(':term', $term);
                 $statement->execute();
                 $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
                 if(empty($data)) {
                     $query = "INSERT INTO terms (vocabulary_id, term_name) VALUES (:vid, :term)";
-                    $statement = $this->connector->getConnection()->prepare($query);
+                    $statement =  Database::database()->prepare($query);
                     $statement->bindValue(':vid', $vid);
                     $statement->bindValue(':term', $term);
                     $statement->execute();
-                    $term_id[] = $this->connector->getConnection()->lastInsertId();
+                    $term_id[] =  Database::database()->lastInsertId();
                 }else {
                     $term_id[] = $data[0]['term_id'];
                 }
@@ -79,14 +87,62 @@ class Term implements ReferenceInterface
         return $term_id;
     }
 
-
-    public function connector(Connector $connector): void
+    public function setVid(string|int $vid): void
     {
-        $this->connector = $connector;
+        if(is_string($vid)) {
+            $vocabulary = Vocabulary::vocabulary($vid);
+            $vid = $vocabulary->vid();
+        }
+        $this->termData['#values']['vid'] = $vid;
     }
 
-    public function setVid(int $vid): void
+    public static function loads(string $vid): array
     {
-        $this->termData['#values']['vid'] = $vid;
+        $vocabulary = Vocabulary::vocabulary($vid);
+        $vid = $vocabulary->vid();
+
+        $query = "SELECT term_id FROM terms WHERE vocabulary_id = :vid";
+        $statement =  Database::database()->prepare($query);
+        $statement->bindValue(':vid', $vid);
+        $statement->execute();
+        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        if(!empty($data)) {
+           foreach ($data as &$term) {
+               $term = (new Term())->load($term['term_id']);
+           }
+        }
+        return $data;
+    }
+
+    public function update(): bool
+    {
+        $query = "UPDATE terms SET term_name = :term_name WHERE term_id = :term_id";
+        $statement =  Database::database()->prepare($query);
+        $statement->bindValue(':term_name', $this->termData['#values']['term'][0]);
+        $statement->bindValue(':term_id', $this->getId());
+        return $statement->execute();
+    }
+
+    public function delete(): bool
+    {
+        $query = "DELETE FROM terms WHERE term_id = :term_id";
+        $statement =  Database::database()->prepare($query);
+        $statement->bindValue(':term_id', $this->getId());
+        return $statement->execute();
+    }
+
+    public static function find(string $termId): array
+    {
+        $query = "SELECT nid FROM term_nodes WHERE tid = :term_id";
+        $statement =  Database::database()->prepare($query);
+        $statement->bindValue(':term_id', $termId);
+        $statement->execute();
+        $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        if(!empty($data)) {
+            foreach ($data as &$node) {
+                $node = Node::load($node['nid']);
+            }
+        }
+        return $data;
     }
 }

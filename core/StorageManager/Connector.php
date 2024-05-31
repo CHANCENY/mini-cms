@@ -71,6 +71,9 @@ class Connector
 
             $query = "CREATE TABLE IF NOT EXISTS `terms` (term_id INTEGER PRIMARY KEY AUTOINCREMENT, term_name varchar(255) NOT NULL, vocabulary_id INTEGER NOT NULL)";
             $this->connection->exec($query);
+
+            $query = "CREATE TABLE IF NOT EXISTS `term_nodes` (tnd INTEGER PRIMARY KEY AUTOINCREMENT, tid INTEGER NOT NULL, nid INTEGER NOT NULL)";
+            $this->connection->exec($query);
         }
         if($database->getDatabaseType() === 'mysql') {
             // Table entity_types.
@@ -88,6 +91,9 @@ class Connector
             $this->connection->exec($query);
 
             $query = "CREATE TABLE IF NOT EXISTS `terms` (term_id INTEGER PRIMARY KEY AUTO_INCREMENT, term_name varchar(255) NOT NULL, vocabulary_id INTEGER NOT NULL)";
+            $this->connection->exec($query);
+
+            $query = "CREATE TABLE IF NOT EXISTS `term_nodes` (tnd INTEGER PRIMARY KEY AUTO_INCREMENT, tid INTEGER NOT NULL, nid INTEGER NOT NULL)";
             $this->connection->exec($query);
         }
     }

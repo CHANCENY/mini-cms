@@ -546,5 +546,88 @@
         "description": "This is for deleting voca",
         "url": "\/structure\/vocabularies\/{vid}\/edit",
         "handler": "Mini\\Cms\\default\\Controllers\\VocabularyEdit"
+    },
+    {
+        "id": "0f8d9541-d6c2-4d67-b0e0-9d2c7e00e8f5",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "New Term Item",
+        "description": "This is for adding terms",
+        "url": "\/structure\/vocabularies\/{vid}\/term\/new",
+        "handler": "Mini\\Cms\\default\\Controllers\\TermCreation"
+    },
+    {
+        "id": "9e8b9e1a-11a2-4ff4-abdf-e39e51bb4f68",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Terms",
+        "description": "This is displaying terms",
+        "url": "\/vocabularies\/{vid}\/term\/list",
+        "handler": "Mini\\Cms\\default\\Controllers\\TermListing"
+    },
+    {
+        "id": "57b5186f-fb96-42af-961e-2d647f016301",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Term Edit",
+        "description": "This is term edit",
+        "url": "\/structure\/vocabularies\/{vid}\/term\/{tid}\/edit",
+        "handler": "Mini\\Cms\\default\\Controllers\\TermEdit"
+    },
+    {
+        "id": "afc20ed4-b451-4cec-9d74-1862bb058438",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Term Deletion",
+        "description": "This is term deletion",
+        "url": "\/structure\/vocabularies\/{vid}\/term\/{tid}\/delete",
+        "handler": "Mini\\Cms\\default\\Controllers\\TermDelete"
+    },
+    {
+        "id": "a7322f9d-3dd0-4be0-8bd4-a156b520b742",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator",
+                "authenticated"
+            ]
+        },
+        "name": "Content By Term",
+        "description": "This is for displaying content by terms",
+        "url": "\/content\/term\/{tid}",
+        "handler": "Mini\\Cms\\default\\Controllers\\ContentByTerm"
     }
 ]

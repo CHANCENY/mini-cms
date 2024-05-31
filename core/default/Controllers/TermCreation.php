@@ -7,11 +7,11 @@ use Mini\Cms\Controller\ControllerInterface;
 use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Response;
 use Mini\Cms\Controller\StatusCode;
+use Mini\Cms\Entities\Term;
 use Mini\Cms\Services\Services;
-use Mini\Cms\Vocabulary;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class VocabularyEdit implements ControllerInterface
+class TermCreation implements ControllerInterface
 {
 
     public function __construct(private Request &$request, private Response &$response)
@@ -23,23 +23,25 @@ class VocabularyEdit implements ControllerInterface
      */
     public function isAccessAllowed(): bool
     {
-        return true;
+       return true;
     }
 
     public function writeBody(): void
     {
         if($this->request->isMethod(\Symfony\Component\HttpFoundation\Request::METHOD_POST)) {
-            $vocabulary_label = $this->request->getPayload()->get('vocabulary_label');
-            $vocabulary_name = $this->request->get('vid');
-            if($vocabulary_label) {
-                if((new Vocabulary())->load($vocabulary_name)?->update($vocabulary_label)) {
-                    (new RedirectResponse('/structure/vocabularies'))->send();
+            $term_name = $this->request->getPayload()->get('term_name');
+            if($term_name) {
+                $term = new Term();
+                $term->setTerm($term_name);
+                $term->setVid($this->request->get('vid'));
+                if($term->save()) {
+                    (new RedirectResponse("/vocabularies/{$this->request->get('vid')}/term/list"))->send();
                     exit;
                 }
             }
         }
         $this->response->setContentType(ContentType::TEXT_HTML)
             ->setStatusCode(StatusCode::OK)
-            ->write(Services::create('render')->render('vocabulary_form_edit.php'));
+            ->write(Services::create('render')->render('term_creation_form.php'));
     }
 }

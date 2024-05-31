@@ -7,11 +7,11 @@ use Mini\Cms\Controller\ControllerInterface;
 use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Response;
 use Mini\Cms\Controller\StatusCode;
+use Mini\Cms\Entities\Term;
 use Mini\Cms\Services\Services;
-use Mini\Cms\Vocabulary;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-class VocabularyEdit implements ControllerInterface
+class TermEdit implements ControllerInterface
 {
 
     public function __construct(private Request &$request, private Response &$response)
@@ -28,18 +28,22 @@ class VocabularyEdit implements ControllerInterface
 
     public function writeBody(): void
     {
+        $vid = $this->request->get('vid');
+        $tid = $this->request->get('tid');
         if($this->request->isMethod(\Symfony\Component\HttpFoundation\Request::METHOD_POST)) {
-            $vocabulary_label = $this->request->getPayload()->get('vocabulary_label');
-            $vocabulary_name = $this->request->get('vid');
-            if($vocabulary_label) {
-                if((new Vocabulary())->load($vocabulary_name)?->update($vocabulary_label)) {
-                    (new RedirectResponse('/structure/vocabularies'))->send();
+            $term_name = $this->request->get('term_name');
+            if($term_name) {
+                $term = Term::term($tid);
+                $term->setTerm($term_name);
+                if($term->update()) {
+                    (new RedirectResponse("/vocabularies/$vid/term/list"))->send();
                     exit;
                 }
             }
         }
+        $term = Term::term((int) $tid);
         $this->response->setContentType(ContentType::TEXT_HTML)
             ->setStatusCode(StatusCode::OK)
-            ->write(Services::create('render')->render('vocabulary_form_edit.php'));
+            ->write(Services::create('render')->render('term_edit.php', ['tid' => $tid, 'vid' => $vid,'term_name' => $term->getTerm()]));
     }
 }

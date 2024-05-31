@@ -2,13 +2,11 @@
 
 namespace Mini\Cms;
 
-use Mini\Cms\StorageManager\Connector;
-
 interface ReferenceInterface
 {
     public function getId();
 
-    public function load(string $vid);
+    public function load(int $term): ReferenceInterface;
 
     public function getTerm(): string;
 
@@ -20,9 +18,8 @@ interface ReferenceInterface
 
     public function save(): array;
 
-
-    public function connector(Connector $connector): void;
-
     public function setVid(int $vid): void;
+
+    public static  function loads(string $vid): array;
 
 }

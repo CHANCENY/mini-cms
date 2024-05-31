@@ -5,6 +5,7 @@ namespace Mini\Cms\Fields;
 
 use Mini\Cms\Connections\Database\Database;
 use Mini\Cms\Entities\Node;
+use Mini\Cms\Entities\Term;
 use Mini\Cms\Fields\FieldViewDisplay\FieldViewDisplayInterface;
 use Mini\Cms\Services\Services;
 use Mini\Cms\StorageManager\FieldRequirementNotFulFilledException;
@@ -179,7 +180,8 @@ class ReferenceField implements FieldInterface, FieldViewDisplayInterface
         elseif ($settings['reference_type'] === 'vocabulary') {
             $voc = Vocabulary::vocabulary($settings['reference_name']);
             $ref_name = $voc->vid();
-            $query = "SELECT term_name AS name, FROM terms WHERE vocabulary_id = :id AND term_name LIKE '%$search_string%' LIMIT 10";
+            $query = "SELECT term_name AS name,term_id AS id FROM terms WHERE vocabulary_id = :id AND term_name LIKE '%$search_string%' LIMIT 10";
+
         }
         $query = Database::database()->prepare($query);
         $query->bindParam(':id', $ref_name);
@@ -286,7 +288,13 @@ class ReferenceField implements FieldInterface, FieldViewDisplayInterface
             }
         }
         elseif ($set['reference_type'] === 'vocabulary') {
-            //TODO: handle terms here.
+            $term = Term::term($field_value['value'] ?? 0);
+            if($display_name === 'link') {
+                $field_value = "<a class='link' title='{$term->getTerm()}' href='/content/term/{$term->getId()}'>{$term->getTerm()}</a>";
+            }
+            elseif ($display_name === 'text') {
+                $field_value = "<p>{$term->getTerm()}</p>";
+            }
         }
         return Services::create('render')->render('reference_field_display_markup.php',['value' => $field_value, 'setting' => $setting]);
     }
@@ -315,6 +323,13 @@ class ReferenceField implements FieldInterface, FieldViewDisplayInterface
             $query->execute(['value' => $this->savable_data, 'entity_id' => $entity]);
             $flags[] = $con->lastInsertId();
         }
+
+        // Save relations
+        if($this->getReferenceSettings()['reference_type'] === 'vocabulary') {
+           $query = Database::database()->prepare('INSERT INTO term_nodes (`tid`,`nid`) VALUES (:value,:entity_id)');
+           $query->execute(['value' => $this->savable_data, 'entity_id' => $entity]);
+        }
+
         if(count($flags) === 0) {
             return null;
         }
