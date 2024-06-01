@@ -12,7 +12,7 @@ use Mini\Cms\StorageManager\FieldRequirementNotFulFilledException;
 use Mini\Cms\Vocabulary;
 use Throwable;
 
-class ReferenceField implements FieldInterface, FieldViewDisplayInterface
+class ReferenceField implements FieldInterface
 {
     private array $field = array();
 

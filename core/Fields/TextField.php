@@ -10,7 +10,7 @@ use Mini\Cms\StorageManager\FieldRequirementNotFulFilledException;
 use PDO;
 use Throwable;
 
-class TextField implements FieldInterface, FieldViewDisplayInterface
+class TextField implements FieldInterface
 {
     private array $field = [];
     private mixed $savable_data;

@@ -11,7 +11,7 @@ use Mini\Cms\StorageManager\Connector;
 use Mini\Cms\StorageManager\FieldRequirementNotFulFilledException;
 use Throwable;
 
-class FileField implements FieldInterface, FieldViewDisplayInterface
+class FileField implements FieldInterface
 {
 
     private array $field = array();

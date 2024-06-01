@@ -25,6 +25,7 @@ class TextAreaFieldMarkUp implements FieldMarkUpInterface
         };
 
         $is_required = !empty($field->isRequired()) ? 'required' : null;
+        $is_required = $display_setting === 'full_html' ? null : $is_required;
         $size = $this->field->getSize();
         $this->markup = <<<FIELD_MARKUP
                <div class="form-group field-markup mt-3">

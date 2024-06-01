@@ -44,12 +44,15 @@ class CreationContentForm implements ControllerInterface
                     $payload2 = $payload->all();
                     $data = [];
                     foreach ($fields_registered as $key=>$item) {
-                        if(gettype($payload2[$item]) === 'string') {
+                        if(!empty($payload2[$item]) && gettype($payload2[$item]) === 'string') {
                             $data[$item] = htmlspecialchars($payload2[$item]);
                         }
-                        if(gettype($payload2[$item]) === 'array') {
+                        elseif(!empty($payload2[$item]) && gettype($payload2[$item]) === 'array') {
                             $data[$item] = $payload2[$item];
+                        }else {
+                            $data[$item] = null;
                         }
+
                     }
 
                     foreach ($data as $key=>$item) {
@@ -76,11 +79,16 @@ class CreationContentForm implements ControllerInterface
                     }
 
                     if(!empty($data['title'])) {
+
                         $new_node = Node::create($entity->getEntityTypeName());
                         foreach ($data as $key=>$value) {
+
+                            if($key === 'publish') {
+                                $value = $value == 'on' ? 'Yes' : 'No';
+                                $key = 'status';
+                            }
                             $new_node->set($key,$value);
                         }
-                    
                         $new_node->save();
                     }
                 }

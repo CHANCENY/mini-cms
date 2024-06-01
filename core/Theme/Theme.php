@@ -4,7 +4,11 @@ namespace Mini\Cms\Theme;
 
 use DOMDocument;
 use Mini\Cms\Configurations\ConfigFactory;
+use Mini\Cms\Controller\Request;
+use Mini\Cms\Controller\Route;
+use Mini\Cms\Modules\CurrentUser\CurrentUser;
 use Mini\Cms\Modules\MetaTag\MetaTag;
+use Mini\Cms\Modules\Site\Site;
 use Mini\Cms\Modules\Storage\Tempstore;
 use Mini\Cms\Services\Services;
 
@@ -35,9 +39,29 @@ class Theme
         $this->them_title = $theme['title'] ?? null;
         $this->theme_description = $theme['description'] ?? null;
         $this->theme_source = $theme['source_directory'] ?? null;
+        $this->assets = [];
 
         // Finding assets.
-        $this->assets = json_decode(file_get_contents(trim($this->theme_source,'/') . "/__theme_libraries.json"),true);
+        if(!Theme::isDefaultTheme('default_admin')) {
+            $theme_source = Theme::themeSource('default_admin');
+           $this->assets = json_decode(file_get_contents(trim($theme_source,'/') . "/__theme_libraries.json"),true);
+        }
+        $custom = json_decode(file_get_contents(trim($this->theme_source,'/') . "/__theme_libraries.json"),true);
+        if(!empty($custom['head'])) {
+            foreach ($custom['head'] as $head) {
+                $this->assets['head'][] = $head;
+            }
+        }
+        if(!empty($custom['footer'])) {
+            foreach ($custom['footer'] as $head) {
+                $this->assets['footer'][] = $head;
+            }
+        }
+        if(!empty($custom['global'])) {
+            foreach ($custom['global'] as $head) {
+                $this->assets['global'][] = $head;
+            }
+        }
     }
 
     public function view(string $file_name, $options = []): ?string
@@ -48,10 +72,30 @@ class Theme
             throw new \Exception('Multiple view file detected ('.$file_name.')');
         }
 
+        $currentUser = new CurrentUser();
+        $route = Tempstore::load('current_route');
+        if(empty($view_file[0]) && $file_name !== 'navigation.php') {
+            if($route instanceof Route) {
+                $loaded = $route->getLoadedRoute();
+                if($loaded instanceof \Mini\Cms\Routing\Route){
+                    if($loaded->isUserAllowed($currentUser->getRoles())){
+                        $default_theme = Theme::override('default_admin');
+                        if($default_theme instanceof Theme) {
+                            $theme_source = $default_theme->getThemeSource();
+                            $finder = new FileLoader($theme_source);
+                            $view_file = $finder->findFiles($file_name);
+                        }
+                    }
+                }
+            }
+        }
+
         $variables = [
             'content'=>$options,
-            'current_route' => Tempstore::load('current_route'),
-            'current_user' => [],
+            'current_route' => $route,
+            'current_user' => new CurrentUser(),
+            'current_request' => Request::createFromGlobals(),
+            'site' => new Site(),
         ];
         if(!empty($view_file[0]) && file_exists($view_file[0])) {
             ob_start();
@@ -79,15 +123,26 @@ class Theme
 
     public function writeNavigation(): string|null
     {
-        $navigation = Tempstore::load('theme_navigation');
-        //TODO: calling menus_alter hook.
-        if($navigation instanceof Menus) {
-            return Tempstore::load('theme_loaded')->view('navigation.php',$navigation);
+        $theme = Tempstore::load('theme_loaded');
+        $default_navigation = null;
+        if($theme instanceof Theme) {
+            $navigation = Tempstore::load('theme_navigation');
+            //TODO: calling menus_alter hook.
+            if($navigation instanceof Menus) {
+                $currentUser = new CurrentUser();
+                if($currentUser->isAdmin()) {
+                    $default_theme = Theme::override('default_admin');
+                    if(!Theme::isDefaultTheme('default_admin')) {
+                       $default_navigation = $default_theme->view('navigation.php',$navigation);
+                    }
+                }
+                return $default_navigation . Tempstore::load('theme_loaded')->view('navigation.php',$navigation);
+            }
         }
         return null;
     }
 
-    public function writeFooter(): string
+    public function writeFooter(): string|null
     {
         $footer = Tempstore::load('theme_footer');
         if($footer instanceof FooterInterface) {
@@ -160,12 +215,42 @@ class Theme
     {
         $config = Services::create('config.factory');
         if($config instanceof ConfigFactory) {
-            $theme = $config->get('theme');
-            $theme_default = array_filter($theme,function ($item){
-                return $item['active'] === true;
+            $themes = $config->get('theme');
+            $theme_default = array_filter($themes,function ($item) use ($theme){
+                return $item['name'] === $theme;
             });
             if($theme_default) {
                 return new Theme(reset($theme_default));
+            }
+        }
+        return null;
+    }
+
+    public static function isDefaultTheme(string $theme): bool
+    {
+        $config = Services::create('config.factory');
+        if($config instanceof ConfigFactory) {
+            $themes = $config->get('theme');
+            $theme_default = array_filter($themes,function ($item) use ($theme){
+                return $item['name'] === $theme && $item['active'] === true;
+            });
+            if($theme_default) {
+               return true;
+            }
+        }
+        return false;
+    }
+
+    public static function themeSource(string $theme): ?string
+    {
+        $config = Services::create('config.factory');
+        if($config instanceof ConfigFactory) {
+            $themes = $config->get('theme');
+            $theme_default = array_filter($themes,function ($item) use ($theme){
+                return $item['name'] === $theme;
+            });
+            if($theme_default) {
+                return reset($theme_default)['source_directory'];
             }
         }
         return null;

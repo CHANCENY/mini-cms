@@ -28,6 +28,7 @@ class Node implements NodeInterface
     public function __construct()
     {
         $this->data = [];
+        $this->fields['#fields'] = [];
     }
 
     public function id()

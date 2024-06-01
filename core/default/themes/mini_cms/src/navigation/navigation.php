@@ -1,22 +1,4 @@
 <style>
-    * {
-        box-sizing: border-box;
-    }
-
-    $primary: hsl(260, 100%, 80%);
-
-    html,
-    body {
-        height: 100vh;
-        width: 100vw;
-    }
-
-    body {
-        margin: 0;
-        place-items: center;
-        font-family: system-ui, sans-serif;
-    }
-
     .admin-nav nav,
     .nav-item {
         display: flex;
@@ -102,11 +84,27 @@
         }
     }
 
+    .admin-nav {
+        overflow: hidden;
+        background-color: #333;
+    }
+
+
+    .admin-nav.sticky {
+        position: fixed;
+        top: 0;
+        width: 100%;
+    }
+
+    .admin-nav.sticky + .content {
+        padding-top: 60px;
+    }
+
 </style>
 <?php if(!empty($content)): ?>
 <?php $menus = $content; ?>
 <?php if($menus instanceof \Mini\Cms\Theme\Menus): ?>
-<div class="admin-nav">
+<div id="admin-nav" class="admin-nav">
     <nav class="menu" id="nav">
         <?php foreach ($menus->getMenus() as $menu_key=>$menu): ?>
                 <?php  if($menu instanceof \Mini\Cms\Theme\Menu): ?>
@@ -137,3 +135,17 @@
 </div>
     <?php endif; ?>
 <?php endif; ?>
+<script>
+    window.onscroll = function() {myFunction()};
+
+    const navbar = document.getElementById("admin-nav");
+    const sticky = navbar.offsetTop;
+
+    function myFunction() {
+        if (window.pageYOffset > sticky) {
+            navbar.classList.add("sticky")
+        } else {
+            navbar.classList.remove("sticky");
+        }
+    }
+</script>

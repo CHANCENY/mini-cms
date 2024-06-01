@@ -35,6 +35,7 @@ class FormBase
 TILTLE;
 
         $this->fields_registered[] = 'title';
+        $this->fields_registered[] = 'publish';
 
         if($fields) {
             foreach ($fields as $key=>$field) {
@@ -54,6 +55,15 @@ TILTLE;
                 }
             }
         }
+
+        $checked = $node?->published() ? 'checked' : null;
+        $this->form_html .= <<<PUBLISHED
+<div class="form-group form-default-publish mt-5">
+          <label for="title">Publish</label>
+          <input type="checkbox" name="publish" class="form-check title-field" id="published" $checked>
+</div>
+PUBLISHED;
+
 
        $form_id = Uuid::uuid4()->toString();
         $this->form_html .= <<<TILTLE

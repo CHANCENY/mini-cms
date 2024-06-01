@@ -8,7 +8,7 @@ use Mini\Cms\Fields\FieldViewDisplay\FieldViewDisplayInterface;
 use Mini\Cms\Services\Services;
 use Mini\Cms\StorageManager\FieldRequirementNotFulFilledException;
 
-class TextAreaField implements FieldInterface, FieldViewDisplayInterface
+class TextAreaField implements FieldInterface
 {
     private array $field = array();
 
