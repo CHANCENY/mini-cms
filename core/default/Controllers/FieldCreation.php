@@ -71,7 +71,7 @@ class FieldCreation implements ControllerInterface
                    $field->setLabel($field_name);
                    $field->setDescription($field_description);
                    $field->setRequired(!empty($field_required));
-                   $field->setSize((int) $field_size);
+                   $field->setSize($field_size);
                    $field->setName($field_name);
                    $field->setDefaultValue($field_default_value);
                    $field->setEntityID($entity->entityId());

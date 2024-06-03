@@ -99,19 +99,7 @@ class Entity
         $this->entity_fields = $query->fetchAll(\PDO::FETCH_ASSOC);
         if($this->entity_fields) {
             foreach ($this->entity_fields as $k=>$field) {
-
-                if($field['field_type'] == 'short_text') {
-                    $this->entity_fields[$k] = (new TextField())->load($field['field_name']);
-                }
-                if($field['field_type'] == 'long_text') {
-                    $this->entity_fields[$k] = (new TextAreaField())->load($field['field_name']);
-                }
-                if($field['field_type'] == 'file') {
-                    $this->entity_fields[$k] = (new FileField())->load($field['field_name']);
-                }
-                if($field['field_type'] == 'reference') {
-                    $this->entity_fields[$k] = (new ReferenceField())->load($field['field_name']);
-                }
+                $this->entity_fields[$k] = Field::load($field['field_name']);
             }
         }
         return $this;

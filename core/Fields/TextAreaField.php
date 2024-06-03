@@ -235,18 +235,19 @@ class TextAreaField implements FieldInterface
         ];
         $displayType = $this->getDisplayType();
         $display_name = $displayType['name'];
-        $field_value = reset($field_value);
-        if($display_name === 'trimmed') {
-            $field_value = trim(substr($field_value['value'], 0, 255));
-        }
-        if($display_name === 'full_html') {
-            $field_value = html_entity_decode($field_value['value']);
-        }
-        if($display_name === 'full_text') {
-            $field_value = trim($field_value['value']);
-        }
-        if($display_name === 'plain_text') {
-            $field_value = htmlspecialchars(strip_tags(html_entity_decode($field_value['value'])));
+        foreach ($field_value as $value) {
+            if($display_name === 'trimmed') {
+                $field_value = trim(substr($value['value'], 0, 255));
+            }
+            if($display_name === 'full_html') {
+                $field_value = html_entity_decode($value['value']);
+            }
+            if($display_name === 'full_text') {
+                $field_value = trim($value['value']);
+            }
+            if($display_name === 'plain_text') {
+                $field_value = htmlspecialchars(strip_tags(html_entity_decode($value['value'])));
+            }
         }
         return Services::create('render')->render('textarea_field_display_markup.php',['value' => $field_value, 'setting' => $setting]);
     }

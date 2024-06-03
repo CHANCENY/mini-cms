@@ -29,7 +29,7 @@
             </div>
             <div class="form-group mt-3">
                 <label for="field_size" class="for">Field Size</label>
-                <input type="number" class="form-control" id="field_size" name="field_size">
+                <input type="text" class="form-control" id="field_size" name="field_size">
             </div>
             <div class="form-group mt-3">
                 <label for="field_required" class="for">Field Required</label>

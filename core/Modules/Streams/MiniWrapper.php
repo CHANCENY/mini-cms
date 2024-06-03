@@ -121,6 +121,20 @@ class MiniWrapper implements StreamWrapper
         return true;
     }
 
+    public function unlink($path): bool
+    {
+        // Translate the path
+        $translatedPath = $this->getRealPath($path);
+        // Check if the file exists
+        if (file_exists($translatedPath)) {
+            // Attempt to delete the file
+            return unlink($translatedPath);
+        } else {
+            trigger_error("File does not exist: $translatedPath", E_USER_WARNING);
+            return false;
+        }
+    }
+
     public function getRealPath($uri): array|string
     {
         if(str_starts_with($uri, 'public://')) {

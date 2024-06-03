@@ -271,10 +271,7 @@ class ReferenceField implements FieldInterface
         $displayType = $this->getDisplayType();
         $display_name = $displayType['name'];
         $field_value = reset($field_value);
-
         $set = $this->getReferenceSettings();
-
-
         if($set['reference_type'] === 'entity') {
 
             $node = Node::load((int) $field_value['value']);
@@ -285,6 +282,8 @@ class ReferenceField implements FieldInterface
                 elseif ($display_name === 'text') {
                     $field_value = "<p>{$node->getTitle()}</p>";
                 }
+            }else {
+                $field_value = null;
             }
         }
         elseif ($set['reference_type'] === 'vocabulary') {
@@ -325,7 +324,7 @@ class ReferenceField implements FieldInterface
         }
 
         // Save relations
-        if($this->getReferenceSettings()['reference_type'] === 'vocabulary') {
+        if($this->getReferenceSettings()['reference_type'] === 'vocabulary' && $this->savable_data && $entity) {
            $query = Database::database()->prepare('INSERT INTO term_nodes (`tid`,`nid`) VALUES (:value,:entity_id)');
            $query->execute(['value' => $this->savable_data, 'entity_id' => $entity]);
         }

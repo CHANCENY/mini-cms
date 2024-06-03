@@ -4,15 +4,21 @@ namespace Mini\Cms;
 
 use Mini\Cms\Configurations\ConfigFactory;
 use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Fields\EmailField;
 use Mini\Cms\Fields\FieldInterface;
 use Mini\Cms\Fields\FieldMarkUpInterface;
 use Mini\Cms\Fields\FieldViewDisplay\FieldViewDisplayInterface;
 use Mini\Cms\Fields\FileField;
+use Mini\Cms\Fields\MarkUp\EmailFieldMarkUp;
 use Mini\Cms\Fields\MarkUp\FileFieldMarkUp;
+use Mini\Cms\Fields\MarkUp\PhoneFieldMarkUp;
 use Mini\Cms\Fields\MarkUp\ReferenceFieldMarkUp;
+use Mini\Cms\Fields\MarkUp\SelectFieldMarkUp;
 use Mini\Cms\Fields\MarkUp\TextAreaFieldMarkUp;
 use Mini\Cms\Fields\MarkUp\TextFieldMarkUp;
+use Mini\Cms\Fields\PhoneField;
 use Mini\Cms\Fields\ReferenceField;
+use Mini\Cms\Fields\SelectField;
 use Mini\Cms\Fields\TextAreaField;
 use Mini\Cms\Fields\TextField;
 use Mini\Cms\Services\Services;
@@ -48,6 +54,24 @@ class Field
                 'field_type' => 'file',
                 'field_create_handler' => FileField::class,
                 'field_markup_handler' => FileFieldMarkUp::class,
+            ],
+            [
+                'label'=> 'Email field',
+                'field_type' => 'email',
+                'field_create_handler' => EmailField::class,
+                'field_markup_handler' => EmailFieldMarkUp::class,
+            ],
+            [
+                'label'=> 'Phone field',
+                'field_type' => 'phone',
+                'field_create_handler' => PhoneField::class,
+                'field_markup_handler' => PhoneFieldMarkUp::class,
+            ],
+            [
+                'label'=> 'Select field',
+                'field_type' => 'select',
+                'field_create_handler' => SelectField::class,
+                'field_markup_handler' => SelectFieldMarkUp::class,
             ]
         ];
 
