@@ -254,7 +254,7 @@ class Node implements NodeInterface
      * Deleting node.
      * @return bool True is deleted.
      */
-    public function delete()
+    public function delete(): bool
     {
         if($this->fields['#fields']) {
             foreach ($this->fields['#fields'] as $field) {
@@ -377,6 +377,20 @@ class Node implements NodeInterface
     {
         $query = Database::database()->prepare("SELECT node_id FROM entity_node_data ORDER BY updated DESC");
         $nodes = $query->execute();
+        $nodes = $query->fetchAll();
+        if($nodes) {
+            foreach ($nodes as $key=>$node) {
+                $nodes[$key] = Node::load($node['node_id']);
+            }
+        }
+        return $nodes;
+    }
+
+    public static function loadByOwner(int $uid): array
+    {
+        $query = Database::database()->prepare("SELECT node_id FROM entity_node_data WHERE uid = :uid");
+        $query->bindValue(':uid',$uid);
+        $query->execute();
         $nodes = $query->fetchAll();
         if($nodes) {
             foreach ($nodes as $key=>$node) {

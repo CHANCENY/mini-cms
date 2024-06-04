@@ -629,5 +629,74 @@
         "description": "This is for displaying content by terms",
         "url": "\/content\/term\/{tid}",
         "handler": "Mini\\Cms\\default\\Controllers\\ContentByTerm"
+    },
+    {
+        "id": "0f71643e-6548-47c9-89e6-f35ab54d8bab",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator",
+                "authenticated"
+            ]
+        },
+        "name": "Profile",
+        "description": "This is user profile page",
+        "url": "\/user\/{uid}",
+        "handler": "Mini\\Cms\\default\\Controllers\\UserProfile"
+    },
+    {
+        "id": "63aa2a5e-cf7a-4d9f-987a-b7ce4387bf2d",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator",
+                "authenticated"
+            ]
+        },
+        "name": "Profile edit",
+        "description": "This is for user edit",
+        "url": "\/user\/{uid}\/edit",
+        "handler": "Mini\\Cms\\default\\Controllers\\UserEdit"
+    },
+    {
+        "id": "646800e4-c9db-4a30-a56c-a81656d2aa7d",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator",
+                "authenticated"
+            ]
+        },
+        "name": "Profile deletion",
+        "description": "this user delete",
+        "url": "\/user\/{uid}\/delete",
+        "handler": "Mini\\Cms\\default\\Controllers\\ProfileDelete"
+    },
+    {
+        "id": "1ec00237-00a4-4220-b075-2c4e22876b48",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator",
+                "authenticated"
+            ]
+        },
+        "name": "Profile",
+        "description": "This is profile",
+        "url": "\/user",
+        "handler": "Mini\\Cms\\default\\Controllers\\Profile"
     }
 ]

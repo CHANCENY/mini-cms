@@ -1,4 +1,19 @@
 {
+  "menu_profile": {
+    "label": "Profile",
+    "link": "/user",
+    "icon": "user",
+    "children": [],
+    "attributes": {
+      "class": "nav-item",
+      "id": "nav-item-user",
+      "title": "Profile"
+    },
+    "options": {
+      "roles": ["administrator", "authenticated"],
+      "permission": ["administrator_access", "authenticated_access"]
+    }
+  },
   "menu_dashboard": {
     "label": "Dashboard",
     "link": "/dashboard",
