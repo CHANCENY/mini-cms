@@ -49,6 +49,9 @@ TILTLE;
                                 $default_value = $field->getType() === 'file' ? $default_value : reset($default_value);
                             }
                         }
+                        if(empty($default_value)) {
+                            $default_value['value'] = $field->getDefaultValue() ?? null;
+                        }
                         $this->form_html .= $markup->buildMarkup($field,$default_value)->getMarkup(). PHP_EOL;
                         $this->fields_registered[] = $field->getName();
                     }

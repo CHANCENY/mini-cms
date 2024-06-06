@@ -8,6 +8,7 @@ use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Route;
 use Mini\Cms\Modules\CurrentUser\CurrentUser;
 use Mini\Cms\Modules\MetaTag\MetaTag;
+use Mini\Cms\Modules\Respositories\Territory\AddressFormat;
 use Mini\Cms\Modules\Site\Site;
 use Mini\Cms\Modules\Storage\Tempstore;
 use Mini\Cms\Services\Services;
@@ -311,6 +312,7 @@ class Theme
         $inputs = $dom->getElementsByTagName('input');
 
         $file_input_exist = false;
+        $address_field_exists = false;
 
         foreach ($inputs as $index => $input) {
             // Get input type and name
@@ -323,6 +325,10 @@ class Theme
 
             // Generate unique ID for input element
             $inputId = $input->hasAttribute('id') ? $input->getAttribute('id') : 'input-' . $index;
+            dump($input->getAttribute('class'));
+            if(strpos($input->getAttribute('class'), 'field-field-address-field')) {
+                $address_field_exists = true;
+            }
 
             // Create label text
             $labelText = 'Field ' . ($name !== '' ? $name : 'input');
@@ -344,6 +350,9 @@ class Theme
         $file_script = null;
         if($file_input_exist) {
             $file_script = "<script type='text/javascript'>".file_get_contents('../core/default/themes/mini_cms/assets/js/file_manager.js') . "</script>";
+        }
+        if($address_field_exists) {
+            $file_script .= "<script type='text/javascript'>".file_get_contents(AddressFormat::addressAsset()) . "</script>";
         }
 
         $dom_content = $dom->saveHTML();

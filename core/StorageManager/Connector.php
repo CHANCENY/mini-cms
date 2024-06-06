@@ -74,6 +74,9 @@ class Connector
 
             $query = "CREATE TABLE IF NOT EXISTS `term_nodes` (tnd INTEGER PRIMARY KEY AUTOINCREMENT, tid INTEGER NOT NULL, nid INTEGER NOT NULL)";
             $this->connection->exec($query);
+
+            $query = "CREATE TABLE IF NOT EXISTS `address_fields_data` (lid INTEGER PRIMARY KEY AUTOINCREMENT, country_code varchar(20) NOT NULL, state_code varchar(20) NULL, city_id varchar(11) NULL, zip_code varchar(20), address_1 varchar(255), address_2 varchar(255), county varchar(255))";
+            $this->connection->exec($query);
         }
         if($database->getDatabaseType() === 'mysql') {
             // Table entity_types.
@@ -94,6 +97,9 @@ class Connector
             $this->connection->exec($query);
 
             $query = "CREATE TABLE IF NOT EXISTS `term_nodes` (tnd INTEGER PRIMARY KEY AUTO_INCREMENT, tid INTEGER NOT NULL, nid INTEGER NOT NULL)";
+            $this->connection->exec($query);
+
+            $query = "CREATE TABLE IF NOT EXISTS `address_fields_data` (lid INT(11) PRIMARY KEY AUTO_INCREMENT, country_code varchar(20) NOT NULL, state_code varchar(20) NULL, city_id varchar(11) NULL, zip_code varchar(20), address_1 varchar(255), address_2 varchar(255), county varchar(255))";
             $this->connection->exec($query);
         }
     }

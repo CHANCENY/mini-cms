@@ -4,11 +4,13 @@ namespace Mini\Cms;
 
 use Mini\Cms\Configurations\ConfigFactory;
 use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Fields\AddressField;
 use Mini\Cms\Fields\EmailField;
 use Mini\Cms\Fields\FieldInterface;
 use Mini\Cms\Fields\FieldMarkUpInterface;
 use Mini\Cms\Fields\FieldViewDisplay\FieldViewDisplayInterface;
 use Mini\Cms\Fields\FileField;
+use Mini\Cms\Fields\MarkUp\AddressFieldMarkUp;
 use Mini\Cms\Fields\MarkUp\EmailFieldMarkUp;
 use Mini\Cms\Fields\MarkUp\FileFieldMarkUp;
 use Mini\Cms\Fields\MarkUp\PhoneFieldMarkUp;
@@ -72,6 +74,12 @@ class Field
                 'field_type' => 'select',
                 'field_create_handler' => SelectField::class,
                 'field_markup_handler' => SelectFieldMarkUp::class,
+            ],
+            [
+                'label'=> 'Address field',
+                'field_type' => 'address',
+                'field_create_handler' => AddressField::class,
+                'field_markup_handler' => AddressFieldMarkUp::class,
             ]
         ];
 
