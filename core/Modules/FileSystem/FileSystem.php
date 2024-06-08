@@ -479,4 +479,30 @@ class FileSystem
         return !empty($this->upload);
     }
 
+    public static function removeDirectory(string $dir): bool
+    {
+        // Check if the directory exists
+        if (!is_dir($dir)) {
+            return false;
+        }
+
+        // Open the directory
+        $files = array_diff(scandir($dir), ['.', '..']);
+
+        // Loop through all files and directories
+        foreach ($files as $file) {
+            $path = $dir . DIRECTORY_SEPARATOR . $file;
+
+            // Recursively delete directories
+            if (is_dir($path)) {
+                self::removeDirectory($path);
+                rmdir($path);
+            } else {
+                // Delete files
+                unlink($path);
+            }
+        }
+        return true;
+    }
+
 }

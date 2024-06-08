@@ -20,7 +20,8 @@ class AddressFieldMarkUp implements FieldMarkUpInterface
         $this->field = $field;
         $is_required = !empty($field->isRequired()) ? 'required' : null;
         $size = $this->field->getSize();
-        $this->markup = $address->getAddressMarkUp($default_value ?? 'US');
+        $full_field = "<input type='hidden' name='{$field->getName()}' class='field-field-address-field'>";
+        $this->markup = $full_field . $address->getAddressMarkUp($field->getName(),$default_value ?? 'US');
         return $this;
     }
 

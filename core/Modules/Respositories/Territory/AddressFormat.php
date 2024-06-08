@@ -53,9 +53,10 @@ class AddressFormat
 
     /**
      * @param string $country_code
+     * @param string $name_key
      * @return string|null
      */
-    public function getAddressFieldsMarkUp(string $country_code): string|null
+    public function getAddressFieldsMarkUp(string $country_code, string $name_key): string|null
     {
         $address = $this->getAddressField($country_code);
         $fields = self::fieldNames();
@@ -68,6 +69,7 @@ class AddressFormat
                 if(!empty($field_data)) {
                     extract(['content' => $field_data]);
                     extract($field);
+                    $field_field_main = $name_key;
                     ob_start();
                     require __DIR__. $field['template'];
                     if($key == 'administrativearea' || $key == 'thoroughfare' || $key == 'premise') {
@@ -100,32 +102,38 @@ FIELDS;
             'administrativearea' =>[
                 'name' => 'administrative_area',
                 'label'=>'State/Province/Region/County',
-                'template' => '/templates/administrative_area.php'
+                'template' => '/templates/administrative_area.php',
+                'storage_field_name' => 'state_code',
             ],
             'thoroughfare' =>[
                 'name'=> 'address_1',
                 'label'=>'Address 1',
-                'template' => '/templates/thoroughfare.php'
+                'template' => '/templates/thoroughfare.php',
+                'storage_field_name' => 'address_1',
             ],
             'premise' => [
                 'name'=> 'address_2',
                 'label'=>'Address 2',
-                'template' => '/templates/premise.php'
+                'template' => '/templates/premise.php',
+                'storage_field_name' => 'address_2',
             ],
             'localityname' =>[
                 'name'=> 'city',
                 'label'=>'City/District',
-                'template' => '/templates/localityname.php'
+                'template' => '/templates/localityname.php',
+                'storage_field_name' => 'city_id',
             ],
             'postalcode' =>[
                 'name'=> 'postalcode',
                 'label'=>'Postal Code',
-                'template' => '/templates/postalcode.php'
+                'template' => '/templates/postalcode.php',
+                'storage_field_name' => 'zip_code',
             ],
             'dependent_localityname' =>[
                 'name'=> 'administrative_area',
                 'label'=>'Province/Region/County',
-                'template' => '/templates/dependent_localityname.php'
+                'template' => '/templates/dependent_localityname.php',
+                'storage_field_name' => 'county',
             ]
 
         ];
@@ -162,12 +170,13 @@ FIELDS;
         return $results;
     }
 
-    public function getAddressMarkUp(string $default_country = 'US'): string
+    public function getAddressMarkUp(string $key,string $default_country = 'US'): string
     {
         $default_country = empty($default_country) ? 'US' : $default_country;
         $countries = new Countries();
         $countries = $countries->getCountries();
-        $fields = $this->getAddressFieldsMarkUp($default_country);
+        $fields = $this->getAddressFieldsMarkUp($default_country, $key);
+        $main_field = $key;
         ob_start();
         require __DIR__. '/templates/country.php';
         return ob_get_clean();
@@ -176,5 +185,17 @@ FIELDS;
     public static function addressAsset(): string
     {
         return __DIR__ . '/templates/address_field.js';
+    }
+
+    public static function filterAddressValues(array $payload2, string $main_field): array
+    {
+        $fields = self::fieldNames();
+        $address_values = [];
+        foreach ($fields as $key=>$field) {
+            if(isset($payload2[$main_field . '___' . $key])) {
+                $address_values[$key] = $payload2[$main_field . '___' . $key];
+            }
+        }
+        return $address_values;
     }
 }

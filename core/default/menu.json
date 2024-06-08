@@ -160,5 +160,20 @@
       "roles": ["administrator"],
       "permission": ["administrator_access"]
     }
+  },
+  "menu_extension_install": {
+    "label": "Extend",
+    "link": "/extension/install",
+    "icon": "extend",
+    "children": [],
+    "attributes": {
+      "class": "nav-item",
+      "id": "nav-item-extend",
+      "title": "extend"
+    },
+    "options": {
+      "roles": ["administrator"],
+      "permission": ["administrator_access"]
+    }
   }
 }

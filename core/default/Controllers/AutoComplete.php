@@ -38,6 +38,11 @@ class AutoComplete implements ControllerInterface
             $vocabularies = Vocabulary::vocabularies();
 
             $list = [];
+            $list[] = [
+                'name' => 'users',
+                'type' => 'users',
+                'label' => 'User',
+            ];
 
             if(!empty($entities)) {
                 foreach ($entities as $entity) {

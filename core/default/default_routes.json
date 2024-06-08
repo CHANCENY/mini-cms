@@ -698,5 +698,40 @@
         "description": "This is profile",
         "url": "\/user",
         "handler": "Mini\\Cms\\default\\Controllers\\Profile"
+    },
+    {
+        "id": "ad6ccb4c-a72b-450b-952a-71f0dcbfd09c",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator",
+                "aunthenticated",
+                "anonymous"
+            ]
+        },
+        "name": "AddressFieldFetcher",
+        "description": "This is for address",
+        "url": "\/assets\/address\/auto\/{country_code}\/{field_name}",
+        "handler": "Mini\\Cms\\default\\Controllers\\AddressFieldFetcher"
+    },
+    {
+        "id": "8f36b8ba-ca58-4f03-a25a-8b0b940d6b85",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Extensions",
+        "description": "This is for installing extension",
+        "url": "\/extension\/install",
+        "handler": "Mini\\Cms\\default\\Controllers\\Extensions"
     }
 ]

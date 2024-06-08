@@ -164,26 +164,13 @@ class Node implements NodeInterface
             }
         }
 
-
-        if(!empty($this->fields)) {
-            $tables = array_map(function ($field){
-                return $field->getName();
-            }, $this->fields['#fields']);
-
-            if($tables) {
-                foreach ($tables as $table) {
-                    $valueField = 'field__'.$table . '__value';
-                    $query = "SELECT $valueField, field_id FROM field__{$table} WHERE entity_id = :id";
-                    $statement = Database::database()->prepare($query);
-                    $statement->bindValue(':id', $node_id);
-                    $statement->execute();
-                    $result = $statement->fetchAll(\PDO::FETCH_ASSOC) ?? [];
-                    foreach ($result as $value) {
-                        $this->data['#values'][$table][] = [
-                            'value' => $value[$valueField],
-                           // 'id' => $value['field_id'],
-                        ];
-                    }
+        if(!empty($this->fields['#fields'])) {
+            foreach ($this->fields['#fields'] as $field=>$value) {
+                $value = is_array($value) ? reset($value) : $value;
+                if($value instanceof FieldInterface) {
+                    $this->data['#values'][$value->getName()][] = [
+                        'value' => $value->fetchData($node_id),
+                    ];
                 }
             }
         }

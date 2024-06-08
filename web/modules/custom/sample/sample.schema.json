@@ -1,0 +1,8 @@
+{
+  "install": [
+    "CREATE TABLE chance (cid int(11) PRIMARY KEY AUTO_INCREMENT, name varchar(255))"
+  ],
+  "uninstall": [
+    "DELETE TABLE chance"
+  ]
+}

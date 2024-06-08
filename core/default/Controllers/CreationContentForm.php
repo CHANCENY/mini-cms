@@ -12,6 +12,7 @@ use Mini\Cms\Entity;
 use Mini\Cms\Field;
 use Mini\Cms\Fields\FieldInterface;
 use Mini\Cms\Modules\Form\FormBase;
+use Mini\Cms\Modules\Respositories\Territory\AddressFormat;
 use Mini\Cms\Modules\Storage\Tempstore;
 use Mini\Cms\Services\Services;
 
@@ -49,17 +50,20 @@ class CreationContentForm implements ControllerInterface
                         }
                         elseif(!empty($payload2[$item]) && gettype($payload2[$item]) === 'array') {
                             $data[$item] = $payload2[$item];
-                        }else {
+                        }
+                        elseif (!empty($payload2[$item.'___country'])) {
+                            $data[$item] = array_merge(['country'=>$payload2[$item.'___country']], AddressFormat::filterAddressValues($payload2, $item));
+                        }
+                        else {
                             $data[$item] = null;
                         }
 
                     }
-
                     foreach ($data as $key=>$item) {
                         $field = Field::load($key);
                         if($field instanceof FieldInterface) {
 
-                            // Lets handle file field if has multiple fids
+                            // Let's handle file field if it has multiple fids
                             if($field->getType() === 'file') {
                                 $fids = null;
                                 $size = $field->getSize();

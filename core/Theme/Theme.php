@@ -310,7 +310,6 @@ class Theme
         }
 
         $inputs = $dom->getElementsByTagName('input');
-
         $file_input_exist = false;
         $address_field_exists = false;
 
@@ -325,8 +324,7 @@ class Theme
 
             // Generate unique ID for input element
             $inputId = $input->hasAttribute('id') ? $input->getAttribute('id') : 'input-' . $index;
-            dump($input->getAttribute('class'));
-            if(strpos($input->getAttribute('class'), 'field-field-address-field')) {
+            if($input->getAttribute('class') === 'field-field-address-field') {
                 $address_field_exists = true;
             }
 

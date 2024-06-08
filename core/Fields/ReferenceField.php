@@ -6,10 +6,12 @@ namespace Mini\Cms\Fields;
 use Mini\Cms\Connections\Database\Database;
 use Mini\Cms\Entities\Node;
 use Mini\Cms\Entities\Term;
+use Mini\Cms\Entities\User;
 use Mini\Cms\Fields\FieldViewDisplay\FieldViewDisplayInterface;
 use Mini\Cms\Services\Services;
 use Mini\Cms\StorageManager\FieldRequirementNotFulFilledException;
 use Mini\Cms\Vocabulary;
+use PDO;
 use Throwable;
 
 class ReferenceField implements FieldInterface
@@ -183,6 +185,12 @@ class ReferenceField implements FieldInterface
             $query = "SELECT term_name AS name,term_id AS id FROM terms WHERE vocabulary_id = :id AND term_name LIKE '%$search_string%' LIMIT 10";
 
         }
+        elseif ($settings['reference_type'] === 'users') {
+           $query = "SELECT name AS name, uid AS id FROM users WHERE name LIKE '%$search_string%' LIMIT 10";
+           $query = Database::database()->prepare($query);
+           $query->execute();
+           return $query->fetchAll(\PDO::FETCH_ASSOC);
+        }
         $query = Database::database()->prepare($query);
         $query->bindParam(':id', $ref_name);
         $query->execute();
@@ -274,13 +282,13 @@ class ReferenceField implements FieldInterface
         $set = $this->getReferenceSettings();
         if($set['reference_type'] === 'entity') {
 
-            $node = Node::load((int) $field_value['value']);
-            if($node instanceof Node) {
+            $user = Node::load((int) $field_value['value']);
+            if($user instanceof Node) {
                 if($display_name === 'link') {
-                    $field_value = "<a class='link' title='{$node->getTitle()}' href='/structure/content/node/{$node->id()}'>{$node->getTitle()}</a>";
+                    $field_value = "<a class='link' title='{$user->getTitle()}' href='/structure/content/node/{$user->id()}'>{$user->getTitle()}</a>";
                 }
                 elseif ($display_name === 'text') {
-                    $field_value = "<p>{$node->getTitle()}</p>";
+                    $field_value = "<p>{$user->getTitle()}</p>";
                 }
             }else {
                 $field_value = null;
@@ -293,6 +301,15 @@ class ReferenceField implements FieldInterface
             }
             elseif ($display_name === 'text') {
                 $field_value = "<p>{$term->getTerm()}</p>";
+            }
+        }
+        elseif ($set['reference_type'] === 'users') {
+            $user = User::load((int) $field_value['value']);
+            if($display_name === 'link') {
+                $field_value = "<a class='link' title='{$user->getName()}' href='/user/{$user->getUid()}'>{$user->getName()}</a>";
+            }
+            elseif ($display_name === 'text') {
+                $field_value = "<p>{$user->getName()}</p>";
             }
         }
         return Services::create('render')->render('reference_field_display_markup.php',['value' => $field_value, 'setting' => $setting]);

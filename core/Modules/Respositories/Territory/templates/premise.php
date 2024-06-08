@@ -1,7 +1,7 @@
 <div class="form-group address-2-field">
     <label for="<?= $key ?? null; ?>" class="label"><?= $label ?? null; ?></label>
     <?php if(!empty($content['options']) && is_array($content['options'])): ?>
-        <select name="<?= $key ?? null; ?>" class="form-control address-2-area" id="<?= $key ?? null; ?>">
+        <select name="<?= $field_field_main. '___'. $key ?? null; ?>" class="form-control address-2-area" id="<?= $key ?? null; ?>">
             <?php foreach ($content['options'] as $s=>$v): ?>
                 <?php if(is_array($v)): ?>
                     <?php $v_v = array_keys($v); $vvv = array_values($v); ?>
@@ -10,6 +10,6 @@
             <?php endforeach; ?>
         </select>
     <?php else: ?>
-        <input type="text" name="<?= $key ?? null; ?>" id="<?= $key ?? null; ?>" class="form-control address-2-area">
+        <input type="text" name="<?= $field_field_main. '___' . $key ?? null; ?>" id="<?= $key ?? null; ?>" class="form-control address-2-area">
     <?php endif; ?>
 </div>

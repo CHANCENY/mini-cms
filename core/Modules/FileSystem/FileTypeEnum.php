@@ -57,4 +57,20 @@ enum FileTypeEnum: string
 
     case AUDIO_ODT = 'audio/odt';
 
+    // Compress files
+    case APPLICATION_ZIP = 'application/zip';
+
+    case APPLICATION_GZIP = 'application/gzip';
+
+    case APPLICATION_X_TAR = 'application/x-tar';
+
+    case APPLICATION_X_BZIP2 = 'application/x-bzip2';
+
+    case APPLICATION_X_XZ = 'application/x-xz';
+
+    case APPLICATION_X_7Z_COMPRESSED = 'application/x-7z-compressed';
+
+    case APPLICATION_X_RAR_COMPRESSED = 'application/x-rar-compressed';
+
+
 }

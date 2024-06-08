@@ -7,6 +7,12 @@ class MiniWrapper implements StreamWrapper
     protected $streamRead;
 
     protected $fileHandle;
+    /**
+     * @var false|resource|null
+     */
+    private $dirHandle;
+    private array $dirEntries;
+    private int $dirPosition;
 
     public function stream_open(string $path, string $mode, int $options, string $opened_path = NULL): bool
     {
@@ -102,7 +108,6 @@ class MiniWrapper implements StreamWrapper
         }
     }
 
-
     public function mkdir($uri, $mode, $options) {
         $dir_path = $this->getRealPath($uri);
 
@@ -135,6 +140,80 @@ class MiniWrapper implements StreamWrapper
         }
     }
 
+    public function stream_metadata($path, $option, $value) {
+        // Translate the path
+        $translatedPath = $this->getRealPath($path);
+
+        switch ($option) {
+            case STREAM_META_TOUCH:
+                if (is_array($value) && count($value) == 2) {
+                    return touch($translatedPath, $value[0], $value[1]);
+                } else {
+                    return touch($translatedPath);
+                }
+            case STREAM_META_OWNER_NAME:
+            case STREAM_META_OWNER:
+                return chown($translatedPath, $value);
+            case STREAM_META_GROUP_NAME:
+            case STREAM_META_GROUP:
+                return chgrp($translatedPath, $value);
+            case STREAM_META_ACCESS:
+                return chmod($translatedPath, $value);
+            default:
+                return false;
+        }
+    }
+
+    public function dir_opendir($path, $options) {
+        // Translate the path
+        $translatedPath = $this->getRealPath($path);
+        // Open the directory handle
+        $this->dirHandle = opendir($translatedPath);
+
+        if ($this->dirHandle) {
+            $this->dirEntries = [];
+            while (($entry = readdir($this->dirHandle)) !== false) {
+                $this->dirEntries[] = $entry;
+            }
+            closedir($this->dirHandle);
+            $this->dirPosition = 0;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function dir_readdir() {
+        if (isset($this->dirEntries[$this->dirPosition])) {
+            return $this->dirEntries[$this->dirPosition++];
+        } else {
+            return false;
+        }
+    }
+
+    public function dir_rewinddir() {
+        $this->dirPosition = 0;
+    }
+
+    public function dir_closedir() {
+        $this->dirHandle = null;
+        $this->dirEntries = [];
+        $this->dirPosition = 0;
+        return true;
+    }
+
+    public function rmdir($path, $options) {
+        // Translate the path
+        $translatedPath = $this->getRealPath($path);
+        // Attempt to remove the directory
+        if (is_dir($translatedPath)) {
+            return rmdir($translatedPath);
+        } else {
+            trigger_error("Directory does not exist or is not a directory: $translatedPath", E_USER_WARNING);
+            return false;
+        }
+    }
+
     public function getRealPath($uri): array|string
     {
         if(str_starts_with($uri, 'public://')) {
@@ -142,6 +221,12 @@ class MiniWrapper implements StreamWrapper
         }
         if(str_starts_with($uri, 'private://')) {
             $uri = str_replace('private://', 'sites/default/files/private/', $uri);
+        }
+        if(str_starts_with($uri, 'module://')) {
+            $uri = str_replace('module://', 'modules/', $uri);
+        }
+        if(str_starts_with($uri, 'theme://')) {
+            $uri = str_replace('theme://', 'themes/', $uri);
         }
         return $uri;
     }

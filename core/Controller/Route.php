@@ -161,6 +161,8 @@ class Route
 
         stream_wrapper_register('public', 'Mini\Cms\Modules\Streams\MiniWrapper', STREAM_IS_URL);
         stream_wrapper_register('private', 'Mini\Cms\Modules\Streams\MiniWrapper', STREAM_IS_URL);
+        stream_wrapper_register('module', 'Mini\Cms\Modules\Streams\MiniWrapper', STREAM_IS_URL);
+        stream_wrapper_register('theme', 'Mini\Cms\Modules\Streams\MiniWrapper', STREAM_IS_URL);
 
         $config = Services::create('config.factory');
         if($config instanceof ConfigFactory) {

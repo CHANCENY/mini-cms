@@ -79,4 +79,16 @@ interface StreamWrapper
 
     public function mkdir($uri, $mode, $options);
 
+    public function stream_metadata($path, $option, $value);
+
+    public function dir_opendir($path, $options);
+
+    public function dir_readdir();
+
+    public function dir_rewinddir();
+
+    public function dir_closedir();
+
+    public function rmdir($path, $options);
+
 }

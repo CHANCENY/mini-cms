@@ -3,7 +3,13 @@
 namespace Mini\Cms\Fields;
 
 use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Modules\Respositories\Territory\AddressFormat;
+use Mini\Cms\Modules\Respositories\Territory\City;
+use Mini\Cms\Modules\Respositories\Territory\Country;
+use Mini\Cms\Modules\Respositories\Territory\State;
+use Mini\Cms\Services\Services;
 use Mini\Cms\StorageManager\FieldRequirementNotFulFilledException;
+use PDO;
 
 class AddressField implements FieldInterface
 {
@@ -260,7 +266,42 @@ class AddressField implements FieldInterface
      */
     public function dataSave(int $entity): array|int|null
     {
-        // TODO: Implement dataSave() method.
+        $fields = AddressFormat::fieldNames();
+        // Swapping field keys
+        $new_data = [];
+        foreach($this->savable_data as $key => $value) {
+            if(isset($fields[$key])) {
+                $field = $fields[$key];
+                $new_data[$field['storage_field_name']] = $value;
+            }
+        }
+        $new_data['country_code'] = $this->savable_data['country'] ?? null;
+        if(!empty($new_data['country_code'])) {
+            $this->savable_data = $new_data;
+        }
+
+        // Query line building.
+        $placeholders = array_map(function ($field) {
+            return ":$field";
+        },array_keys($this->savable_data));
+
+        $con = Database::database();
+        $query_line = "INSERT INTO address_fields_data (".implode(', ', array_keys($this->savable_data)).") VALUES (".implode(', ', $placeholders).")";
+        $query = $con->prepare($query_line);
+        foreach ($this->savable_data as $key => $value) {
+          $query->bindValue(":$key", $value);
+        }
+        $query->execute();
+        $address_id = $con->lastInsertId();
+
+        // Inserting referencing id in field table
+        if($address_id) {
+            $table = "field__".$this->field['field_name'];
+            $value_col = "field__".$this->field['field_name'].'__value';
+            $query = $con->prepare("INSERT INTO $table (`$value_col`,`entity_id`) VALUES (:value, :entity_id)");
+            $query->execute(['value' => $address_id, 'entity_id' => $entity]);
+            return $con->lastInsertId();
+        }
         return null;
     }
 
@@ -269,8 +310,44 @@ class AddressField implements FieldInterface
      */
     public function dataUpdate(int $entity): bool
     {
-        // TODO: Implement dataUpdate() method.
-        return true;
+        $table = "field__".$this->field['field_name'];
+        $value_col = "field__".$this->field['field_name'].'__value';
+        $query = Database::database()->prepare("SELECT * FROM $table WHERE entity_id = :entity_id");
+        $query->execute(['entity_id' => $entity]);
+        $data =  $query->fetch(PDO::FETCH_ASSOC);
+        $lid = $data[$value_col] ?? null;
+        if($lid) {
+            $fields = AddressFormat::fieldNames();
+            // Swapping field keys
+            $new_data = [];
+            foreach($this->savable_data as $key => $value) {
+                if(isset($fields[$key])) {
+                    $field = $fields[$key];
+                    $new_data[$field['storage_field_name']] = $value;
+                }
+            }
+            $new_data['country_code'] = $this->savable_data['country'] ?? null;
+            if(!empty($new_data['country_code'])) {
+                $this->savable_data = $new_data;
+            }
+
+            // Query line building.
+            $placeholders = array_map(function ($field) {
+                return "$field = :$field";
+            },array_keys($this->savable_data));
+
+            $con = Database::database();
+            $query_line = "UPDATE address_fields_data SET  ".implode(', ', $placeholders)." WHERE lid = :lid";
+            $query = $con->prepare($query_line);
+            foreach ($this->savable_data as $key => $value) {
+                $query->bindValue(":$key", $value);
+            }
+            $query->bindValue(":lid", $lid);
+            return $query->execute();
+        }
+        else {
+            return !empty($this->dataSave($entity));
+        }
     }
 
     /**
@@ -278,8 +355,21 @@ class AddressField implements FieldInterface
      */
     public function dataDelete(int $entity): bool
     {
-        // TODO: Implement dataDelete() method.
-        return true;
+        $table = "field__".$this->field['field_name'];
+        $value_col = "field__".$this->field['field_name'].'__value';
+        $query = Database::database()->prepare("SELECT * FROM $table WHERE entity_id = :entity_id");
+        $query->execute(['entity_id' => $entity]);
+        $data =  $query->fetch(PDO::FETCH_ASSOC);
+        $lid = $data[$value_col] ?? null;
+        if($lid) {
+            $query = Database::database()->prepare("DELETE FROM address_fields_data WHERE lid = :lid");
+            $query->execute(['lid' => $lid]);
+
+            $query = Database::database()->prepare("DELETE FROM $table WHERE entity_id = :id");
+            return $query->execute(['id' => $entity]);
+
+        }
+        return false;
     }
 
     /**
@@ -287,8 +377,31 @@ class AddressField implements FieldInterface
      */
     public function fetchData(int $entity): array
     {
-        // TODO: Implement fetchData() method.
-        return [];
+        $table = "field__".$this->field['field_name'];
+        $value_col = "field__".$this->field['field_name'].'__value';
+        $query = Database::database()->prepare("SELECT * FROM $table WHERE entity_id = :entity_id");
+        $query->execute(['entity_id' => $entity]);
+        $data =  $query->fetch(PDO::FETCH_ASSOC);
+        $lid = $data[$value_col] ?? null;
+        $fields = AddressFormat::fieldNames();
+        $new_data = array_map(function ($field) {
+            return $field['storage_field_name'];
+        }, $fields);
+        $temp = [];
+        foreach ($new_data as $key => $value) {
+           $temp[$value] = null;
+        }
+        $new_data = $temp;
+        if($lid) {
+            $query = Database::database()->prepare("SELECT * FROM address_fields_data WHERE lid = :lid");
+            $query->execute(['lid' => $lid]);
+            $address =  $query->fetch(PDO::FETCH_ASSOC);
+            if(!empty($address['lid'])) {
+                unset($address['lid']);
+            }
+            return $address ?? $new_data;
+        }
+        return $new_data;
     }
 
     /**
@@ -296,7 +409,7 @@ class AddressField implements FieldInterface
      */
     public function setData(mixed $data): FieldInterface
     {
-        // TODO: Implement setData() method.
+       $this->savable_data = $data;
         return $this;
     }
 
@@ -307,12 +420,16 @@ class AddressField implements FieldInterface
     {
         return [
             [
-                'label' => 'Trimmed',
-                'name' => 'trimmed',
+                'label' => 'Full detailed address',
+                'name' => 'full_address',
             ],
             [
-                'label' => 'Full Text',
-                'name' => 'full_text',
+                'label' => 'Minor detailed Address',
+                'name' => 'minor_address',
+            ],
+            [
+                'label' => 'Map',
+                'name' => 'map_address',
             ]
         ];
     }
@@ -333,6 +450,68 @@ class AddressField implements FieldInterface
      */
     public function markUp(array $field_value): string
     {
-       return '';
+        $setting = [
+            'label' => $this->field['field_label'],
+            'label_visible' => $this->field['field_settings']['field_label_visible'] ?? false,
+            'label_name' => $this->getName(),
+        ];
+        $displayType = $this->getDisplayType();
+        $display_name = $displayType['name'];
+        foreach ($field_value as $value) {
+            $field_value = $this->constructAddress($display_name, $value['value']);
+        }
+        return Services::create('render')->render('address_field_display_markup.php',['value' => $field_value, 'setting' => $setting]);
+    }
+
+    private function constructAddress(string $type, $address): string|null
+    {
+        if(!empty($address['country_code'])) {
+            $country = (new Country($address['country_code']));
+            $state = null;
+            if(!empty($address['state_code'])) {
+                $state = (new State($address['country_code'], $address['state_code']));
+            }
+            if($type === 'map_address' && $country->getName()) {
+                //https://www.google.com/maps/search/?api=1&query=Mohali+Tower,+India
+                $query = "{$address['address_1']} {$state?->getName()} {$address['city_id']} {$country->getName()}";
+                $link = "https://www.google.com/maps/search/?api=1&". http_build_query(['query' => $query]);
+                return "<div><p><a href='{$link}' target='_blank'>{$query}</a></p></div>";
+            }
+
+            if($type === 'minor_address' && $country->getName()) {
+                return "<div>
+           <p><strong>Country:</strong> &nbsp; {$country->getName()}<br>
+             <strong>State:</strong> &nbsp; {$state?->getName()}<br>
+             <strong>City:</strong> &nbsp; {$address['city_id']}<br>
+             <strong>address 1:</strong> &nbsp; {$address['address_1']}<br>
+             <strong>Address 2:</strong> &nbsp; {$address['address_2']}<br>
+             <strong>Postal Code:</strong> &nbsp; {$address['zip_code']}<br>
+             <strong>County:</strong> &nbsp; {$address['county']}<br>
+           </p>
+</div>";
+            }
+
+            if($type === 'full_address' && $country->getName()) {
+                $query = "{$address['address_1']} {$state?->getName()} {$address['city_id']} {$country->getName()}";
+                $link = "https://www.google.com/maps/search/?api=1&". http_build_query(['query' => $query]);
+                return "<div>
+           <p><strong>Country:</strong> &nbsp; {$country->getName()}<br>
+           <strong>Flag:</strong> &nbsp; {$country->getEmoji()}<br>
+           <strong>Region:</strong> &nbsp; {$country->getRegion()}<br>
+           <strong>Country Capital:</strong> &nbsp; {$country->getCapital()}<br>
+           <strong>Country Currency:</strong> &nbsp; {$country->getCurrency()}<br>
+           <strong>Country Latitude:</strong> &nbsp; {$country->getLatitude()}<br>
+           <strong>Country Longitude:</strong> &nbsp; {$country->getLongitude()}<br>
+           <strong>Country Code:</strong> &nbsp; {$address['country_code']}<br>
+             <strong>State:</strong> &nbsp; {$state?->getName()}<br>
+             <strong>City:</strong> &nbsp; {$address['city_id']}<br>
+             <strong>address 1:</strong> &nbsp; {$address['address_1']}<br>
+             <strong>Address 2:</strong> &nbsp; {$address['address_2']}<br>
+             <strong>Postal Code:</strong> &nbsp; {$address['zip_code']}<br>
+             <strong>County:</strong> &nbsp; {$address['county']}<br> 
+           </p></div>". "<div><p><a href='{$link}' target='_blank'>{$query}</a></p></div>";
+            }
+        }
+        return null;
     }
 }
