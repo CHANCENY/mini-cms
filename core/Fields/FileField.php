@@ -9,6 +9,7 @@ use Mini\Cms\Modules\FileSystem\File;
 use Mini\Cms\Services\Services;
 use Mini\Cms\StorageManager\Connector;
 use Mini\Cms\StorageManager\FieldRequirementNotFulFilledException;
+use PDO;
 use Throwable;
 
 class FileField implements FieldInterface

@@ -49,6 +49,10 @@ class MetaTag
                 MetagEnum::Canonical->name => [
                     'value' => $url,
                     'tag' => MetagEnum::Canonical
+                ],
+                MetagEnum::Charset->name =>[
+                    'value' => 'UTF-8',
+                    'tag' => MetagEnum::Charset
                 ]
             ];
         }

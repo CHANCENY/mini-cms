@@ -4,6 +4,8 @@ namespace Mini\Cms\Controller;
 
 use Mini\Cms\Configurations\ConfigFactory;
 use Mini\Cms\Modules\Access\AccessMiddleRunner;
+use Mini\Cms\Modules\Extensions\Extensions;
+use Mini\Cms\Modules\Extensions\ModuleHandler\ModuleHandler;
 use Mini\Cms\Modules\MetaTag\MetaTag;
 use Mini\Cms\Modules\Storage\Tempstore;
 use Mini\Cms\Routing\RouteBuilder;
@@ -65,28 +67,33 @@ class Route
 
             Tempstore::save('current_route',$this);
             $theme = Theme::loader();
-            //TODO: call theme modifier hooks.
+            Extensions::runHooks('_theme_alter',[&$theme]);
+
 
             Tempstore::save('theme_loaded',$theme);
 
             $menus = new Menus($path);
-            //TODO: call menu_alter
+            Extensions::runHooks('_menus_alter',[&$menus]);
             Tempstore::save('theme_navigation', $menus);
 
             $footer = new Footer();
             $footer->themeFile('footer.php');
+            Extensions::runHooks('_footer_alter',[&$footer]);
             Tempstore::save('theme_footer', $footer);
 
             $metaTag = new MetaTag();
+            Extensions::runHooks('_meta_data_initialize_alter',[&$metaTag]);
             Tempstore::save('theme_meta_tags', $metaTag);
 
             if(!empty($params)) {
                 $_GET = array_merge($_GET, $params);
+                Extensions::runHooks('_request_params_alter',[&$_GET]);
             }
 
             // Found matched route info
             $routeBuilder = new RouteBuilder();
             $this->loadedRoute = $routeBuilder->getRouteByPattern($pattern);
+            Extensions::runHooks('_loaded_route_alter',[&$this->loadedRoute]);
 
             // Let's load controller here.
             $controller = $this->loadedRoute->getRouteHandler();
@@ -129,9 +136,7 @@ class Route
                     // Will are calling writeBody method on controller class.
                     // so that we can have a response.
                     $this->controllerHandler->writeBody();
-                    // TODO: calling hooks.
-                    // TODO: Writing response.
-
+                    Extensions::runHooks('_response_alter',[&$this->response]);
                     $this->response->send();
                     exit;
                 }
@@ -141,7 +146,7 @@ class Route
             throw new ControllerMissingException("Controller not found (".$controller. ")");
         }
         else {
-            //TODO go 404 page.
+            Extensions::runHooks('_not_found_alter',[&$path]);
             throw new PageNotFoundException("This uri is missing in system $path");
         }
     }
@@ -163,7 +168,6 @@ class Route
         stream_wrapper_register('private', 'Mini\Cms\Modules\Streams\MiniWrapper', STREAM_IS_URL);
         stream_wrapper_register('module', 'Mini\Cms\Modules\Streams\MiniWrapper', STREAM_IS_URL);
         stream_wrapper_register('theme', 'Mini\Cms\Modules\Streams\MiniWrapper', STREAM_IS_URL);
-
         $config = Services::create('config.factory');
         if($config instanceof ConfigFactory) {
             $database = $config->get('database');
@@ -172,5 +176,6 @@ class Route
                 exit;
             }
         }
+        Extensions::runHooks('_wrapper_register_alter',[]);
     }
 }

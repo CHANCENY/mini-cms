@@ -4,6 +4,7 @@ namespace Mini\Cms\Entities;
 
 use Mini\Cms\Configurations\ConfigFactory;
 use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Modules\Extensions\Extensions;
 use Mini\Cms\Modules\FileSystem\File;
 use Mini\Cms\Services\Services;
 use PDO;
@@ -236,6 +237,7 @@ class User
     {
         if($this->userExist($this->email, $this->name) === true) {
 
+            Extensions::runHooks('_user_prepare_insert', [&$this]);
             $con = Database::database();
             $query = $con->prepare(
                 "INSERT INTO users (name, email, password, role, active, created, updated, firstname, lastname,image) VALUES (:name, :email, :password, :role, :active, :created, :updated, :firstname, :lastname, :image)"
@@ -253,6 +255,7 @@ class User
 
             $query->execute();
             $this->uid = $con->lastInsertId();
+            Extensions::runHooks('_user_post_insert', [&$this]);
             return $this->uid;
         }
         return $this->uid;
@@ -779,6 +782,7 @@ class User
 
     public function update(): bool
     {
+        Extensions::runHooks('_user_prepare_update',[&$this]);
         $updated = time();
         $user = $this->getUser();
         $this->updated = $updated;
@@ -797,13 +801,17 @@ class User
             $query->bindValue(':'.$column, $this->$column);
         }
         $query->bindParam(':uid', $this->uid);
+        Extensions::runHooks('_user_post_update',[&$this]);
         return $query->execute();
     }
 
     public function delete(): bool
     {
+        Extensions::runHooks('_user_prepare_delete',[&$this]);
         $query = Database::database()->prepare("DELETE FROM users WHERE uid = :uid");
         $query->bindParam(':uid', $this->uid);
+
+        Extensions::runHooks('_user_post_delete',[&$this]);
         $flag[] = $query->execute();
 
         $nodes = Node::loadByOwner($this->uid);

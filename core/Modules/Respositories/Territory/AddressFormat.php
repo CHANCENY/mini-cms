@@ -38,7 +38,8 @@ class AddressFormat
         $address = array_filter($this->address_options, function ($address) use ($country_code) {
             return $address['iso'] === $country_code;
         });
-        return reset($address);
+        $address = reset($address);
+        return is_array($address) ? $address : [];
     }
 
     /**

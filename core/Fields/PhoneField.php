@@ -6,6 +6,7 @@ use Mini\Cms\Connections\Database\Database;
 use Mini\Cms\Fields\FieldInterface;
 use Mini\Cms\Services\Services;
 use Mini\Cms\StorageManager\FieldRequirementNotFulFilledException;
+use PDO;
 
 class PhoneField implements FieldInterface
 {

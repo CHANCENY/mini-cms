@@ -1,0 +1,12 @@
+<?php
+
+
+//function Sample_theme_alter(\Mini\Cms\Theme\Theme &$theme): void
+//{
+//    dump($theme);
+//}
+
+//function Sample_node_post_start(\Mini\Cms\Entities\Node &$node)
+//{
+//
+//}

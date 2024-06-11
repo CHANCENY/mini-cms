@@ -2,6 +2,9 @@
 
 namespace Mini\Cms\Services;
 
+use Mini\Cms\Modules\Extensions\Extensions;
+use Mini\Cms\Modules\Storage\Tempstore;
+
 class Services implements ServiceInterface
 {
 
@@ -22,8 +25,15 @@ class Services implements ServiceInterface
      */
     public function __construct()
     {
-        if(isset($this->servicePath) && file_exists($this->servicePath)) {
-            $this->services = json_decode(file_get_contents($this->servicePath), true);
+        $services = Tempstore::load('system.service');
+        if(empty($services)) {
+            if(isset($this->servicePath) && file_exists($this->servicePath)) {
+                $this->services = json_decode(file_get_contents($this->servicePath), true);
+                Tempstore::save('system.service', $this->services);
+            }
+        }
+        else {
+            $this->services = $services;
         }
     }
 

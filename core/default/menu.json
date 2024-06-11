@@ -161,9 +161,9 @@
       "permission": ["administrator_access"]
     }
   },
-  "menu_extension_install": {
+  "menu_extension": {
     "label": "Extend",
-    "link": "/extension/install",
+    "link": "/extension/extend",
     "icon": "extend",
     "children": [],
     "attributes": {

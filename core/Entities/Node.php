@@ -6,6 +6,7 @@ use Mini\Cms\Connections\Database\Database;
 use Mini\Cms\Field;
 use Mini\Cms\Fields\FieldInterface;
 use Mini\Cms\Modules\CurrentUser\CurrentUser;
+use Mini\Cms\Modules\Extensions\Extensions;
 use Mini\Cms\NodeInterface;
 use PDO;
 
@@ -208,6 +209,7 @@ class Node implements NodeInterface
      */
     public function save(): ?int
     {
+        Extensions::runHooks('_node_prepare_insert',[&$this]);
         $columns = array_keys($this->data['#node']);
         $placeholders = array_map(function ($field) {
             return ':'.$field;
@@ -224,7 +226,6 @@ class Node implements NodeInterface
         }
         $query->execute();
         $node_id = $con->lastInsertId();
-
         // Now let's save fields data if node was created
         if(!empty($node_id)) {
             foreach ($this->fields['#fields'] as $field) {
@@ -232,6 +233,7 @@ class Node implements NodeInterface
                     $field->dataSave($node_id);
                 }
             }
+            Extensions::runHooks('_node_post_start',[&$this,$node_id]);
             return $node_id;
         }
         return  null;
@@ -243,6 +245,7 @@ class Node implements NodeInterface
      */
     public function delete(): bool
     {
+        Extensions::runHooks('_node_prepare_delete',[&$this]);
         if($this->fields['#fields']) {
             foreach ($this->fields['#fields'] as $field) {
                 if($field instanceof FieldInterface) {
@@ -253,7 +256,9 @@ class Node implements NodeInterface
         $query = "DELETE FROM entity_node_data WHERE node_id = :id";
         $statement = Database::database()->prepare($query);
         $statement->bindValue(':id',$this->id());
-        return $statement->execute();
+        $deleted =  $statement->execute();
+        Extensions::runHooks('_node_post_delete',[&$this]);
+        return $deleted;
     }
 
     /**
@@ -271,6 +276,7 @@ class Node implements NodeInterface
      */
     public function update(): bool
     {
+        Extensions::runHooks('_node_prepare_update',[&$this]);
         $columns = array_keys($this->data['#node']);
         $index = array_filter($columns,function($field){
             return $field === 'node_id';
@@ -296,6 +302,7 @@ class Node implements NodeInterface
                     $flags[] = $field->dataUpdate($this->id());
                 }
             }
+            Extensions::runHooks('_node_post_update',[&$this]);
         }
         return in_array(true,$flags);
     }

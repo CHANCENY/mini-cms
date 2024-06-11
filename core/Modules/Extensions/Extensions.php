@@ -3,12 +3,20 @@
 namespace Mini\Cms\Modules\Extensions;
 
 use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Modules\Extensions\ModuleHandler\ModuleHandler;
 use Mini\Cms\Modules\FileSystem\File;
 use Mini\Cms\Modules\FileSystem\FileSystem;
 use ZipArchive;
 
+/**
+ *
+ */
 final class Extensions
 {
+    /**
+     * Schema creator.
+     * @return void
+     */
     public static function extensionsStorage(): void
     {
         $database = new Database();
@@ -23,6 +31,11 @@ final class Extensions
         }
     }
 
+    /**
+     * Prepare installation of module.
+     * @param int $fid
+     * @return string|null
+     */
     public static function extensionsPrepareModule(int $fid): string|null
     {
         $unzipping_path = 'public://extensions';
@@ -79,6 +92,65 @@ final class Extensions
             }
         }
         return null;
+    }
+
+    /**
+     * Loading all modules in a system.
+     * @return array
+     */
+    public static function loadModules(): array {
+
+        return array_map(function($module) {
+            return new ModuleHandler($module['ext_id']);
+        },
+            Database::database()->query("SELECT ext_id FROM `extensions` WHERE `ext_type` = 'module'")->fetchAll());
+    }
+
+    /**
+     * Save extension states.
+     * @param array $extensions
+     * @return bool
+     */
+    public static function saveExtensions(array $extensions): bool
+    {
+        $flag = [];
+        foreach ($extensions as $extension_id=>$extension_Status) {
+            $query = Database::database()->prepare("UPDATE extensions SET `ext_status` = :status WHERE `ext_id` = :id");
+            $flag[] = $query->execute(['status' => $extension_Status, 'id' => $extension_id]);
+
+        }
+        return in_array(true, $flag);
+    }
+
+    /**
+     * Get all active modules.
+     * @return array
+     */
+    public static function activeModules(): array
+    {
+        return array_map(function($module) {
+            return new ModuleHandler($module['ext_id']);
+        },
+            Database::database()->query("SELECT ext_id FROM `extensions` WHERE `ext_type` = 'module' AND ext_status = 'on'")->fetchAll());
+    }
+
+    public static function runHooks(string $hook_name, array $args = []): void
+    {
+        $modules = self::activeModules();
+        if(!empty($modules)) {
+            foreach ($modules as $module) {
+                if($module instanceof ModuleHandler) {
+                    $module_file = $module->getHooksFile();
+                    $module_name = $module->getName(). $hook_name;
+                    if(file_exists($module_file)) {
+                        require_once $module_file;
+                        if(function_exists($module_name)) {
+                            call_user_func_array($module_name,$args);
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

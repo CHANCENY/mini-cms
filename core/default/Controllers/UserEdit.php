@@ -30,11 +30,27 @@ class UserEdit implements ControllerInterface
     {
         if($this->request->isMethod(\Symfony\Component\HttpFoundation\Request::METHOD_POST)) {
             $user = User::load($this->request->get('uid'));
-            $user->setFirstname($this->request->getPayload()->get('firstname'));
-            $user->setLastname($this->request->getPayload()->get('lastname'));
-            $user->setEmail($this->request->getPayload()->get('email'));
-            $user->setName($this->request->getPayload()->get('username'));
-            $user->setImage($this->request->getPayload()->get('image'));
+
+            if($this->request->getPayload()->get('firstname')) {
+                $user->setFirstname($this->request->getPayload()->get('firstname'));
+            }
+
+            if($this->request->getPayload()->get('lastname')) {
+                $user->setLastname($this->request->getPayload()->get('lastname'));
+            }
+
+            if($this->request->getPayload()->get('email')){
+                $user->setEmail($this->request->getPayload()->get('email'));
+            }
+
+            if($this->request->getPayload()->get('username')){
+                $user->setName($this->request->getPayload()->get('username'));
+            }
+
+            if($this->request->getPayload()->get('image')) {
+                $user->setImage($this->request->getPayload()->get('image'));
+            }
+
 
             if($user->update()) {
                 (new RedirectResponse('/user/'.$user->getUid()))->send();

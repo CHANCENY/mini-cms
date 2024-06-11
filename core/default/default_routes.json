@@ -639,7 +639,8 @@
             ],
             "roles": [
                 "administrator",
-                "authenticated"
+                "authenticated",
+                "anonymous"
             ]
         },
         "name": "Profile",
@@ -691,7 +692,8 @@
             ],
             "roles": [
                 "administrator",
-                "authenticated"
+                "authenticated",
+                "anonymous"
             ]
         },
         "name": "Profile",
@@ -733,5 +735,22 @@
         "description": "This is for installing extension",
         "url": "\/extension\/install",
         "handler": "Mini\\Cms\\default\\Controllers\\Extensions"
+    },
+    {
+        "id": "905d8ebb-105f-4d3a-801a-67e8c83150d0",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Extend",
+        "description": "This is for listing modules",
+        "url": "\/extension\/extend",
+        "handler": "Mini\\Cms\\default\\Controllers\\Extend"
     }
 ]

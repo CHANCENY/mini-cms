@@ -6,6 +6,7 @@ use Mini\Cms\Connections\Database\Database;
 use Mini\Cms\Fields\FieldInterface;
 use Mini\Cms\Services\Services;
 use Mini\Cms\StorageManager\FieldRequirementNotFulFilledException;
+use PDO;
 
 class SelectField implements FieldInterface
 {
@@ -65,7 +66,7 @@ class SelectField implements FieldInterface
         $query = "SELECT * FROM entity_types_fields WHERE field_name = :field_name";
         $statement = Database::database()->prepare($query);
         $statement->execute(['field_name' => $field]);
-        $this->field = $statement->fetchAll(\PDO::FETCH_ASSOC)[0] ?? [];
+        $this->field = $statement->fetchAll(PDO::FETCH_ASSOC)[0] ?? [];
         if(!empty($this->field['field_settings'])) {
             $this->field['field_settings'] = json_decode($this->field['field_settings'], true);
         }

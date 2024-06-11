@@ -1,0 +1,19 @@
+[
+  {
+    "id": "905d8ebb-105f-4d3a-801a-67e8c83150d0098",
+    "options": {
+      "unauthorized_access": true,
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "roles": [
+        "administrator"
+      ]
+    },
+    "name": "Sample Controller Route",
+    "description": "This is for sample controller route",
+    "url": "/sampling/extending",
+    "handler": "Mini\\Modules\\contrib\\Sample\\src\\Controller\\Sample"
+  }
+]

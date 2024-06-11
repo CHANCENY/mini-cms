@@ -11,7 +11,9 @@
                                     <h4><?= $content['user']->getFirstname() .' '. $content['user']->getLastname(); ?></h4>
                                     <p class="text-secondary mb-1"><?= $content['user']->getRole() ?></p>
                                     <p class="text-muted font-size-sm">Joined <?= date('d F, Y',$content['user']->getCreated()) ?></p>
-                                    <a href="/user/<?= $content['user']->getUid() ?>/delete" class="btn btn-danger">Delete profile</a>
+                                    <?php if($content['actions_button']): ?>
+                                        <a href="/user/<?= $content['user']->getUid() ?>/delete" class="btn btn-danger">Delete profile</a>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -28,6 +30,7 @@
                                     <?= $content['user']->getFirstname() .' '. $content['user']->getLastname(); ?>
                                 </div>
                             </div>
+                            <?php if($content['actions_button']): ?>
                             <hr>
                             <div class="row">
                                 <div class="col-sm-3">
@@ -59,9 +62,10 @@
                             <hr>
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <a class="btn btn-info " target="__blank" href="/user/<?= $content['user']->getUid() ?>/edit">Edit</a>
+                                        <a class="btn btn-info " target="__blank" href="/user/<?= $content['user']->getUid() ?>/edit">Edit</a>
                                 </div>
                             </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
