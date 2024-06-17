@@ -3,6 +3,8 @@
 namespace Mini\Cms\Routing;
 
 use Mini\Cms\Modules\Access\Role;
+use Mini\Cms\Modules\Extensions\Extensions;
+use Mini\Cms\Modules\Extensions\ModuleHandler\ModuleHandler;
 
 class Route
 {

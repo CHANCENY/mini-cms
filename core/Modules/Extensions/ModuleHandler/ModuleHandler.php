@@ -77,11 +77,4 @@ class ModuleHandler
         return null;
     }
 
-    public function getModuleDefinedRoutes(): array
-    {
-        $path = trim($this->getPath(), '/') . '/' . $this->module['ext_name'] . 'routing.' . '.json';
-        if(file_exists($path)){
-            $routes = json_decode(file_get_contents($path), true);
-        }
-    }
 }

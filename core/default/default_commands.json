@@ -2,5 +2,9 @@
   "route:admin": {
     "arg": [],
     "listener":"Mini\\Cms\\Modules\\Terminal\\RouteCreationTerminal"
+  },
+  "modal:create": {
+    "arg": [],
+    "listener":"Mini\\Cms\\Modules\\Terminal\\ModalCreation"
   }
 }

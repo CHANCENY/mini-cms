@@ -48,3 +48,4 @@ ___
 20. **_node_post_start**: This is hook that get triggered just after node creation. hook expect (Node parameter as reference)
 21. **_node_post_update**: This is hook that get triggered just after node update. hook expect (Node parameter as reference)
 22. **_node_post_delete**: This is hook that get triggered just after node deletion. hook expect (Node parameter as reference)
+23. **_attachements_assets**: This hook is called as soon as assets are loaded to theme.

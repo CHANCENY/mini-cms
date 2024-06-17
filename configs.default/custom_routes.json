@@ -1,0 +1,20 @@
+[
+  {
+    "id": "a7322f9d-3dd0-4be0-8bd4-a156b520b74299",
+    "options": {
+      "unauthorized_access": true,
+      "methods": [
+        "GET"
+      ],
+      "roles": [
+        "administrator",
+        "authenticated",
+        "anonymous"
+      ]
+    },
+    "name": "Sample",
+    "description": "This is for displaying content by terms",
+    "url": "\/sample",
+    "handler": "Mini\\Cms\\Web\\Controllers\\Sample"
+  }
+]

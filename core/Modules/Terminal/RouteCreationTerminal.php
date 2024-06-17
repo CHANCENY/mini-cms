@@ -83,9 +83,9 @@ class RouteCreationTerminal implements TerminalInterface
         }
 
         if($builder->save(true)) {
-            echo 'Route created successfully.\n\n';
+            echo 'Route created successfully.'.PHP_EOL . PHP_EOL;
         }else {
-            echo "Failed to create route\n\n";
+            echo "Failed to create route".PHP_EOL;
         }
         return 1;
     }

@@ -7,6 +7,7 @@ use Mini\Cms\Configurations\ConfigFactory;
 use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Route;
 use Mini\Cms\Modules\CurrentUser\CurrentUser;
+use Mini\Cms\Modules\Extensions\Extensions;
 use Mini\Cms\Modules\MetaTag\MetaTag;
 use Mini\Cms\Modules\Respositories\Territory\AddressFormat;
 use Mini\Cms\Modules\Site\Site;
@@ -63,6 +64,8 @@ class Theme
                 $this->assets['global'][] = $head;
             }
         }
+
+        Extensions::runHooks('_attachements_assets', [&$this->assets]);
     }
 
     public function view(string $file_name, $options = []): ?string

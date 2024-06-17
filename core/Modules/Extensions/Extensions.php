@@ -136,6 +136,7 @@ final class Extensions
 
     public static function runHooks(string $hook_name, array $args = []): void
     {
+        self::extensionsStorage();
         $modules = self::activeModules();
         if(!empty($modules)) {
             foreach ($modules as $module) {
