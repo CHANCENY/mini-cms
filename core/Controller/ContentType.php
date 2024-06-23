@@ -37,6 +37,7 @@ enum ContentType: string
     case IMAGE_WEBP = 'image/webp';
     case IMAGE_TIFF = 'image/tiff';
     case IMAGE_SVG = 'image/svg+xml';
+    case IMAGE_JPG = 'image/jpg';
 
     // Audio
     case AUDIO_MPEG = 'audio/mpeg';

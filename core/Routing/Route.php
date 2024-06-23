@@ -181,4 +181,14 @@ class Route
         }
         return !empty(array_intersect($roles, $this->getRoles()));
     }
+
+    public function setRouteTitle(string $title): void
+    {
+       $this->route['name'] = $title;
+    }
+
+    public function setRouteDescription(string $description): void
+    {
+        $this->route['description'] = $description;
+    }
 }

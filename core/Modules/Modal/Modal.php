@@ -127,17 +127,26 @@ abstract class Modal
      */
     public function all(): RecordCollections
     {
-        return new RecordCollections($this->db->connect()?->query("SELECT * FROM {$this->main_table}")->fetchAll() ?? []);
+        return new RecordCollections($this->db->connect()?->query("SELECT * FROM {$this->main_table} ORDER BY {$this->main_table}_created DESC")->fetchAll() ?? []);
     }
 
     /**
      * Get record of modal.
      * @param string|int $value
+     * @param string|null $field_name
      * @return RecordCollections
      */
-    public function get(string|int $value): RecordCollections
+    public function get(string|int $value, string|null $field_name = null): RecordCollections
     {
-
+        if($field_name) {
+            foreach ($this->columns as $column) {
+                if($column instanceof ColumnInterface) {
+                    if($column->getName() === $field_name) {
+                        $this->primary_key_column = $column;
+                    }
+                }
+            }
+        }
         $query = $this->db->connect()?->prepare("SELECT * FROM {$this->main_table} WHERE {$this->primary_key_column->getName()} = :{$this->primary_key_column->getName()}");
         $query->bindParam(':'.$this->primary_key_column->getName(), $value);
         $query->execute();
@@ -286,5 +295,29 @@ abstract class Modal
             $processed[] = $this->store($value);
         }
         return $processed;
+    }
+
+    /**
+     * Getting collection of given range
+     * @param int $limit
+     * @param int $offset
+     * @return RecordCollections
+     */
+    public function range(int $limit, int $offset): RecordCollections
+    {
+       return new RecordCollections($this->db->connect()->query("SELECT * FROM $this->main_table ORDER BY {$this->main_table}_created DESC limit $limit OFFSET $offset")->fetchAll() ?? []);
+    }
+
+    /**
+     * Get records belongs to uid.
+     * @param int $uid
+     * @return RecordCollections
+     */
+    public function byOwner(int $uid): RecordCollections
+    {
+        $query = $this->db->connect()?->prepare("SELECT * FROM {$this->main_table} WHERE {$this->main_table}_uid = :uid");
+        $query->bindParam(':uid', $uid);
+        $query->execute();
+        return new RecordCollections($query->fetchAll());
     }
 }

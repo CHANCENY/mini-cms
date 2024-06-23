@@ -4,8 +4,10 @@ namespace Mini\Cms\Services;
 
 use Mini\Cms\Modules\Extensions\Extensions;
 use Mini\Cms\Modules\Storage\Tempstore;
+use Mini\Cms\System\System;
+use Mini\Cms\Theme\FileLoader;
 
-class Services implements ServiceInterface
+class Services extends System implements ServiceInterface
 {
 
     /**
@@ -18,13 +20,18 @@ class Services implements ServiceInterface
      * Declarations file.
      * @var string
      */
-    private string $servicePath = '../configs/services.json';
+    private string $servicePath;
 
     /**
      * Construct loads declarations.
      */
     public function __construct()
     {
+        parent::__construct();
+
+        $file = new FileLoader($this->getAppConfigRoot());
+        $this->servicePath = $file->findFiles('services.json')[0] ?? null;
+
         $services = Tempstore::load('system.service');
         if(empty($services)) {
             if(isset($this->servicePath) && file_exists($this->servicePath)) {

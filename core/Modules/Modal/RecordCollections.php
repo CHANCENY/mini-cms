@@ -40,14 +40,6 @@ class RecordCollections
      */
     public function __toString(): string
     {
-        $arrays = [];
-        if($this->records) {
-            foreach ($this->records as $record) {
-                if($record instanceof RecordCollection) {
-                    $arrays[] = $record->getRecord();
-                }
-            }
-        }
-        return json_encode($arrays);
+        return json_encode($this->records);
     }
 }

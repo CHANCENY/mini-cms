@@ -3,6 +3,7 @@
 namespace Mini\Cms\StorageManager;
 
 use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Modules\Extensions\Extensions;
 use PDO;
 use PDOException;
 

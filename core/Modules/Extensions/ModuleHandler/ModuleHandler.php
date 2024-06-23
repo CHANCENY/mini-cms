@@ -16,11 +16,16 @@ class ModuleHandler
     private array $module;
 
     /**
-     * @param int $module_id
+     * @param int|string $module_id
      */
-    public function __construct(int $module_id)
+    public function __construct(int|string $module_id)
     {
-        $this->module = Database::database()->query("SELECT * FROM `extensions` WHERE `ext_id` = {$module_id}")->fetch();
+        if(is_int($module_id)) {
+            $this->module = Database::database()->query("SELECT * FROM `extensions` WHERE `ext_id` = {$module_id}")->fetch();
+        }
+        else {
+            $this->module = Database::database()->query("SELECT * FROM `extensions` WHERE `ext_name` = '$module_id'")->fetch();
+        }
     }
 
     public function id()

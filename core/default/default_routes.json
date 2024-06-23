@@ -100,7 +100,8 @@
             ],
             "roles": [
                 "anonymous",
-                "administrator"
+                "administrator",
+                "authenticated"
             ]
         },
         "name": "Files Uploader",

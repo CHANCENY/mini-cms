@@ -64,8 +64,7 @@ class Theme
                 $this->assets['global'][] = $head;
             }
         }
-
-        Extensions::runHooks('_attachements_assets', [&$this->assets]);
+        Extensions::runHooks('_attachments_assets',[&$this->assets]);
     }
 
     public function view(string $file_name, $options = []): ?string

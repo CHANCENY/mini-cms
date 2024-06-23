@@ -72,5 +72,8 @@ enum FileTypeEnum: string
 
     case APPLICATION_X_RAR_COMPRESSED = 'application/x-rar-compressed';
 
+    case APPLICATION_EPUB = 'application/epub+zip';
+
+    case APPLICATION_X_ZIP_COMPRESSED = 'application/x-zip-compressed';
 
 }

@@ -8,6 +8,7 @@ use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Response;
 use Mini\Cms\Controller\StatusCode;
 use Mini\Cms\Modules\Access\Roles;
+use Mini\Cms\Services\Services;
 
 class HomePage implements ControllerInterface
 {
@@ -28,6 +29,6 @@ class HomePage implements ControllerInterface
     {
         $this->response->setStatusCode(StatusCode::OK)
             ->setContentType(ContentType::TEXT_HTML)
-            ->write("<h1>Home</h1>");
+            ->write(Services::create('render')->render('home_page.php'));
     }
 }

@@ -38,6 +38,8 @@ enum ContentTypeEnum: string
     case IMAGE_TIFF = 'image/tiff';
     case IMAGE_SVG = 'image/svg+xml';
 
+    case IMAGE_JPG = 'image/jpg';
+
     // Audio
     case AUDIO_MPEG = 'audio/mpeg';
     case AUDIO_OGG = 'audio/ogg';

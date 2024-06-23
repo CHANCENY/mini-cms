@@ -3,8 +3,8 @@
     "arg": [],
     "listener":"Mini\\Cms\\Modules\\Terminal\\RouteCreationTerminal"
   },
-  "modal:create": {
-    "arg": [],
-    "listener":"Mini\\Cms\\Modules\\Terminal\\ModalCreation"
+  "route:import": {
+    "arg": ["from"],
+    "listener": "Mini\\Cms\\Modules\\Terminal\\ImportRoute"
   }
 }

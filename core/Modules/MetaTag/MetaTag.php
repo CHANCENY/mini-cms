@@ -62,7 +62,7 @@ class MetaTag
     {
         $this->metaTags[$meta->name] = [
             'value' => $value,
-            'tag' => MetagEnum::Title
+            'tag' => $meta
         ];
     }
 

@@ -4,7 +4,7 @@
             <form class="form" enctype="multipart/form-data" method="post">
                 <div class="p-2 m-2 bordered rounded">
                     <div class="row">
-                        <h3>User Registration</h3>
+                        <h3>User Edit</h3>
                     </div>
                     <div class="row mt-lg-2">
                         <div class="form-group col">

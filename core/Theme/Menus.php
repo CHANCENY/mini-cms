@@ -108,7 +108,7 @@ class Menus
 
                         if(!array_intersect($roles,$currentUser->getRoles()))
                         {
-                            unset($this->default_menus[$k]);
+                            unset($this->custom_menus[$k]);
                         }
                     }
                 }
@@ -116,7 +116,7 @@ class Menus
                 if($config instanceof ConfigFactory) {
                     $database = $config->get('database');
                     if(!empty($database) && $k === 'menu_installation') {
-                        unset($this->default_menus[$k]);
+                        unset($this->custom_menus[$k]);
                     }
                 }
             }
@@ -135,19 +135,22 @@ class Menus
                     if(in_array('authenticated_access', $permissions)) {
                         if(!$currentUser->isAuthenticated()) {
                             $flag = true;
+                        }else {
+                            $flag = false;
                         }
                     }
 
                     if($flag) {
+                        //dump($flag, $permissions,$menu);
                         if(!in_array('anonymous_access', $permissions)) {
-                            unset($this->default_menus[$k]);
+                            unset($this->custom_menus[$k]);
                         }
                     }
 
                     if(count($permissions)  === 1 && $permissions[0] === 'anonymous_access') {
 
                         if(!empty($currentUser->id())) {
-                            unset($this->default_menus[$k]);
+                            unset($this->custom_menus[$k]);
                         }
                     }
                 }
@@ -216,6 +219,13 @@ class Menus
             if(!empty($child['children'])) {
                 $this->traverChildrenMenusToMarkActive($child['children']);
             }
+        }
+    }
+
+    public function unset(string $menu_key): void
+    {
+        if(isset($this->menus[$menu_key])) {
+            unset($this->menus[$menu_key]);
         }
     }
 }

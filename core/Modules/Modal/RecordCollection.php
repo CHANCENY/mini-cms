@@ -50,9 +50,4 @@ readonly class RecordCollection
     {
        return json_encode($this->record);
     }
-
-    public function getRecord(): array
-    {
-        return $this->record;
-    }
 }
