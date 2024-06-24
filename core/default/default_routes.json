@@ -154,7 +154,8 @@
             ],
             "roles": [
                 "authenticated",
-                "administrator"
+                "administrator",
+                "anonymous"
             ]
         },
         "name": "User Verification",

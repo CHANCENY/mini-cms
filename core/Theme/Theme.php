@@ -139,7 +139,9 @@ class Theme
                        $default_navigation = $default_theme->view('navigation.php',$navigation);
                     }
                 }
-                return $default_navigation . Tempstore::load('theme_loaded')->view('navigation.php',$navigation);
+                $navigation_file = 'navigation.php';
+                Extensions::runHooks('_navigation_template_alter', [&$navigation_file]);
+                return $default_navigation . Tempstore::load('theme_loaded')->view($navigation_file,$navigation);
             }
         }
         return null;
@@ -151,6 +153,7 @@ class Theme
         if($footer instanceof FooterInterface) {
             // TODO call hook footer_alter
             $renderArray = $footer->render();
+            Extensions::runHooks('_footer_template_alter',[&$renderArray]);
             return $this->view($renderArray['theme'] ?? '', $renderArray['options'] ?? []);
         }
         return "";

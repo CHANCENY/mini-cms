@@ -56,7 +56,9 @@ class ConfigFactory extends System implements ConfigFactoryInterface
     {
         if($take_backup) {
             $backup = (new FileLoader($this->getAppConfigRoot()))->findFiles('backup_configurations.json')[0] ?? null;
-            copy($this->configurationPath, $backup);
+            if(!empty($backup)) {
+                copy($this->configurationPath, $backup);
+            }
         }
         return !empty(file_put_contents($this->configurationPath, json_encode($this->configurationObject, JSON_PRETTY_PRINT
         )));

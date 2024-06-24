@@ -85,9 +85,9 @@ class Response
                                        <title>$title</title>
                                      </head>
                                      <body class='body-content full-content-$route_id'>
-                                       <header class='header-content'>{{NAVIGATION}}</header>
-                                       <section class='main-content'>{{CONTENT_BODY}}</section> 
-                                       <footer class='footer-content'>{{FOOTER}}</footer>
+                                       {{NAVIGATION}}
+                                       {{CONTENT_BODY}}
+                                       {{FOOTER}}
                                        {{APPEND_ASSETS}}
                                        {{DEFAULTS_ASSETS}}
                                      </body>
