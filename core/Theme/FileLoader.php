@@ -36,7 +36,7 @@ class FileLoader
                     $foundFiles = array_merge($foundFiles, $results);
                 }
             }
-            if(is_file($fullPath) && str_ends_with($fullPath,$file_name)){
+            if(is_file($fullPath) && $file === $file_name){
                 $foundFiles[] = $fullPath;
             }
         }
