@@ -43,29 +43,44 @@ class Route
      */
     public function __construct(string $route_id)
     {
-        $this->routes = [];
-        $this->defaults = [];
+        global $routes;
 
-        if(file_exists($this->default_routes)) {
-            $this->defaults = json_decode(file_get_contents($this->default_routes), true) ?? [];
+        $fullCollection = [];
+
+        if(empty($routes)) {
+            $this->routes = [];
+            $this->defaults = [];
+
+            if(file_exists($this->default_routes)) {
+                $this->defaults = json_decode(file_get_contents($this->default_routes), true) ?? [];
+            }
+            else {
+                $alternative_path ='../default/default_routes.json';
+                if(file_exists($alternative_path)) {
+                    $this->defaults = json_decode(file_get_contents($alternative_path), true) ?? [];
+                }
+            }
+
+            if(file_exists($this->custom_routes)) {
+                $this->routes = json_decode(file_get_contents($this->custom_routes), true) ?? [];
+            }
+            else {
+                $alternative_path = '../../configs/custom_routes.json';
+                if(file_exists($alternative_path)) {
+                    $this->routes = json_decode(file_get_contents($alternative_path), true) ?? [];
+                }
+            }
+            $fullCollection = array_merge($this->routes, $this->defaults);
+            $routes['default'] = $this->defaults;
+            $routes['custom'] = $this->routes;
+            $routes['full'] = $fullCollection;
         }
         else {
-            $alternative_path ='../default/default_routes.json';
-            if(file_exists($alternative_path)) {
-                $this->defaults = json_decode(file_get_contents($alternative_path), true) ?? [];
-            }
+            $this->routes = $routes['custom'];
+            $this->defaults = $routes['default'];
+            $fullCollection = $routes['full'];
         }
 
-        if(file_exists($this->custom_routes)) {
-            $this->routes = json_decode(file_get_contents($this->custom_routes), true) ?? [];
-        }
-        else {
-            $alternative_path = '../../configs/custom_routes.json';
-            if(file_exists($alternative_path)) {
-                $this->routes = json_decode(file_get_contents($alternative_path), true) ?? [];
-            }
-        }
-        $fullCollection = array_merge($this->routes, $this->defaults);
         $this->route = array_filter($fullCollection, function ($route) use ($route_id) {
             return $route['id'] === $route_id;
         });

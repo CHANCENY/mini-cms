@@ -41,6 +41,7 @@ class Extend implements ControllerInterface
                 }
             }
         }
+        \Mini\Cms\Modules\Extensions\Extensions::moduleInSystem();
         $modules = \Mini\Cms\Modules\Extensions\Extensions::loadModules();
         $this->response->write(Services::create('render')->render('extend_module.php',['modules' => $modules]));
     }

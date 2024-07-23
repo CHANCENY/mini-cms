@@ -1,6 +1,7 @@
 <?php
 
 namespace Mini\Cms\Modules\Modal;
+use Exception;
 use Mini\Cms\Connections\Database\Database;
 use Mini\Cms\Modules\Modal\Columns\ColumnInterface;
 use Mini\Cms\Services\Services;
@@ -147,7 +148,7 @@ abstract class Modal
                 }
             }
         }
-        $query = $this->db->connect()?->prepare("SELECT * FROM {$this->main_table} WHERE {$this->primary_key_column->getName()} = :{$this->primary_key_column->getName()}");
+        $query = $this->db->connect()?->prepare("SELECT * FROM {$this->main_table} WHERE {$this->primary_key_column->getName()} = :{$this->primary_key_column->getName()} ORDER BY {$this->main_table}_created DESC");
         $query->bindParam(':'.$this->primary_key_column->getName(), $value);
         $query->execute();
         return new RecordCollections($query->fetchAll());
@@ -198,10 +199,21 @@ abstract class Modal
     /**
      * Deleting record from modal records.
      * @param string|int $value
+     * @param string|null $field_name
      * @return bool
      */
-    public function delete(string|int $value): bool
+    public function delete(string|int $value, string|null $field_name = null): bool
     {
+        if($field_name) {
+            foreach ($this->columns as $column) {
+                if($column instanceof ColumnInterface) {
+                    if($column->getName() === $field_name) {
+                        $this->primary_key_column = $column;
+                    }
+                }
+            }
+        }
+
         if(!empty($this->primary_key_column)) {
             $query = "DELETE FROM {$this->main_table} WHERE {$this->primary_key_column->getName()} = :value";
             $query = $this->db->connect()->prepare($query);
@@ -222,12 +234,15 @@ abstract class Modal
         if(!empty($this->columns)) {
             foreach($this->columns as $column) {
                 if($column instanceof ColumnInterface) {
-                    if(!empty($values[$column->getName()])) {
-                        $processed[$column->getName()] = $values[$column->getName()];
+                    if(isset($values[$column->getName()])) {
+                        if(!empty($values[$column->getName()]) || is_numeric($values[$column->getName()])) {
+                            $processed[$column->getName()] = $values[$column->getName()];
+                        }
                     }
                 }
             }
         }
+
         if(!empty($processed)) {
             $columns = array_keys($processed);
             $placeholders = array_map(function($column) {return "$column = :$column"; },$columns);
@@ -241,6 +256,7 @@ abstract class Modal
             return $this->get($key);
         }
 
+        print_r($processed);
         return false;
     }
 
@@ -301,10 +317,18 @@ abstract class Modal
      * Getting collection of given range
      * @param int $limit
      * @param int $offset
+     * @param string|null $search_by
+     * @param string|null $value
      * @return RecordCollections
      */
-    public function range(int $limit, int $offset): RecordCollections
+    public function range(int $limit, int $offset, ?string $search_by = null, ?string $value = null): RecordCollections
     {
+        if(!empty($search_by) && !empty($value)) {
+            $query = "SELECT * FROM $this->main_table WHERE $search_by = :vl ORDER BY {$this->main_table}_created DESC limit $limit OFFSET $offset";
+            $query = Database::database()->prepare($query);
+            $query->execute(['vl' => $value]);
+            return new RecordCollections($query->fetchAll() ?? []);
+        }
        return new RecordCollections($this->db->connect()->query("SELECT * FROM $this->main_table ORDER BY {$this->main_table}_created DESC limit $limit OFFSET $offset")->fetchAll() ?? []);
     }
 
@@ -315,9 +339,131 @@ abstract class Modal
      */
     public function byOwner(int $uid): RecordCollections
     {
-        $query = $this->db->connect()?->prepare("SELECT * FROM {$this->main_table} WHERE {$this->main_table}_uid = :uid");
+        $query = $this->db->connect()?->prepare("SELECT * FROM {$this->main_table} WHERE {$this->main_table}_uid = :uid ORDER BY {$this->main_table}_created DESC");
         $query->bindParam(':uid', $uid);
-        $query->execute();
         return new RecordCollections($query->fetchAll());
     }
+
+    /**
+     * Get all offset value possible for this modal table.
+     * @param int $limit
+     * @return RecordCollections
+     */
+    public function offSetArray(int $limit = 10): RecordCollections
+    {
+        $query = "SELECT CEIL(COUNT(*) / $limit) AS pages FROM {$this->main_table}";
+        $query = $this->db->connect()?->prepare($query);
+        $query->execute();
+        $pages = $query->fetch();
+        $pages_list = [];
+        for($i = 1; $i <= (int) $pages['pages']; $i++){
+            $pages_list[] = ['page'=>$i];
+        }
+        return new RecordCollections($pages_list);
+    }
+
+    /**
+     * Get all data with in action
+     * @param array $values
+     * @param string $field_name
+     * @return RecordCollections
+     */
+    public function in(array $values, string $field_name): RecordCollections
+    {
+        if(empty($values)) {
+            return new RecordCollections([]);
+        }
+        if($field_name) {
+            foreach ($this->columns as $column) {
+                if($column instanceof ColumnInterface) {
+                    if($column->getName() === $field_name) {
+                        $this->primary_key_column = $column;
+                    }
+                }
+            }
+        }
+        $query = "SELECT * FROM {$this->main_table} WHERE {$this->primary_key_column->getName()} IN (".implode(', ',$values).")";
+        $query = Database::database()->prepare($query);
+        $query->execute();
+        return new RecordCollections($query->fetchAll() ?? []);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function where(array $conditions): RecordCollections
+    {
+        if(empty($conditions)) {
+            return new RecordCollections([]);
+        }
+
+        // construct where clause.
+        foreach($conditions as $condition) {
+            if(empty($condition['operator']) || empty($condition['value']) || empty($condition['column'])) {
+              throw new Exception("Column name, operator, conjunction and value must be specified");
+            }
+        }
+        $query = $this->buildDynamicQuery($conditions);
+        $query = $this->db->connect()->prepare($query);
+        $query->execute();
+        return new RecordCollections($query->fetchAll() ?? []);
+    }
+
+    /**
+     * @param array $conditions
+     * @return string
+     * @throws Exception
+     */
+    private function buildDynamicQuery(array $conditions): string {
+        // Initial SQL query parts
+        $sql = "SELECT * FROM {$this->main_table} WHERE ";
+
+        // Array to hold individual conditions
+        $queryConditions = [];
+
+        foreach ($conditions as $condition) {
+            // Extract values from the condition array
+            $column = $condition['column'];
+            $operator = $condition['operator'];
+            $value = $condition['value'];
+            $conjunction = $condition['conjunction'] ?? null;
+
+            // Handle different operators and value types
+            switch ($operator) {
+                case '=':
+                case '!=':
+                case '>':
+                case '<':
+                case '>=':
+                case '<=':
+                    // Simple comparison operators
+                    $queryConditions[] = "`$column` $operator '" . addslashes($value) . "'";
+                    break;
+                case 'IN':
+                case 'NOT IN':
+                case 'ROW':
+                    // IN and NOT IN operators for array of values
+                    $valueString = implode(', ', array_map(function ($v) {
+                        return "'" . addslashes($v) . "'";
+                    }, (array)$value));
+                    $queryConditions[] = "`$column` $operator ($valueString)";
+                    break;
+                default:
+                    throw new Exception("Unsupported operator: $operator");
+                    break;
+            }
+
+            // Add conjunction (AND/OR) if provided and not the last condition
+            if ($conjunction && $condition !== end($conditions)) {
+                $queryConditions[] = strtoupper($conjunction);
+            }
+        }
+
+        // Combine all conditions into the final query
+        $sql .= implode(' ', $queryConditions);
+
+        return $sql;
+    }
+
+
 }

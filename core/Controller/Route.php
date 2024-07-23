@@ -100,6 +100,7 @@ class Route
 
             // Handling controller.
             if(empty($controller)) {
+                Extensions::runHooks('_not_found_error');
                 throw new ControllerHandlerNotFoundException("Controller not found to handle the request CID: ".$this->loadedRoute->getRouteId());
             }
             $this->request = Request::createFromGlobals();
@@ -114,16 +115,19 @@ class Route
 
             // Before calling handle lets check options
             if(!$this->loadedRoute->isAccessible()) {
+                Extensions::runHooks('_access_denied_error');
                 throw new TemporaryUnAvailableException("This controller can not be access at moment CD". $this->loadedRoute->getRouteId());
             }
 
             if(!$this->loadedRoute->isMethod($method)) {
+                Extensions::runHooks('_method_not_allowed_error');
                 throw new BadGateWayException('Method '.$method. ' is not allowed for route CD: '.$this->loadedRoute->getRouteId());
             }
 
             // Current user here.
             $currentUserRoles = Services::create('current.user')->getRoles();
             if(!$this->loadedRoute->isUserAllowed($currentUserRoles)) {
+                Extensions::runHooks('_access_denied_error');
                 throw new AccessDeniedRouteException("Route is not allowed to be access by user with ".implode(',', $currentUserRoles). ' roles RD: '.$this->loadedRoute->getRouteId());
             }
 
@@ -143,6 +147,7 @@ class Route
             }
 
             // If reach at this point the dont have controller.
+            Extensions::runHooks('_controller_not_found');
             throw new ControllerMissingException("Controller not found (".$controller. ")");
         }
         else {

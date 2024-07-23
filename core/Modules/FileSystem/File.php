@@ -103,9 +103,9 @@ class File
         $resolved = $this->getUri();
         if(!empty($this->styles->style())) {
             $style_key = $this->styles->style();
-            $list = explode('/', $resolved);
-            $path = str_starts_with($resolved, 'public://') ? 'public://'.$style_key .'/'.end($list) :
-                'private://'.$style_key.'/'.end($list);
+            $file_dir = trim(substr($resolved,strpos($resolved,'://'), strlen($resolved)),'://');
+            $path = str_starts_with($resolved, 'public://') ? 'public://'.$style_key .'/'.$file_dir :
+                'private://'.$style_key.'/'.$file_dir;
             if(file_exists($path)) {
                 $resolved = $path;
             }
@@ -113,8 +113,11 @@ class File
         return $resolved;
     }
 
-    public function getFilePath(bool $style_resolved = false): string
+    public function getFilePath(bool $style_resolved = false, string|null $style_name = null): string
     {
+        if($style_name) {
+            $this->styles->switchStyle($style_name);
+        }
         $file = new MiniWrapper();
         $path = $style_resolved ?$this->resolveStyleUri() : $this->getUri();
         return $file->getRealPath($path);
@@ -124,5 +127,16 @@ class File
     {
         $query = Database::database()->prepare("DELETE FROM file_managed WHERE fid = :id");
         return $query->execute(['id'=>$this->file_data['fid']]);
+    }
+
+    public function getRenderHtmlFileField(string $field_name): string
+    {
+        return <<<FILE
+<div class="col px-5 ps-0 mt-1 mb-1">
+   <a href="/{$this->getFilePath()}" target="_blank">{$this->getName()}</a>
+   <span class="remove float-end text-danger" field="$field_name" title="remove" aria-label="remove" data="{$this->file_data['fid']}" style="cursor: pointer;">x</span>
+</div>
+FILE;
+
     }
 }

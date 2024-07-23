@@ -199,7 +199,6 @@ class Node implements NodeInterface
 
     public function setTitle(string $title)
     {
-        // TODO: Implement setTitle() method.
         $this->data['#node']['title']['value'] = $title;
     }
 

@@ -14,7 +14,6 @@ class MetaTag
 
     public function __construct()
     {
-        //TODO: bring in site config
         $config_site = Services::create('config.site');
         if($config_site instanceof Site) {
             $file = File::load($config_site->getBrandingAssets('Logo')['fid'] ?? 0);

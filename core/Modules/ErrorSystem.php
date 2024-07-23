@@ -84,6 +84,18 @@ class ErrorSystem
         },array_diff(scandir($this->error_storage),['.','..']));
     }
 
+    public function getError(string $error_id): \stdClass|null
+    {
+        $error = array_filter($this->getErrors(),function ($error) use ($error_id){
+            return $error->report_on == $error_id;
+        });
+
+        if($error) {
+            return reset($error);
+        }
+        return null;
+    }
+
     public function isOn(): bool
     {
         return $this->handle_errors;
