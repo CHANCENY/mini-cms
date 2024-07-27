@@ -4,7 +4,7 @@ namespace Mini\Cms\Modules\Modal;
 
 use Mini\Cms\Entities\User;
 
-readonly class RecordCollection
+class RecordCollection
 {
 
     /**
@@ -12,6 +12,19 @@ readonly class RecordCollection
      */
     public function __construct(private array $record)
     {
+    }
+
+    /**
+     * This will just temporary hold data not persist to database.
+     * @param string $column
+     * @param mixed $value
+     * @return void
+     */
+    public function set(string $column, mixed$value): void
+    {
+        if(!empty($value) && !is_array($value)) {
+            $this->record[$column] = $value;
+        }
     }
 
     /**

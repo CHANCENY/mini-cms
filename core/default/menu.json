@@ -114,23 +114,6 @@
       "permission": ["administrator_access"]
     }
   },
-  "menu_password": {
-    "label": "Forgot Password",
-    "link": "/user/password",
-    "icon": "password",
-    "children": [
-
-    ],
-    "attributes": {
-      "class": "nav-item",
-      "id": "nav-item-password",
-      "title": "Password changing"
-    },
-    "options": {
-      "roles": ["*"],
-      "permission": ["anonymous_access", "authenticated_access", "administrator_access"]
-    }
-  },
   "menu_content": {
     "label": "Contents",
     "link": "/structure/contents",
@@ -170,6 +153,21 @@
       "class": "nav-item",
       "id": "nav-item-extend",
       "title": "extend"
+    },
+    "options": {
+      "roles": ["administrator"],
+      "permission": ["administrator_access"]
+    }
+  },
+  "menu_error": {
+    "label": "Errors reports",
+    "link": "/reporting/errors",
+    "icon": "errors",
+    "children": [],
+    "attributes": {
+      "class": "nav-item",
+      "id": "nav-item-extend",
+      "title": "report errors"
     },
     "options": {
       "roles": ["administrator"],

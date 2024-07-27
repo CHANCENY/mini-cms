@@ -40,6 +40,10 @@ class RecordCollections
      */
     public function __toString(): string
     {
-        return json_encode($this->records);
+        $list = [];
+        foreach ($this->records as $record) {
+            $list[] = json_decode($record->__toString());
+        }
+        return json_encode($list);
     }
 }

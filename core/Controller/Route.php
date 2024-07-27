@@ -90,6 +90,7 @@ class Route
                 Extensions::runHooks('_request_params_alter',[&$_GET]);
             }
 
+
             // Found matched route info
             $routeBuilder = new RouteBuilder();
             $this->loadedRoute = $routeBuilder->getRouteByPattern($pattern);
@@ -98,12 +99,20 @@ class Route
             // Let's load controller here.
             $controller = $this->loadedRoute->getRouteHandler();
 
+            // Do security check using hook
+            Extensions::runHooks('_route_access_alter',[&$this->loadedRoute]);
+
             // Handling controller.
             if(empty($controller)) {
+                Extensions::runHooks('_not_found_error');
                 throw new ControllerHandlerNotFoundException("Controller not found to handle the request CID: ".$this->loadedRoute->getRouteId());
             }
             $this->request = Request::createFromGlobals();
             $this->response = new Response();
+
+            if($this->request->isMethod('POST')) {
+                Extensions::runHooks('_post_request_alter',[&$this->request]);
+            }
 
             // Middlewares calling.
             $access_middle_response = (new AccessMiddleRunner($this->loadedRoute, $this->response))->runMiddleWares();
@@ -114,16 +123,19 @@ class Route
 
             // Before calling handle lets check options
             if(!$this->loadedRoute->isAccessible()) {
+                Extensions::runHooks('_access_denied_error');
                 throw new TemporaryUnAvailableException("This controller can not be access at moment CD". $this->loadedRoute->getRouteId());
             }
 
             if(!$this->loadedRoute->isMethod($method)) {
+                Extensions::runHooks('_method_not_allowed_error');
                 throw new BadGateWayException('Method '.$method. ' is not allowed for route CD: '.$this->loadedRoute->getRouteId());
             }
 
             // Current user here.
             $currentUserRoles = Services::create('current.user')->getRoles();
             if(!$this->loadedRoute->isUserAllowed($currentUserRoles)) {
+                Extensions::runHooks('_access_denied_error');
                 throw new AccessDeniedRouteException("Route is not allowed to be access by user with ".implode(',', $currentUserRoles). ' roles RD: '.$this->loadedRoute->getRouteId());
             }
 
@@ -143,6 +155,7 @@ class Route
             }
 
             // If reach at this point the dont have controller.
+            Extensions::runHooks('_controller_not_found');
             throw new ControllerMissingException("Controller not found (".$controller. ")");
         }
         else {

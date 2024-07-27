@@ -18,7 +18,7 @@ class States
         $states = array_filter($this->states, function($state) use ($country_code) {
             return $state['country_code'] === $country_code;
         });
-        return reset($states);
+        return $states;
     }
 
     public function getState(string $country_code, string $state_code): mixed {

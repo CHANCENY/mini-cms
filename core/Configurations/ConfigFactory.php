@@ -80,4 +80,13 @@ class ConfigFactory extends System implements ConfigFactoryInterface
     {
         return preg_replace('/[^A-Za-z0-9\-]/','_',$name);
     }
+
+    /**
+     * Configuration data.
+     * @return array
+     */
+    public function getConfigurations(): array
+    {
+        return $this->configurationObject;
+    }
 }

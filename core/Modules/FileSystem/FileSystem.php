@@ -255,7 +255,7 @@ class FileSystem
                             'width' => $dimensions['width'] ?? 0,
                             'height' => $dimensions['height'] ?? 0,
                             'type' => $type,
-                            'uri' => $this->fileWriteData($files['tmp_name'][$i],$files['name'][$i], $files['name'][$i]) ?? '',
+                            'uri' => $this->fileWriteData($files['tmp_name'][$i],$files['name'][$i], end($list)) ?? '',
                             'alt' => $files['name'][$i],
                             'uploaded_on' => time(),
                         ];

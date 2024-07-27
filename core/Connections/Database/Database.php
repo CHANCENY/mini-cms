@@ -17,6 +17,9 @@ class Database
 
     private \PDO $connection;
 
+    /**
+     * @throws \Exception
+     */
     public function __construct()
     {
         $config = Services::create('config.factory');
@@ -53,7 +56,11 @@ class Database
                 $this->connection = new PDO($dsn, $this->getDatabaseUser(), $this->getDatabasePassword());
                 $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+                $this->connection->setAttribute(PDO::ATTR_PERSISTENT,true);
             }
+
+            global $database;
+            $database = $this->connection;
         }
     }
 
@@ -94,6 +101,10 @@ class Database
 
     public static function database(): PDO|null
     {
+        global $database;
+        if(isset($database)) {
+            return $database;
+        }
         return (new Database())->connect();
     }
 
@@ -105,6 +116,10 @@ class Database
         }catch (\Throwable $throwable) {
             return;
         }
+    }
+
+    public function dbProcesses(): array {
+        return $this->connection->query("SHOW PROCESSLIST")->fetchAll();
     }
 
 }

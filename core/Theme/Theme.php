@@ -100,6 +100,7 @@ class Theme
             'current_request' => Request::createFromGlobals(),
             'site' => new Site(),
         ];
+        Extensions::runHooks('_view_data_alter', [&$variables, $file_name]);
         if(!empty($view_file[0]) && file_exists($view_file[0])) {
             ob_start();
             extract($variables);
@@ -161,6 +162,8 @@ class Theme
 
     public function writeAssets(string $assets_section): ?string
     {
+        $current_route = Tempstore::load('current_route');
+        Extensions::runHooks('_pre_assets_build',[&$this->assets[$assets_section], $assets_section, $current_route]);
         return $this->buildAssets($this->assets[$assets_section] ?? []);
     }
 

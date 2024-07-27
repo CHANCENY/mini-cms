@@ -31,7 +31,7 @@ class FileImageStyles
         });
 
         if(empty($this->default)){
-            $this->default = $this->styles['small'] ?? [];
+            $this->switchStyle('small');
         }
     }
 
@@ -59,5 +59,17 @@ class FileImageStyles
     public function style(): string
     {
         return array_keys($this->default)[0] ?? '';
+    }
+
+    public function switchStyle(string $style_name): void
+    {
+        if(isset($this->styles[$style_name])) {
+           foreach ($this->styles as $key=>$style) {
+               if($key === $style_name) {
+                   $this->default = [$key => $style];
+                   break;
+               }
+           }
+        }
     }
 }

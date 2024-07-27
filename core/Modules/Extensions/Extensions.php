@@ -154,4 +154,79 @@ final class Extensions
         }
     }
 
+    public static function moduleInSystem(): array
+    {
+        $contrib_modules = [];
+        if(is_dir('module://contrib')) {
+            self::scanDirectories('module://contrib', $contrib_modules);
+        }
+        $custom_modules = [];
+        if(is_dir('module://custom')) {
+            self::scanDirectories('modules://custom', $custom_modules);
+        }
+
+        $modules = array();
+        if(!empty($custom_modulesc)) {
+            foreach ($custom_modulesc as $module) {
+                $module_path = substr($module, 0, strrpos($module, DIRECTORY_SEPARATOR));
+                $file_content = file_get_contents($module);
+                $file_content = json_decode($file_content, true);
+                $modules[] = array_merge($file_content, ['path' => $module_path]);
+            }
+        }
+        if(!empty($contrib_modules)) {
+            foreach ($contrib_modules as $module) {
+                $module_path = substr($module, 0, strrpos($module, DIRECTORY_SEPARATOR));
+                $file_content = file_get_contents($module);
+                $file_content = json_decode($file_content, true);
+                $modules[] = array_merge($file_content, ['path' => $module_path]);
+            }
+        }
+        foreach ($modules as $module) {
+            $query = Database::database()->prepare("SELECT ext_id FROM `extensions` WHERE `ext_name` = :name");
+            $query->execute(['name' =>trim( $module['name'])]);
+            $d = $query->fetch();
+            if(empty($d)) {
+                $query = Database::database()->prepare("INSERT INTO `extensions` (ext_name, ext_version, ext_status,ext_type, ext_path) VALUES(:name, :version, :status, :type, :path)");
+                $query->execute([
+                    'name' => $module['name'],
+                    'version' => $module['version'],
+                    'status' => 0,
+                    'type' => $module['type'],
+                    'path' => $module['path'],
+                ]);
+            }
+        }
+        return $modules;
+    }
+
+    // Recursive function to scan directories
+    private static function scanDirectories($dir, &$infoFiles): void
+    {
+        // Open the directory
+        $files = scandir($dir);
+
+        // Loop through the directory contents
+        foreach ($files as $file) {
+            if ($file === '.' || $file === '..') {
+                continue;
+            }
+
+            $fullPath = $dir . DIRECTORY_SEPARATOR . $file;
+
+            // If it's a directory, recursively scan it
+            if (is_dir($fullPath)) {
+                self::scanDirectories($fullPath, $infoFiles);
+            }
+            // If it's a file and ends with .info.json, add it to the array
+            elseif (is_file($fullPath) && preg_match('/\.info\.json$/', $file)) {
+                $infoFiles[] = $fullPath;
+            }
+        }
+    }
+
+    public static function importRoutes(): bool {
+
+    }
+
 }

@@ -6,5 +6,17 @@
   "route:import": {
     "arg": ["from"],
     "listener": "Mini\\Cms\\Modules\\Terminal\\ImportRoute"
+  },
+  "exc:curl": {
+    "arg": ["url"],
+    "listener": "Mini\\Cms\\Modules\\Terminal\\CurlTerminal"
+  },
+  "exc:controller": {
+    "arg": ["name","resp"],
+    "listener": "Mini\\Cms\\Modules\\Terminal\\ControllerTerminal"
+  },
+  "exc:route-import": {
+    "arg": ["username", "password", "hostname"],
+    "listener": "Mini\\Cms\\Modules\\Terminal\\CurlRouteImportTerminal"
   }
 }

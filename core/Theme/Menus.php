@@ -5,6 +5,8 @@ namespace Mini\Cms\Theme;
 
 use Mini\Cms\Configurations\ConfigFactory;
 use Mini\Cms\Modules\CurrentUser\CurrentUser;
+use Mini\Cms\Routing\Route;
+use Mini\Cms\Routing\RouteBuilder;
 use Mini\Cms\Routing\URIMatcher;
 use Mini\Cms\Services\Services;
 
@@ -26,6 +28,7 @@ class Menus
     /**
      * Construct loads menus register in menu_register.json
      * @param string $current_uri
+     * @throws \Exception
      */
     public function __construct(string $current_uri = '/')
     {
@@ -226,6 +229,43 @@ class Menus
     {
         if(isset($this->menus[$menu_key])) {
             unset($this->menus[$menu_key]);
+        }
+    }
+
+    /**
+     * Set menu link using route id, not the route url should not contain patterns.
+     * @param string $route_id
+     * @return void
+     */
+    public function markRouteAsMenu(string $route_id): void
+    {
+        $routes = new RouteBuilder();
+        $routes_collection = $routes->getRoutes();
+        if($routes_collection) {
+            $found = array_filter($routes_collection, function ($route) use ($route_id) {
+               return $route->getRouteId() === $route_id;
+            });
+
+            if(!empty($found)) {
+                $route = reset($found);
+                if($route instanceof Route) {
+                    $r = $route->getPermission();
+                    $this->menus[$route_id] = new Menu([
+                        'label' => $route->getRouteTitle(),
+                        'link' => $route->getUrl(),
+                        'options' => [
+                            'roles' => $route->getRoles(),
+                            'permissions' => reset( $r),
+                        ],
+                        'attributes' => [
+                            "class"=> "nav-item",
+                            "id"=> "nav-item-user",
+                            "title"=> $route->getRouteTitle(),
+                        ],
+                        'children' => []
+                    ]);
+                }
+            }
         }
     }
 }
