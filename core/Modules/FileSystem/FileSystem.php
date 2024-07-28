@@ -364,43 +364,59 @@ class FileSystem
 
     /**
      * Resize jpeg file.
-     * @param $sourceImage
-     * @param $targetWidth
-     * @param $targetHeight
-     * @param $targetFile
-     * @return string
+     * @param string $sourceImage Path to the source image
+     * @param int $targetWidth Target width
+     * @param int $targetHeight Target height
+     * @param string $targetFile Path to the target file
+     * @return string Path to the resized image
      */
-    private function resizeImageJpeg($sourceImage, $targetWidth, $targetHeight, $targetFile): string
+    private function resizeImageJpeg(string $sourceImage, int $targetWidth, int $targetHeight, string $targetFile): string
     {
         list($sourceWidth, $sourceHeight) = getimagesize($sourceImage);
+
+        // If the source image is smaller than the target dimensions, copy it directly
+        if ($sourceWidth <= $targetWidth && $sourceHeight <= $targetHeight) {
+            copy($sourceImage, $targetFile);
+            return $targetFile;
+        }
+
         $sourceAspect = $sourceWidth / $sourceHeight;
         $targetAspect = $targetWidth / $targetHeight;
 
         if ($sourceAspect > $targetAspect) {
             // Source image is wider
             $resizeWidth = $targetWidth;
-            $resizeHeight = round($targetWidth / $sourceWidth * $sourceHeight);
+            $resizeHeight = round($targetWidth / $sourceAspect);
         } else {
             // Source image is taller or square
             $resizeHeight = $targetHeight;
-            $resizeWidth = round($targetHeight / $sourceHeight * $sourceWidth);
+            $resizeWidth = round($targetHeight * $sourceAspect);
         }
 
-        // Create a new blank image
+        // Create a new blank image with target dimensions
         $targetImage = imagecreatetruecolor($targetWidth, $targetHeight);
 
-        // Load the source image
-        $sourceImage = imagecreatefromjpeg($sourceImage);
+        // Fill the new image with a white background
+        $white = imagecolorallocate($targetImage, 255, 255, 255);
+        imagefill($targetImage, 0, 0, $white);
 
-        // Resize the image
-        imagecopyresampled($targetImage, $sourceImage, 0, 0, 0, 0, $targetWidth, $targetHeight, $resizeWidth, $resizeHeight);
+        // Load the source image
+        $srcImage = imagecreatefromjpeg($sourceImage);
+
+        // Calculate positions for centering the resized image within the target dimensions
+        $xPos = ($targetWidth - $resizeWidth) / 2;
+        $yPos = ($targetHeight - $resizeHeight) / 2;
+
+        // Resize the source image and copy it to the target image
+        imagecopyresampled($targetImage, $srcImage, $xPos, $yPos, 0, 0, $resizeWidth, $resizeHeight, $sourceWidth, $sourceHeight);
 
         // Save the resized image
         imagejpeg($targetImage, $targetFile);
 
         // Free up memory
-        imagedestroy($sourceImage);
+        imagedestroy($srcImage);
         imagedestroy($targetImage);
+
         return $targetFile;
     }
 
@@ -414,8 +430,14 @@ class FileSystem
      */
     private function resizeImagePng($sourceImage, $targetWidth, $targetHeight, $targetFile): string
     {
-        // Get dimensions of source image
         list($sourceWidth, $sourceHeight) = getimagesize($sourceImage);
+
+        // If the original image is smaller than the target dimensions, copy the original image
+        if ($sourceWidth <= $targetWidth && $sourceHeight <= $targetHeight) {
+            copy($sourceImage, $targetFile);
+            return $targetFile;
+        }
+
         $sourceAspect = $sourceWidth / $sourceHeight;
 
         // Calculate dimensions for resized image
@@ -430,7 +452,7 @@ class FileSystem
         }
 
         // Create a new blank image
-        $targetImage = imagecreatetruecolor($targetWidth, $targetHeight);
+        $targetImage = imagecreatetruecolor($resizeWidth, $resizeHeight);
 
         // Create a new transparent background for PNG images
         $transparent = imagecolorallocatealpha($targetImage, 0, 0, 0, 127);
@@ -438,17 +460,18 @@ class FileSystem
         imagesavealpha($targetImage, true);
 
         // Load the source image
-        $sourceImage = imagecreatefrompng($sourceImage);
+        $srcImage = imagecreatefrompng($sourceImage);
 
         // Resize the image
-        imagecopyresampled($targetImage, $sourceImage, 0, 0, 0, 0, $targetWidth, $targetHeight, $sourceWidth, $sourceHeight);
+        imagecopyresampled($targetImage, $srcImage, 0, 0, 0, 0, $resizeWidth, $resizeHeight, $sourceWidth, $sourceHeight);
 
         // Save the resized image
         imagepng($targetImage, $targetFile);
 
         // Free up memory
-        imagedestroy($sourceImage);
+        imagedestroy($srcImage);
         imagedestroy($targetImage);
+
         return $targetFile;
     }
 
