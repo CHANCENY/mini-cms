@@ -19,6 +19,8 @@ global  $routes;
 
 global $database;
 
+global $configurations;
+
 /**
  * Get configuration value.
  * @param string $notation

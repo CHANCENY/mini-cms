@@ -2,7 +2,6 @@
 
 namespace Mini\Cms\System;
 
-use Mini\Cms\Modules\Extensions\Extensions;
 
 class System
 {

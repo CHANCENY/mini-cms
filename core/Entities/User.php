@@ -297,8 +297,8 @@ class User
     {
         $file = File::load($this->image);
         if($file instanceof File) {
-            $profile =  $file->getFilePath();
-            if(file_exists($profile)) {
+            $profile =  $file->getFilePath('small');
+            if(file_exists($file->getPrivateFilename('small'))) {
                 return '/'.$profile;
             }
         }

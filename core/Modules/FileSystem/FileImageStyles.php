@@ -23,6 +23,18 @@ class FileImageStyles
             'large' => [
                 'width' => 500,
                 'height' => 450,
+            ],
+            "thumbnail" => [
+                'width' => 150,
+                'height' => 150,
+            ],
+            'social-icon' => [
+                'width' => 32,
+                'height' => 32,
+            ],
+            'favicon' => [
+                'width' => 16,
+                'height' => 16,
             ]
         ];
 

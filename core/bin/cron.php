@@ -2,7 +2,7 @@
 
 
 // URL to make the POST request to
-$url = "https://freshcart.articlepulsehub.com/cron/87654345678yzx";
+$url = "https://freshcartshop.com/cron/87654345678yzx";
 
 // Data to be sent in the POST request
 $data = [

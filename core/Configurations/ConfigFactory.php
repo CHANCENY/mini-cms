@@ -10,7 +10,7 @@ class ConfigFactory extends System implements ConfigFactoryInterface
 {
 
     /**
-     * Configuration loaded in system.
+     * Configuration loaded in a system.
      * @var array
      */
     private array $configurationObject;
@@ -26,10 +26,15 @@ class ConfigFactory extends System implements ConfigFactoryInterface
      */
     public function __construct()
     {
+        global $configurations;
         parent::__construct();
         $this->configurationPath = (new FileLoader($this->getAppConfigRoot()))->findFiles('configurations.json')[0] ?? null;
-        if(isset($this->configurationPath) && file_exists($this->configurationPath)) {
+        if(isset($this->configurationPath) && file_exists($this->configurationPath) && empty($configurations)) {
             $this->configurationObject = json_decode(file_get_contents($this->configurationPath), true) ?? [];
+            $configurations = $this->configurationObject;
+        }
+        else {
+            $this->configurationObject = $configurations;
         }
     }
 

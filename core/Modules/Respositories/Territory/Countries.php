@@ -31,6 +31,9 @@ class Countries
         $country = array_filter($this->countries, function($country) use ($code) {
             return $country['iso2'] == $code || $country['iso3'] == $code;
         });
-        return reset($country);
+        if(empty($country)) {
+            return [];
+        }
+        return reset($country) ?? [];
     }
 }

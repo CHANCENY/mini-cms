@@ -80,4 +80,16 @@ enum ContentType: string
     case MODEL_X3D_VRML = 'model/x3d+vrml';
     case MODEL_X3D_FASTINFOSET = 'application/x3d+fastinfoset';
     case MODEL_X3D_VRML_BINARY = 'model/x3d-vrml+binary';
+
+    // Method to return enum based on MIME type string
+    public static function fromMimeType(string $mimeType): ?self
+    {
+        foreach (self::cases() as $case) {
+            if ($case->value === $mimeType) {
+                return $case;
+            }
+        }
+        return null; // Return null if no match found
+    }
+
 }

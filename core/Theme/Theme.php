@@ -217,6 +217,7 @@ class Theme
 
     public function writeHtmlAttribute(): string
     {
+        //TODO: complete here
         return "";
     }
 

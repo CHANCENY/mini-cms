@@ -820,5 +820,23 @@
         "description": "This is for listing modules",
         "url": "/admin/database-processes",
         "handler": "Mini\\Cms\\default\\Controllers\\DatabaseProcessMonitor"
+    },
+    {
+        "id": "905d8ebb-105f-4d3a-801a-6gigif-fdid-idids-isisi-sididii765432345678",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator",
+                "authenticated",
+                "anonymous"
+            ]
+        },
+        "name": "Private file",
+        "description": "This is for private file",
+        "url": "/sites/default/private/{fid}/{style}",
+        "handler": "Mini\\Cms\\default\\Controllers\\PrivateFileAccessController"
     }
 ]

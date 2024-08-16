@@ -57,7 +57,10 @@ class Response
         header("Content-Type: ".$this->contentType->value);
         header("min-cms-type: ".$this->responseType);
         header("Generator: $this->generator");
-        header("Cache-Control: $this->cacheHeader");
+        //header("Cache-Control: $this->cacheHeader");
+        header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1
+        header("Pragma: no-cache"); // HTTP 1.0
+        header("Expires: 0"); // Proxies
 
         // Setting response code.
         http_response_code($this->statusCode->value);

@@ -89,10 +89,10 @@ abstract class MessengerBuilder
     public function getMessages(): mixed
     {
         $theme = Tempstore::load('theme_loaded');
-        $message_line = null;
-       foreach ($this->messages as $key=>$message) {
+        $message_line = [];
+       foreach ($this->messages as $message) {
            if($theme instanceof Theme) {
-               $message_line .= $theme->view($message['theme_message'], $message);
+               $message_line[] = $theme->view($message['theme_message'], $message);
            }
        }
        Tempstore::save('messenger',[]);
