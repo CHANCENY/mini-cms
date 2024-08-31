@@ -51,7 +51,7 @@ class Database
 
             // Making connection to mysql database.
             if($this->getDatabaseType() === 'mysql') {
-                $dsn = 'mysql:host='.$this->getDatabaseHost().';dbname=' . $this->getDatabaseName();
+                $dsn = 'mysql:host='.$this->getDatabaseHost().';dbname=' . $this->getDatabaseName().';charset=utf8mb4';
                 $this->attemptConnection();
                 $this->connection = new PDO($dsn, $this->getDatabaseUser(), $this->getDatabasePassword());
                 $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

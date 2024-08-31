@@ -314,7 +314,7 @@ abstract class Modal
     }
 
     /**
-     * Getting collection of given range
+     * Getting a collection of given ranges
      * @param int $limit
      * @param int $offset
      * @param string|null $search_by

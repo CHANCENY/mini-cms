@@ -14,6 +14,7 @@ use Mini\Cms\Modules\FileSystem\FileSizeEnum;
 use Mini\Cms\Modules\FileSystem\FileSystem;
 use Mini\Cms\Modules\FileSystem\FileTypeEnum;
 use Mini\Cms\StorageManager\Connector;
+use Throwable;
 
 class FilesUploader implements ControllerInterface
 {
@@ -48,12 +49,18 @@ class FilesUploader implements ControllerInterface
             }
             $file = File::load((int) $fid);
             if($file?->delete()) {
-                $query = Database::database()->prepare("DELETE FROM $field WHERE {$field}__value = :id");
-                $query->execute(['id'=> (int) $fid]);
+                try{
+                    $query = Database::database()->prepare("DELETE FROM $field WHERE {$field}__value = :id");
+                    $query->execute(['id'=> (int) $fid]);
 
-                $this->response->setStatusCode(StatusCode::OK)
-                    ->write(['result'=>true]);
-                return;
+                    $this->response->setStatusCode(StatusCode::OK)
+                        ->write(['result'=>true]);
+                    return;
+                }catch (Throwable $exception){
+                    $this->response->setStatusCode(StatusCode::OK)
+                        ->write(['result'=>true]);
+                    return;
+                }
             }
             $this->response->setStatusCode(StatusCode::EXPECTATION_FAILED)
                 ->write(['result'=>false]);

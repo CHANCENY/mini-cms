@@ -80,8 +80,8 @@ class CurrentUser
         $mid = $this->current_user['image'] ?? 0;
         $file = File::load((int) $mid);
         if($file instanceof File) {
-            $profile =  $file->getFilePath();
-            if(file_exists($profile)) {
+            $profile =  $file->getFilePath('small');
+            if(file_exists($file->getPrivateFilename('small'))) {
                 return '/'.$profile;
             }
         }

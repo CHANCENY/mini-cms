@@ -6,6 +6,7 @@ use Mini\Cms\Connections\Database\Database;
 use Mini\Cms\Connections\Smtp\MailManager;
 use Mini\Cms\Connections\Smtp\Receiver;
 use Mini\Cms\Controller\Request;
+use Mini\Cms\Modules\Extensions\Extensions;
 use Mini\Cms\Modules\Storage\Tempstore;
 
 
@@ -24,6 +25,7 @@ class Authenticator
         $user = $query->fetch();
         if($user) {
             if(password_verify($password, $user['password']) && $user['active'] == 1) {
+                Extensions::runHooks('_user_login_validated',[$user]);
                 Tempstore::save('default_current_user', $user, time() * 60 * 60 * 365);
                 return true;
             }
@@ -34,6 +36,7 @@ class Authenticator
         $user = $query->fetch();
         if($user) {
             if(password_verify($password, $user['password']) && $user['active'] == 1) {
+                Extensions::runHooks('_user_login_validated',[$user]);
                 Tempstore::save('default_current_user', $user, time() * 60 * 60 * 365);
                 return true;
             }
@@ -47,6 +50,7 @@ class Authenticator
      */
     public function logoutUser(): bool
     {
+        Extensions::runHooks('_user_logout',[]);
         return Tempstore::delete('default_current_user');
     }
 

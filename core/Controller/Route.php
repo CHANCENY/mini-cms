@@ -81,15 +81,10 @@ class Route
             Extensions::runHooks('_footer_alter',[&$footer]);
             Tempstore::save('theme_footer', $footer);
 
-            $metaTag = new MetaTag();
-            Extensions::runHooks('_meta_data_initialize_alter',[&$metaTag]);
-            Tempstore::save('theme_meta_tags', $metaTag);
-
             if(!empty($params)) {
                 $_GET = array_merge($_GET, $params);
                 Extensions::runHooks('_request_params_alter',[&$_GET]);
             }
-
 
             // Found matched route info
             $routeBuilder = new RouteBuilder();
@@ -113,6 +108,10 @@ class Route
             if($this->request->isMethod('POST')) {
                 Extensions::runHooks('_post_request_alter',[&$this->request]);
             }
+
+            $metaTag = new MetaTag();
+            Extensions::runHooks('_meta_data_initialize_alter',[&$metaTag, $this->request, $this->loadedRoute]);
+            Tempstore::save('theme_meta_tags', $metaTag);
 
             // Middlewares calling.
             $access_middle_response = (new AccessMiddleRunner($this->loadedRoute, $this->response))->runMiddleWares();
@@ -139,6 +138,9 @@ class Route
                 throw new AccessDeniedRouteException("Route is not allowed to be access by user with ".implode(',', $currentUserRoles). ' roles RD: '.$this->loadedRoute->getRouteId());
             }
 
+            $list = explode('::', $controller);
+            $controller = $list[0];
+            $method = $list[1] ?? null;
             // Making handler object.
             $this->controllerHandler = new $controller($this->request, $this->response);
             if($this->controllerHandler instanceof ControllerInterface) {
@@ -147,7 +149,12 @@ class Route
 
                     // Will are calling writeBody method on controller class.
                     // so that we can have a response.
-                    $this->controllerHandler->writeBody();
+                    if($method) {
+                        $this->controllerHandler->$method();
+                    }
+                    else {
+                        $this->controllerHandler->writeBody();
+                    }
                     Extensions::runHooks('_response_alter',[&$this->response]);
                     $this->response->send();
                     exit;

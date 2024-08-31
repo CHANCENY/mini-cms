@@ -4,6 +4,7 @@ namespace Mini\Cms\Modules\FileSystem;
 
 
 use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Controller\Request;
 use Mini\Cms\Modules\Streams\MiniWrapper;
 use Mini\Cms\StorageManager\Connector;
 
@@ -95,10 +96,14 @@ class File
     }
     public function getUri(): string
     {
+        $uri = $this->file_data['uri'];
+        if(str_starts_with($uri, 'private')){
+            return 'sites/default/private/' . $this->file_data['fid']. '/large';
+        }
         return $this->file_data['uri'];
     }
 
-    public function resolveStyleUri(): string
+    private function resolveStyleUri(): string
     {
         $resolved = $this->getUri();
         if(!empty($this->styles->style())) {
@@ -117,6 +122,9 @@ class File
     {
         if($style_name) {
             $this->styles->switchStyle($style_name);
+        }
+        if(str_starts_with($this->file_data['uri'], 'private')) {
+            return  'sites/default/private/' . $this->file_data['fid']. '/'.($style_name ?? 'large');
         }
         $file = new MiniWrapper();
         $path = $style_resolved ?$this->resolveStyleUri() : $this->getUri();
@@ -138,5 +146,22 @@ class File
 </div>
 FILE;
 
+    }
+
+    public function getOwner(): int
+    {
+        return $this->file_data['owner_uid'] ?? 0;
+    }
+
+    public function getPrivateFilename(string $style_key): string
+    {
+        $resolved = $this->file_data['uri'];
+        $path_parts = explode('/', $resolved);
+
+        // Insert "large" as the second element in the path
+        array_splice($path_parts, 2, 0, $style_key);
+
+        // Rebuild the path
+        return  implode('/', $path_parts);
     }
 }

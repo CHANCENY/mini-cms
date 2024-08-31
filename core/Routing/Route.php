@@ -37,6 +37,18 @@ class Route
      * @var array
      */
     private array $route;
+    private array $options = [];
+
+    /**
+     * @param string $key
+     * @param string|int|float $value
+     */
+    public function setOptions(string $key, string|int|float $value): void
+    {
+        $this->options[$key] = $value;
+    }
+
+
 
     /**
      * Constructor to build up routes.
@@ -205,5 +217,20 @@ class Route
     public function setRouteDescription(string $description): void
     {
         $this->route['description'] = $description;
+    }
+
+    function replacePlaceholdersInUrl(array $options): string
+    {
+        $url = $this->getUrl();
+        // Loop through the $params array and replace placeholders in the URL
+        foreach ($options as $key => $value) {
+            $url = str_replace('{' . $key . '}', $value, $url);
+        }
+        return $url;
+    }
+
+    public function __toString()
+    {
+        return $this->replacePlaceholdersInUrl($this->options ?? []);
     }
 }

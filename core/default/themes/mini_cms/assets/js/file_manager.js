@@ -5,8 +5,8 @@ if(fileInputTags){
         if(field.type === 'file') {
             // Event listener for file selection
             field.addEventListener('change', function() {
+                progress_bar(field);
                 const files = this.files;
-
                 if (files.length > 0) {
                     // Create FormData object
                     const formData = new FormData();
@@ -16,6 +16,15 @@ if(fileInputTags){
 
                     // AJAX request to send files to PHP backend
                     const xhr = new XMLHttpRequest();
+                    xhr.upload.addEventListener('progress',(e)=>{
+                        let percent = Math.floor((e.loaded / e.total) * 100);
+                        const progress_bar = document.getElementById(field.id + '-progress');
+                        if(progress_bar){
+                            setTimeout(()=>{
+                                progress_bar.value = Math.round(percent);
+                            },1000);
+                        }
+                    },false);
                     xhr.open('POST', '/files/assets/uploader', true);
                     xhr.onload = function() {
                         if (xhr.status === 200) {
@@ -41,13 +50,16 @@ if(fileInputTags){
                                     remove_file(span);
                                     const list = field.value.split(',');
                                     const thisId = span.getAttribute('data');
-                                    const filtered = list.map((item)=> {
-                                        if(item !== thisId) {
-                                            return item;
-                                        }
-                                    });
+                                    const filtered = list.filter((item)=> { return item !== thisId; });
                                     field.value = filtered.join(',');
                                     span.parentElement.remove();
+                                    if(field.value.length === 0) {
+                                        field.type = 'file';
+                                        if(document.getElementById(field.id+'-progress')) {
+                                            document.getElementById(field.id+'-progress').remove();
+                                        }
+                                    }
+                                    console.log(field.value);
                                 });
                                 ids.push(item.id);
 
@@ -84,9 +96,18 @@ if(fileInputTags){
         xhr.onload = function () {
             if(this.status === 200) {
                 item.parentElement.remove();
-                console.log(this.responseText);
             }
         }
         xhr.send();
     }
+
+    function progress_bar(input_field) {
+        const progress = document.createElement('progress');
+        progress.value = 0;
+        progress.max = 100;
+        progress.id = input_field.id + '-progress';
+        progress.setAttribute('style','width:100%');
+        input_field.parentElement.appendChild(progress);
+    }
 }
+

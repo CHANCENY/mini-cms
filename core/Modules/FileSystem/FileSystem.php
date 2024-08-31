@@ -4,6 +4,9 @@ namespace Mini\Cms\Modules\FileSystem;
 
 
 use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Controller\Request;
+use Mini\Cms\Modules\CurrentUser\CurrentUser;
+use Mini\Cms\Modules\Extensions\Extensions;
 use Mini\Cms\StorageManager\Connector;
 
 class FileSystem
@@ -75,9 +78,9 @@ class FileSystem
         return $this->total_files;
     }
 
-    public function isPublic(bool $public = true): bool
+    public function isPublic(bool $public = true): void
     {
-        return $this->save_as;
+       $this->is_public = $public;
     }
 
     public function setTotalFiles(int $total_files): void
@@ -115,12 +118,12 @@ class FileSystem
     {
         $database = new Database();
         if($database->getDatabaseType() === 'sqlite') {
-            $query = "CREATE TABLE IF NOT EXISTS `file_managed` (fid INTEGER PRIMARY KEY AUTOINCREMENT, uri TEXT NOT NULL, size INTEGER DEFAULT 0, width INTEGER DEFAULT 0, height INTEGER DEFAULT 0, file_name TEXT NOT NULL, type TEXT NOT NULL, alt TEXT NOT NULL, uploaded_on TEXT NOT NULL)";
+            $query = "CREATE TABLE IF NOT EXISTS `file_managed` (fid INTEGER PRIMARY KEY AUTOINCREMENT, uri TEXT NOT NULL, size INTEGER DEFAULT 0, width INTEGER DEFAULT 0, height INTEGER DEFAULT 0, file_name TEXT NOT NULL, type TEXT NOT NULL, alt TEXT NOT NULL, uploaded_on TEXT NOT NULL, owner_uid INTEGER)";
             $statement = Database::database()->prepare($query);
             $statement->execute();
         }
         if($database->getDatabaseType() === 'mysql') {
-            $query = "CREATE TABLE IF NOT EXISTS `file_managed` (fid INT(11) PRIMARY KEY AUTO_INCREMENT, uri TEXT NOT NULL, size INTEGER DEFAULT 0, width INTEGER DEFAULT 0, height INTEGER DEFAULT 0, file_name TEXT NOT NULL, type TEXT NOT NULL, alt TEXT NOT NULL, uploaded_on TEXT NOT NULL)";
+            $query = "CREATE TABLE IF NOT EXISTS `file_managed` (fid INT(11) PRIMARY KEY AUTO_INCREMENT, uri TEXT NOT NULL, size INTEGER DEFAULT 0, width INTEGER DEFAULT 0, height INTEGER DEFAULT 0, file_name TEXT NOT NULL, type TEXT NOT NULL, alt TEXT NOT NULL, uploaded_on TEXT NOT NULL, owner_uid INT(11))";
             $statement = Database::database()->prepare($query);
             $statement->execute();
         }
@@ -155,13 +158,18 @@ class FileSystem
     }
 
     /**
-     * Where will file be uploaded public or private. by default file are saved in public.
-     * @param bool $save_as if True the file will be saved in public.
+     * Where will file be uploaded public or private? by default file are saved in public.
+     * @param bool $save_as if True, the file will be saved in public.
      * @return void
      */
     public function setSaveAs(bool $save_as): void
     {
-        $this->save_as = $save_as ? $this->public_dir : $this->private_dir;
+        if($save_as) {
+            $this->save_as = $this->public_dir;
+        }
+        else {
+            $this->save_as = $this->private_dir;
+        }
     }
 
 
@@ -258,6 +266,7 @@ class FileSystem
                             'uri' => $this->fileWriteData($files['tmp_name'][$i],$files['name'][$i], end($list)) ?? '',
                             'alt' => $files['name'][$i],
                             'uploaded_on' => time(),
+                            'owner_uid' => (new CurrentUser())->id()
                         ];
                     }
                 }
@@ -314,6 +323,8 @@ class FileSystem
      */
     private function fileWriteData(string $path, string $filename, string $extension): string
     {
+        //Run FileSystem hooks
+        Extensions::runHooks('_file_system_save_as_alter',[&$this, Request::createFromGlobals()]);
         $styles = (new FileImageStyles())->getStyles();
         $extend = null;
         $today_folder = (new \DateTime('now'))->format('d-F-Y');

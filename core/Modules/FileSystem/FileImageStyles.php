@@ -2,6 +2,8 @@
 
 namespace Mini\Cms\Modules\FileSystem;
 
+use Mini\Cms\Modules\Extensions\Extensions;
+
 class FileImageStyles
 {
     private array $styles;
@@ -23,8 +25,22 @@ class FileImageStyles
             'large' => [
                 'width' => 500,
                 'height' => 450,
+            ],
+            "thumbnail" => [
+                'width' => 150,
+                'height' => 150,
+            ],
+            'social-icon' => [
+                'width' => 32,
+                'height' => 32,
+            ],
+            'favicon' => [
+                'width' => 16,
+                'height' => 16,
             ]
         ];
+
+        Extensions::runHooks('_image_styles_alter',[&$this->styles]);
 
         $this->default = array_filter($this->styles,function($style){
            return !empty($style['default']);

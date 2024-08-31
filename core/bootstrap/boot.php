@@ -10,14 +10,17 @@ use Mini\Cms\Configurations\ConfigFactory;
 use Mini\Cms\Entities\Node;
 use Mini\Cms\Entities\User;
 use Mini\Cms\Fields\AddressField;
+use Mini\Cms\Modules\Extensions\Extensions;
 use Mini\Cms\Modules\Respositories\Territory\Country;
 use Mini\Cms\Modules\Respositories\Territory\State;
-use Mini\Modules\contrib\customers\src\Modal\Address;
+use Mini\Cms\Modules\Storage\Tempstore;
 
 // Routes routes loaded
 global  $routes;
 
 global $database;
+
+global $configurations;
 
 /**
  * Get configuration value.
@@ -173,6 +176,37 @@ function getCountryByIP($ip): mixed
     }
 }
 
+function truncate_text(string $text, int $length = 100, string $end = '...'): string
+{
+    // Check if the text needs truncation
+    if (mb_strlen($text) <= $length) {
+        return $text;
+    }
+
+    // Truncate text at the nearest space to avoid breaking words
+    $truncated = mb_strimwidth($text, 0, $length, $end);
+
+    // Ensure that truncation does not break words
+    if (mb_strpos($truncated, ' ') !== false && mb_strlen($truncated) < mb_strlen($text)) {
+        // Find the last space in the truncated text
+        $last_space = mb_strrpos($truncated, ' ');
+        if ($last_space !== false) {
+            $truncated = mb_substr($truncated, 0, $last_space) . $end;
+        }
+    }
+
+    return $truncated;
+}
+
+function _login_user(User $user): User
+{
+    $data = $user->getValues();
+    Extensions::runHooks('_user_login_validated',[$data]);
+    Tempstore::save('default_current_user', $user->getValues(), time() * 60 * 60 * 365);
+    return $user;
+}
+
+
 $config = \Mini\Cms\Services\Services::create('config.factory');
 $maintain_mode = $config->get('maintain_mode');
 
@@ -198,3 +232,4 @@ if($maintain_mode['is_active'] && isset($maintain_mode['test_mode']) && $maintai
 MAIN;
     exit;
 }
+

@@ -7,8 +7,13 @@ use Mini\Cms\Controller\ControllerInterface;
 use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Response;
 use Mini\Cms\Controller\StatusCode;
+use Mini\Cms\Modules\Authentication\Authentication;
+use Mini\Cms\Modules\Authentication\AuthenticationInterface;
 use Mini\Cms\Modules\CurrentUser\Authenticator;
+use Mini\Cms\Modules\ErrorSystem;
 use Mini\Cms\Modules\Storage\Tempstore;
+use Mini\Cms\Routing\Route;
+use Mini\Cms\Theme\Theme;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class Login implements ControllerInterface
@@ -26,16 +31,35 @@ class Login implements ControllerInterface
     public function writeBody(): void
     {
         $theme = Tempstore::load('theme_loaded');
-        if($this->request->isMethod(\Symfony\Component\HttpFoundation\Request::METHOD_POST)) {
-            $login = new Authenticator();
-            if($login->loginUser($this->request->getPayload()->get('name'), $this->request->getPayload()->get('password')))
-            {
-                (new RedirectResponse('/'))->send();
-                exit;
+        try {
+            $authentications = new Authentication();
+            $authentication_method = $authentications->getAuthenticationMethod();
+            if($authentication_method) {
+
+                /**@var $_callback AuthenticationInterface **/
+                $_callback = $authentication_method['_callback'];
+
+                /**@var $_success Route **/
+                $_success = $authentication_method['_success_route'];
+
+                /**@var $_error Route **/
+                $_error = $authentication_method['_error_route'];
+
+                $_callback->authenticate($this->request);
+
+                $_callback->success($_success);
+
+                $_callback->error($_error);
+
+                $this->response->setContentType(ContentType::TEXT_HTML)
+                    ->setStatusCode(StatusCode::OK)
+                    ->write($theme->view($_callback->getTheme(), []));
+                return;
             }
+        }catch (\Throwable $e){
+            (new ErrorSystem())->setException($e);
+            $this->response->setContentType(ContentType::TEXT_HTML)
+                ->setStatusCode(StatusCode::OK)->write($theme->view('mini_no_login_view.php'));
         }
-        $this->response->setContentType(ContentType::TEXT_HTML)
-            ->setStatusCode(StatusCode::OK)
-            ->write($theme->view('login_form.php', []));
     }
 }
