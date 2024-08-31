@@ -1,5 +1,5 @@
 {
-    "name": "mini/cms",
+    "name": "minimum/cms",
     "description": "\"Building backend for you apis and your blogging websites mini cms provide quick and simple to use to set up funtioning backend of your site.\"",
     "type": "project",
     "require-dev": {
