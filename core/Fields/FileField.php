@@ -232,10 +232,11 @@ class FileField implements FieldInterface
         $displayType = $this->getDisplayType();
         $display_name = $displayType['name'];
         $setting['file_display_type'] = $display_name;
-
+        $field_value = array_key_exists(0, $field_value) ? $field_value[0] : $field_value;
+        $field_value = array_key_exists('value', $field_value) ? $field_value['value'] : $field_value;
         $files = [];
-        foreach ($field_value as $field) {
-            $file = File::load((int) $field['value']);
+        foreach ($field_value as $fid) {
+            $file = File::load((int) $fid);
             if($file instanceof File) {
                 if($display_name === 'image_format') {
                     $files[] = [

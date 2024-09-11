@@ -838,5 +838,23 @@
         "description": "This is for private file",
         "url": "/sites/default/private/{fid}/{style}",
         "handler": "Mini\\Cms\\default\\Controllers\\PrivateFileAccessController"
+    },
+    {
+        "id": "905d8ebb-1086665f-6669674d3a-85747801a-6g0598584-6958473-690493838-i765432345678",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator",
+                "authenticated",
+                "anonymous"
+            ]
+        },
+        "name": "Confirm password less login",
+        "description": "This is password less login confirmation",
+        "url": "/user/login/method/{session_code}/{auth_method}/{code}",
+        "handler": "Mini\\Cms\\default\\Controllers\\PasswordLessConfirmation"
     }
 ]

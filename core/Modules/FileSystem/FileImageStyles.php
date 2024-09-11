@@ -2,6 +2,8 @@
 
 namespace Mini\Cms\Modules\FileSystem;
 
+use Mini\Cms\Modules\Extensions\Extensions;
+
 class FileImageStyles
 {
     private array $styles;
@@ -37,6 +39,8 @@ class FileImageStyles
                 'height' => 16,
             ]
         ];
+
+        Extensions::runHooks('_image_styles_alter',[&$this->styles]);
 
         $this->default = array_filter($this->styles,function($style){
            return !empty($style['default']);

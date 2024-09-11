@@ -35,7 +35,6 @@ class ContentView implements ControllerInterface
             foreach($fields as $key=>$field) {
                 try {
                    $field_value = $node->get($field->getName());
-
                    // Displaying markup
                     $markup_line .= $field->markUp($field_value);
                 }catch (Throwable $exception) {

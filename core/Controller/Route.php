@@ -81,15 +81,10 @@ class Route
             Extensions::runHooks('_footer_alter',[&$footer]);
             Tempstore::save('theme_footer', $footer);
 
-            $metaTag = new MetaTag();
-            Extensions::runHooks('_meta_data_initialize_alter',[&$metaTag]);
-            Tempstore::save('theme_meta_tags', $metaTag);
-
             if(!empty($params)) {
                 $_GET = array_merge($_GET, $params);
                 Extensions::runHooks('_request_params_alter',[&$_GET]);
             }
-
 
             // Found matched route info
             $routeBuilder = new RouteBuilder();
@@ -113,6 +108,10 @@ class Route
             if($this->request->isMethod('POST')) {
                 Extensions::runHooks('_post_request_alter',[&$this->request]);
             }
+
+            $metaTag = new MetaTag();
+            Extensions::runHooks('_meta_data_initialize_alter',[&$metaTag, $this->request, $this->loadedRoute]);
+            Tempstore::save('theme_meta_tags', $metaTag);
 
             // Middlewares calling.
             $access_middle_response = (new AccessMiddleRunner($this->loadedRoute, $this->response))->runMiddleWares();

@@ -4,6 +4,7 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/core" isTestSource="false" packagePrefix="Mini\Cms\" />
       <sourceFolder url="file://$MODULE_DIR$/web/controllers" isTestSource="false" packagePrefix="Mini\Cms\Web\Controllers\" />
+      <sourceFolder url="file://$MODULE_DIR$/web/modules" isTestSource="false" packagePrefix="Mini\Modules\" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/brick/math" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/ramsey/collection" />

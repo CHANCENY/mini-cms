@@ -20,47 +20,51 @@ class Database
     /**
      * @throws \Exception
      */
-    public function __construct()
+    public function __construct(bool $reset= false)
     {
-        $config = Services::create('config.factory');
-        if($config instanceof ConfigFactory) {
+        global $database;
+        if(!isset($database) || $reset === true) {
+            $config = Services::create('config.factory');
+            if($config instanceof ConfigFactory) {
 
-            $this->database = $config->get('database');
+                $this->database = $config->get('database');
 
-            // Making connection to sqlite database.
-            if($this->getDatabaseType() === 'sqlite') {
+                // Making connection to a sqlite database.
+                if($this->getDatabaseType() === 'sqlite') {
 
-                if(!is_dir($this->sqlite_file)) {
-                    mkdir($this->sqlite_file);
+                    if(!is_dir($this->sqlite_file)) {
+                        mkdir($this->sqlite_file);
+                    }
+
+                    $alternative_path = '../../configs/database';
+                    if(!is_dir($this->sqlite_file)) {
+                        mkdir($alternative_path);
+                        $this->sqlite_file =$alternative_path;
+                    }
+
+                    if(is_dir($this->sqlite_file)) {
+                        // Make path to database file.
+                        $this->sqlite_file = $this->sqlite_file .'/'. $this->getDatabaseName(). '.sqlite';
+                        $this->connection = new PDO('sqlite:'.$this->sqlite_file);
+                        $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                        $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+                    }
                 }
 
-                $alternative_path = '../../configs/database';
-                if(!is_dir($this->sqlite_file)) {
-                    mkdir($alternative_path);
-                    $this->sqlite_file =$alternative_path;
-                }
-
-                if(is_dir($this->sqlite_file)) {
-                    // Make path to database file.
-                    $this->sqlite_file = $this->sqlite_file .'/'. $this->getDatabaseName(). '.sqlite';
-                    $this->connection = new PDO('sqlite:'.$this->sqlite_file);
+                // Making connection to mysql database.
+                if($this->getDatabaseType() === 'mysql') {
+                    $dsn = 'mysql:host='.$this->getDatabaseHost().';dbname=' . $this->getDatabaseName().';charset=utf8mb4';
+                    $this->attemptConnection();
+                    $this->connection = new PDO($dsn, $this->getDatabaseUser(), $this->getDatabasePassword());
                     $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+                    $this->connection->setAttribute(PDO::ATTR_PERSISTENT,true);
                 }
+                $database = $this->connection;
             }
-
-            // Making connection to mysql database.
-            if($this->getDatabaseType() === 'mysql') {
-                $dsn = 'mysql:host='.$this->getDatabaseHost().';dbname=' . $this->getDatabaseName();
-                $this->attemptConnection();
-                $this->connection = new PDO($dsn, $this->getDatabaseUser(), $this->getDatabasePassword());
-                $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-                $this->connection->setAttribute(PDO::ATTR_PERSISTENT,true);
-            }
-
-            global $database;
-            $database = $this->connection;
+        }
+        else {
+            $this->connection = $database;
         }
     }
 

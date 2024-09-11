@@ -5,14 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="94f10dfb-8858-44c2-a819-3faaa754f477" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/core/Modules/Terminal/ModalCreation.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/Modules/FormControllerBase/FormBase.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/Modules/FormControllerBase/FormBuilder.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/Modules/FormControllerBase/FormControllerInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/Modules/FormControllerBase/FormState.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/Modules/FormControllerBase/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/mini-cms.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/mini-cms.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Modules/Extensions/ModuleHandler/ModuleHandler.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/Extensions/ModuleHandler/ModuleHandler.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Modules/Extensions/READme.md" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/Extensions/READme.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Modules/Terminal/RouteCreationTerminal.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/Terminal/RouteCreationTerminal.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Controller/Response.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Controller/Response.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Controller/Route.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Controller/Route.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Modules/FileSystem/File.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/FileSystem/File.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/Routing/Route.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Routing/Route.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Theme/Theme.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Theme/Theme.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/default/default_commands.json" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/default_commands.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/controllers/Sample.php" beforeDir="false" afterPath="$PROJECT_DIR$/web/controllers/Sample.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +37,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\xampp\php\php.exe">
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/bin/php">
     <include_path>
       <path value="$PROJECT_DIR$/vendor/ramsey/uuid" />
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php83" />
@@ -57,20 +62,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/xampp/htdocs/mini-cms",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "php.override.implement.member.chooser.php.doc": "NONE",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/sv/Documents/mini-cms&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;php.override.implement.member.chooser.php.doc&quot;: &quot;NONE&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\xampp\htdocs\mini-cms\core\default\themes\mini_cms\src\forms" />
@@ -82,8 +87,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-19b454f630c8-JavaScript-PS-242.16677.23" />
-        <option value="bundled-php-predefined-a98d8de5180a-22e5edc3f707-com.jetbrains.php.sharedIndexes-PS-242.16677.23" />
+        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-PS-242.21829.154" />
+        <option value="bundled-php-predefined-a98d8de5180a-4d9f4c849d09-com.jetbrains.php.sharedIndexes-PS-242.21829.154" />
       </set>
     </attachedChunks>
   </component>
@@ -116,6 +121,8 @@
       <workItem from="1718515484543" duration="101000" />
       <workItem from="1718515649273" duration="2599000" />
       <workItem from="1718536629669" duration="3771000" />
+      <workItem from="1724150380787" duration="3301000" />
+      <workItem from="1726029840661" duration="8000" />
     </task>
     <servers />
   </component>

@@ -65,7 +65,7 @@ class Authenticator
         $query->execute(['id' => $uid]);
         $user = $query->fetch();
         if($user) {
-            $database = new Database();
+            $database = new Database(true);
             $query = null;
             if($database->getDatabaseType() == 'mysql') {
                 $query = "CREATE TABLE IF NOT EXISTS `verification_tokens` (vid int(11) primary key auto_increment, token varchar(255), uid int(11), created_at int(11))";

@@ -16,14 +16,18 @@ class FileFieldMarkUp implements FieldMarkUpInterface
     {
         $default = null;
         if($default_value) {
+            $default_value = array_key_exists(0, $default_value) ? $default_value[0] : $default_value;
+            $default_value = array_key_exists('value', $default_value) ? $default_value['value'] : $default_value;
             foreach ($default_value as $value) {
-                $file = File::load((int) $value['value']);
-                $default .= <<<FILE
+                if($value) {
+                    $file = File::load((int) $value);
+                    $default .= <<<FILE
 <div class="col px-5 ps-0 mt-1 mb-1">
     <a href="/{$file?->getFilePath()}" target="_blank">{$file?->getName()}</a>
     <span style="cursor: pointer;" field="{$field?->getName()}" class="remove float-end text-danger" title="remove" aria-label="remove" data="{$value['value']}">x</span>
 </div>
 FILE;
+                }
             }
         }
         $this->field = $field;

@@ -148,10 +148,12 @@ class QueryManager
      * @param string $operator
      * @param string $conjunction
      * @return $this
+     * @throws \Exception
      */
     public function addCondition(string $field, mixed $value, string $operator = '=', string $conjunction = 'AND'): QueryManager
     {
         $this->conditions[] = compact('field', 'value', 'operator', 'conjunction');
+        $this->buildConditions();
         return $this;
     }
 
@@ -360,9 +362,6 @@ class QueryManager
             default:
                 throw new \Exception("Unsupported query type.");
         }
-
-        $this->buildConditions();
-
         $stmt = $this->connection->prepare($this->query);
 
         $bindings = [];

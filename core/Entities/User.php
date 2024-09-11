@@ -4,6 +4,7 @@ namespace Mini\Cms\Entities;
 
 use Mini\Cms\Configurations\ConfigFactory;
 use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Mini;
 use Mini\Cms\Modules\Extensions\Extensions;
 use Mini\Cms\Modules\FileSystem\File;
 use Mini\Cms\Services\Services;
@@ -195,16 +196,16 @@ class User
 
     private function userTable(): void
     {
-        $database = new Database();
+        $connection = Mini::connection();
         $query = null;
-        if($database->getDatabaseType() === 'sqlite') {
+        if($connection->getAttribute(PDO::ATTR_DRIVER_NAME) === 'sqlite') {
             $query = "CREATE TABLE IF NOT EXISTS $this->user_tables_query (uid INTEGER PRIMARY KEY AUTOINCREMENT,email varchar(255), name varchar(255), password varchar(255), role varchar(255), active varchar(255), created varchar(255), updated varchar(255), firstname varchar(255), lastname varchar(255), image varchar(30))";
         }
-        if($database->getDatabaseType() === 'mysql') {
+        if($connection->getAttribute(PDO::ATTR_DRIVER_NAME) === 'mysql') {
             $query = "CREATE TABLE IF NOT EXISTS $this->user_tables_query (uid int(11) PRIMARY KEY AUTO_INCREMENT,email varchar(255), name varchar(255), password varchar(255), role varchar(255), active varchar(255), created varchar(255), updated varchar(255), firstname varchar(255), lastname varchar(255), image varchar(30))";
 
         }
-        $query = Database::database()->prepare($query);
+        $query = $connection->prepare($query);
         $query->execute();
     }
 

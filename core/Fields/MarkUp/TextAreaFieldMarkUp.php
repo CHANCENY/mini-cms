@@ -16,6 +16,7 @@ class TextAreaFieldMarkUp implements FieldMarkUpInterface
     public function buildMarkup(FieldInterface $field, array|null $default_value): FieldMarkUpInterface
     {
         $default_value = $default_value['value'] ?? null;
+        $default_value = is_array($default_value) ? reset($default_value) : $default_value;
         $this->field = $field;
         $display_setting = $field->getDisplayType()['name'] ?? 'plain_text';
         $class_name = match ($display_setting) {
@@ -23,7 +24,6 @@ class TextAreaFieldMarkUp implements FieldMarkUpInterface
             'full_html' => 'tinymce-editor',
              default => 'quill-editor',
         };
-
         $is_required = !empty($field->isRequired()) ? 'required' : null;
         $is_required = $display_setting === 'full_html' ? null : $is_required;
         $size = $this->field->getSize();

@@ -162,12 +162,12 @@ final class Extensions
         }
         $custom_modules = [];
         if(is_dir('module://custom')) {
-            self::scanDirectories('modules://custom', $custom_modules);
+            self::scanDirectories('module://custom', $custom_modules);
         }
 
         $modules = array();
-        if(!empty($custom_modulesc)) {
-            foreach ($custom_modulesc as $module) {
+        if(!empty($custom_modules)) {
+            foreach ($custom_modules as $module) {
                 $module_path = substr($module, 0, strrpos($module, DIRECTORY_SEPARATOR));
                 $file_content = file_get_contents($module);
                 $file_content = json_decode($file_content, true);
