@@ -4,16 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a843d78-d8d4-4f56-9402-63f4f92bdf0d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/core/ConnectorInterface.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Entity.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/EntityNotAvailableException.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/NodeInterface.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/ReferenceInterface.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Vocabulary.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/VocabularyInterface.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/VocabularyNotFoundException.php" beforeDir="false" />
-    </list>
+    <list default="true" id="9a843d78-d8d4-4f56-9402-63f4f92bdf0d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
