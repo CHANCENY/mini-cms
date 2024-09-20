@@ -5,80 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a843d78-d8d4-4f56-9402-63f4f92bdf0d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/core/Modules/Cache/CacheStorage.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/Modules/Cache/CacheTagExistException.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/default/Controllers/CacheSettings.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/src/forms/default_cache_settings.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/mini-cms.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.lando.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.lando.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/configs.default/configurations.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/configs.default/custom_commands.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/configs.default/custom_routes.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/configs.default/menus.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/configs.default/services.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Connections/Database/Queries/QueryManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Connections/Database/Queries/QueryManager.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Connections/Smtp/MailManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Connections/Smtp/MailManager.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Controller/ContentType.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Controller/ContentType.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Controller/ContentTypeEnum.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Controller/ContentTypeEnum.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Controller/ControllerInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Controller/ControllerInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Controller/Response.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Controller/Response.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Controller/Route.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Controller/Route.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Entities/DefaultNodeFieldNotProvidedException.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Entities/EntityNameNotFoundException.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Entities/FieldDefaultValueNotFoundForRequiredException.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Entities/FieldMaxSizeException.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Entities/FieldNotFoundException.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Entities/Node.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Entities/NodeTitleNotProvidedException.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Entities/Term.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Entities/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Entities/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/EmailField.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/FieldViewDisplay/FieldViewDisplayInterface.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/FileField.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/FileFieldSubmitter.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/EmailFieldMarkUp.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/FileFieldMarkUp.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/PhoneFieldMarkUp.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/ReferenceFieldMarkUp.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/SelectFieldMarkUp.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/TextAreaFieldMarkUp.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/TextFieldMarkUp.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/PhoneField.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/ReferenceField.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/SelectField.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/TextAreaField.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/TextField.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Fields/assets/Arial-Unicode-Regular.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/assets/Arial-Unicode-Regular.ttf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Hooks/Hook.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Hooks/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Mini.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Mini.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Modules/Access/AccessMiddleWare.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/Access/AccessMiddleWare.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Modules/CurrentUser/Authenticator.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/CurrentUser/Authenticator.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Modules/ErrorSystem.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/ErrorSystem.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Modules/FileSystem/FileSystem.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/FileSystem/FileSystem.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Modules/FormControllerBase/FormState.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/FormControllerBase/FormState.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Modules/Site/Site.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/Site/Site.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Modules/Streams/MiniWrapper.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/Streams/MiniWrapper.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Routing/Route.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Routing/Route.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Routing/RouteBuilder.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Routing/RouteBuilder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/StorageManager/Connector.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/StorageManager/Connector.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/System/System.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/System/System.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Theme/Theme.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Theme/Theme.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/bootstrap/boot.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/bootstrap/boot.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/default/Controllers/SiteConfiguration.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/Controllers/SiteConfiguration.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/default/Controllers/UserRegistration.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/Controllers/UserRegistration.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/default/default_routes.json" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/default_routes.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/default/menu.json" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/menu.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/__theme_libraries.json" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/src/__theme_libraries.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/installations/site_configurations.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/src/installations/site_configurations.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/controllers/Sample.php" beforeDir="false" afterPath="$PROJECT_DIR$/web/controllers/Sample.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/web/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/new-install.php" beforeDir="false" afterPath="$PROJECT_DIR$/web/new-install.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ConnectorInterface.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Entity.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/EntityNotAvailableException.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/NodeInterface.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/ReferenceInterface.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Vocabulary.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/VocabularyInterface.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/VocabularyNotFoundException.php" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,26 +45,26 @@
       <path value="$PROJECT_DIR$/vendor/ramsey/uuid" />
     </include_path>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2mJtR1weNF2isRKxRzhAPJw1jd1" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
