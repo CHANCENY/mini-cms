@@ -1,2 +1,4 @@
 configs
 vendor
+web/sites
+web/controllers
