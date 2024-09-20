@@ -79,6 +79,10 @@ class ErrorSystem
 
     public function getErrors(): array
     {
+        if(!is_dir($this->error_storage)){
+            @mkdir($this->error_storage, 0777, true);
+            return [];
+        }
         return array_map(function ($error){
             return json_decode(file_get_contents($this->error_storage . '/'. $error,true));
         },array_diff(scandir($this->error_storage),['.','..']));

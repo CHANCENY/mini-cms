@@ -18,8 +18,10 @@ class System
             'public' => 'Mini\Cms\Modules\Streams\MiniWrapper',
             'private' => 'Mini\Cms\Modules\Streams\MiniWrapper',
             'module' => 'Mini\Cms\Modules\Streams\MiniWrapper',
-            'theme' => 'Mini\Cms\Modules\Streams\MiniWrapper'
+            'theme' => 'Mini\Cms\Modules\Streams\MiniWrapper',
+            'cache' => 'Mini\Cms\Modules\Streams\MiniWrapper',
         ];
+
         foreach ($wrappers as $key=>$wrapper) {
             $registered_wrappers = stream_get_wrappers();
             if(!in_array($key,$registered_wrappers)) {

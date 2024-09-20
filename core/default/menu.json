@@ -29,23 +29,6 @@
       "permission": ["administrator_access"]
     }
   },
-  "menu_installation": {
-    "label": "Installation",
-    "link": "/install",
-    "icon": "installation",
-    "children": [
-
-    ],
-    "attributes": {
-      "class": "nav-item",
-      "id": "nav-item-install",
-      "title": "Installation of new MiniCMS"
-    },
-    "options": {
-      "roles": ["*"],
-      "permission": ["anonymous_access"]
-    }
-  },
   "menu_login": {
     "label": "Login",
     "link": "/user/login",
@@ -97,53 +80,6 @@
       "permission": ["authenticated_access"]
     }
   },
-  "menu_structure_content_type": {
-    "label": "Content Types",
-    "link": "/structure/content-type",
-    "icon": "content-type",
-    "children": [
-
-    ],
-    "attributes": {
-      "class": "nav-item",
-      "id": "nav-item-content",
-      "title": "Content listing and creation page on MiniCMS"
-    },
-    "options": {
-      "roles": ["administrator"],
-      "permission": ["administrator_access"]
-    }
-  },
-  "menu_content": {
-    "label": "Contents",
-    "link": "/structure/contents",
-    "icon": "contents",
-    "children": [],
-    "attributes": {
-      "class": "nav-item",
-      "id": "nav-item-contents",
-      "title": "Contents"
-    },
-    "options": {
-      "roles": ["administrator"],
-      "permission": ["administrator_access"]
-    }
-  },
-  "menu_vocabulary": {
-    "label": "Vocabulary",
-    "link": "/structure/vocabularies",
-    "icon": "vocabularies",
-    "children": [],
-    "attributes": {
-      "class": "nav-item",
-      "id": "nav-item-vocabularies",
-      "title": "vocabularies"
-    },
-    "options": {
-      "roles": ["administrator"],
-      "permission": ["administrator_access"]
-    }
-  },
   "menu_extension": {
     "label": "Extend",
     "link": "/extension/extend",
@@ -159,6 +95,36 @@
       "permission": ["administrator_access"]
     }
   },
+  "menu_people": {
+    "label": "People",
+    "link": "/users",
+    "icon": "users",
+    "children": [],
+    "attributes": {
+      "class": "nav-item",
+      "id": "nav-item-user",
+      "title": "People"
+    },
+    "options": {
+      "roles": ["administrator"],
+      "permission": ["administrator_access"]
+    }
+  },
+  "menu_pages": {
+    "label": "Pages",
+    "link": "/system/pages",
+    "icon": "pages",
+    "children": [],
+    "attributes": {
+      "class": "nav-item",
+      "id": "nav-item-pages",
+      "title": "People"
+    },
+    "options": {
+      "roles": ["administrator"],
+      "permission": ["administrator_access"]
+    }
+  },
   "menu_error": {
     "label": "Errors reports",
     "link": "/reporting/errors",
@@ -168,6 +134,21 @@
       "class": "nav-item",
       "id": "nav-item-extend",
       "title": "report errors"
+    },
+    "options": {
+      "roles": ["administrator"],
+      "permission": ["administrator_access"]
+    }
+  },
+  "menu_caching": {
+    "label": "Development",
+    "link": "/development",
+    "icon": "development",
+    "children": [],
+    "attributes": {
+      "class": "nav-item",
+      "id": "nav-item-development",
+      "title": "Development"
     },
     "options": {
       "roles": ["administrator"],

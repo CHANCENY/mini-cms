@@ -53,7 +53,7 @@ class Connector
 
     private function createTables(): void
     {
-        $database = new Database();
+        $database = new Database(true);
 
         if($database->getDatabaseType() === 'sqlite') {
             // Table entity_types.

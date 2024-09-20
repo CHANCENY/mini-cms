@@ -5,6 +5,7 @@ namespace Mini\Cms;
 use Mini\Cms\Configurations\ConfigFactory;
 use Mini\Cms\Connections\Database\Database;
 use Mini\Cms\Connections\Database\Queries\QueryManager;
+use Mini\Cms\Controller\Route;
 use Mini\Cms\Entities\Node;
 use Mini\Cms\Entities\Term;
 use Mini\Cms\Entities\User;
@@ -15,10 +16,12 @@ use Mini\Cms\Modules\FileSystem\File;
 use Mini\Cms\Modules\FileSystem\FileSystem;
 use Mini\Cms\Modules\Messenger\Messenger;
 use Mini\Cms\Modules\Site\Site;
+use Mini\Cms\Modules\Storage\Tempstore;
 use Mini\Cms\Routing\RouteBuilder;
 use Mini\Cms\System\System;
 use Mini\Cms\Theme\MarkUp;
 use Mini\Cms\Theme\Theme;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  *
@@ -168,5 +171,17 @@ class Mini
     public static function messenger(): Messenger
     {
         return new Messenger();
+    }
+
+    public static function currentRoute(): \Mini\Cms\Routing\Route
+    {
+        /**@var $current_route Route **/
+       $current_route = Tempstore::load('current_route');
+       return $current_route->getLoadedRoute();
+    }
+
+    public static function redirect(string $url, int $code = 302): RedirectResponse
+    {
+        return new RedirectResponse($url, $code);
     }
 }

@@ -206,6 +206,46 @@ function _login_user(User $user): User
     return $user;
 }
 
+function define_global(string $key, mixed $value): void
+{
+    if(isset($GLOBALS[$key])) {
+        unset($GLOBALS[$key]);
+    }
+    $GLOBALS[$key] = $value;
+}
+
+function get_global(string $key): mixed
+{
+    return $GLOBALS[$key] ?? null;
+}
+
+
+function time_ago(int $timestamp)
+{
+    $timeNow = time(); // Current timestamp
+    $timeDifference = $timeNow - $timestamp;
+
+    // Time periods in seconds
+    $units = [
+        31556926 => 'year',
+        2629743 => 'month',
+        604800 => 'week',
+        86400 => 'day',
+        3600 => 'hour',
+        60 => 'minute',
+        1 => 'second'
+    ];
+
+    foreach ($units as $unitSeconds => $unitName) {
+        if ($timeDifference >= $unitSeconds) {
+            $value = floor($timeDifference / $unitSeconds);
+            return $value . ' ' . $unitName . ($value > 1 ? 's' : '') . ' ago';
+        }
+    }
+
+    return "just now";
+}
+
 
 $config = \Mini\Cms\Services\Services::create('config.factory');
 $maintain_mode = $config->get('maintain_mode');

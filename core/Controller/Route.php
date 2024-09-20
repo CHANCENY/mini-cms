@@ -3,15 +3,20 @@
 namespace Mini\Cms\Controller;
 
 use Mini\Cms\Configurations\ConfigFactory;
+use Mini\Cms\Mini;
 use Mini\Cms\Modules\Access\AccessMiddleRunner;
+use Mini\Cms\Modules\Cache\CacheStorage;
 use Mini\Cms\Modules\Extensions\Extensions;
-use Mini\Cms\Modules\Extensions\ModuleHandler\ModuleHandler;
+use Mini\Cms\Modules\FormControllerBase\FormBuilder;
+use Mini\Cms\Modules\FormControllerBase\FormControllerInterface;
+use Mini\Cms\Modules\FormControllerBase\FormState;
 use Mini\Cms\Modules\MetaTag\MetaTag;
 use Mini\Cms\Modules\Storage\Tempstore;
 use Mini\Cms\Routing\RouteBuilder;
 use Mini\Cms\Routing\URIMatcher;
 use Mini\Cms\Services\Services;
 use Mini\Cms\Theme\Footer;
+use Mini\Cms\Theme\MarkUp;
 use Mini\Cms\Theme\Menus;
 use Mini\Cms\Theme\Theme;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -64,6 +69,9 @@ class Route
             $pattern = $matcher->getMatchedPattern();
 
             $this->currentUri = $path;
+
+            // Global definitions.
+            Extensions::runHooks('_global_definitions_alter',[]);
 
             Tempstore::save('current_route',$this);
             $theme = Theme::loader();
@@ -138,26 +146,99 @@ class Route
                 throw new AccessDeniedRouteException("Route is not allowed to be access by user with ".implode(',', $currentUserRoles). ' roles RD: '.$this->loadedRoute->getRouteId());
             }
 
-            $list = explode('::', $controller);
-            $controller = $list[0];
-            $method = $list[1] ?? null;
-            // Making handler object.
-            $this->controllerHandler = new $controller($this->request, $this->response);
-            if($this->controllerHandler instanceof ControllerInterface) {
+            $cache = new CacheStorage();
+            if($this->request->isMethod('POST')) {
+                $cache->purgeAll();
+            }
+            $cache_tag = $cache->createCacheTag();
+            $cache_data = $cache->get($cache_tag);
+            if(!empty($cache_data)) {
+                $this->response->setStatusCode(StatusCode::OK)
+                    ->setContentType(ContentType::TEXT_CACHEABLE)
+                    ->write($cache_data)
+                    ->send();
+                exit;
+            }
+            if($this->loadedRoute->getRouteType() === '_controller') {
+                $list = explode('::', $controller);
+                $controller = $list[0];
+                $method = $list[1] ?? null;
+                // Making handler object.
+                $this->controllerHandler = new $controller($this->request, $this->response);
+                if($this->controllerHandler instanceof ControllerInterface) {
 
-                if($this->controllerHandler->isAccessAllowed()) {
+                    if($this->controllerHandler->isAccessAllowed()) {
 
-                    // Will are calling writeBody method on controller class.
-                    // so that we can have a response.
-                    if($method) {
-                        $this->controllerHandler->$method();
+                        // Will are calling writeBody method on controller class.
+                        // so that we can have a response.
+                        if($method) {
+                            $this->controllerHandler->$method();
+                        }
+                        else {
+                            $this->controllerHandler->writeBody();
+                        }
+                        Extensions::runHooks('_response_alter',[&$this->response]);
+                        $this->response->send();
+                        exit;
                     }
-                    else {
-                        $this->controllerHandler->writeBody();
+                }
+            }
+            if ($this->loadedRoute->getRouteType() === '_form') {
+
+                $this->controllerHandler = new $controller($this->request, $this->response);
+                if($this->controllerHandler instanceof FormControllerInterface) {
+
+                    if($this->controllerHandler->isAccessAllowed()) {
+
+                        if($this->request->isMethod('GET')) {
+                            $form_fields['form_id'] = [
+                                "#type" => "hidden",
+                                "#title" => "form id",
+                                "#required" => true,
+                                "#placeholder" => "form id",
+                                "#attributes" => ["class" => "form-control", "id" => "form-id"],
+                                "#description" => "form id is required.",
+                                "#default_value" => $this->controllerHandler->getFormId(),
+                            ];
+                            $form_state = new FormState($form_fields, false);
+                            $form = $this->controllerHandler->buildForm($form_fields, $form_state);
+                            $form_base = new FormBuilder($form);
+                            $_string = $form_base->buildForm();
+                            $_form_setting = Tempstore::load('_form_setting');
+                            $_form_setting[$this->controllerHandler->getFormId()] = [
+                                '#form' => $form,
+                            ];
+                            Tempstore::save('_form_settings',$_form_setting);
+                            $this->response->setStatusCode(StatusCode::OK)->setContentType(ContentType::TEXT_HTML);
+                            $this->response->write($_string);
+                            Extensions::runHooks('_response_alter',[&$this->response]);
+                            $this->response->send();
+                            exit;
+                        }
+
+                        if($this->request->isMethod('POST')) {
+                            $_form_setting = Tempstore::load('_form_settings');
+                            $_form_setting = $_form_setting[$this->request->request->get('form_id')];
+                            $form_fields = $_form_setting['#form'];
+                            $form_state = new FormState($form_fields,true);
+                            $this->controllerHandler->validateForm($form_fields, $form_state);
+                            if(!$form_state->isValidated()) {
+                                foreach ($form_state->getErrors() as $error) {
+                                    if(is_string($error)) {
+                                        Mini::messenger()->addErrorMessage($error);
+                                    }
+                                    if($error instanceof MarkUp) {
+                                        Mini::messenger()->addErrorMessage($error->getMarkup());
+                                    }
+                                }
+                            }
+                            else {
+                                $this->controllerHandler->submitForm($form_fields,$form_state);
+                                (new RedirectResponse($form_state->getRedirectUrl()))->send();
+                                exit;
+                            }
+                        }
                     }
-                    Extensions::runHooks('_response_alter',[&$this->response]);
-                    $this->response->send();
-                    exit;
                 }
             }
 

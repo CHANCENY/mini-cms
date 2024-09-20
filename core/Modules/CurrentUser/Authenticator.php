@@ -23,8 +23,10 @@ class Authenticator
         $query = Database::database()->prepare("SELECT * FROM `users` WHERE `email` = :email");
         $query->execute(['email' => $email]);
         $user = $query->fetch();
+        $now = time();
         if($user) {
             if(password_verify($password, $user['password']) && $user['active'] == 1) {
+                Database::database()->prepare("UPDATE `users` SET `login` = :now WHERE `email` = :email")?->execute( ['email' => $email,'now' => $now] );
                 Extensions::runHooks('_user_login_validated',[$user]);
                 Tempstore::save('default_current_user', $user, time() * 60 * 60 * 365);
                 return true;
@@ -36,6 +38,7 @@ class Authenticator
         $user = $query->fetch();
         if($user) {
             if(password_verify($password, $user['password']) && $user['active'] == 1) {
+                Database::database()->prepare("UPDATE `users` SET `login` = :now WHERE `name` = :name")?->execute( ['name' => $email,'now' => $now] );
                 Extensions::runHooks('_user_login_validated',[$user]);
                 Tempstore::save('default_current_user', $user, time() * 60 * 60 * 365);
                 return true;

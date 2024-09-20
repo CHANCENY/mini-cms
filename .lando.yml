@@ -1,4 +1,4 @@
-name: minicms
+name: minicms-v2
 recipe: lamp
 config:
   webroot: web

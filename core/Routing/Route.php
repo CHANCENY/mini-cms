@@ -229,6 +229,11 @@ class Route
         return $url;
     }
 
+    function getRouteType(): string
+    {
+        return $this->route['controller_type'] ?? '_controller';
+    }
+
     public function __toString()
     {
         return $this->replacePlaceholdersInUrl($this->options ?? []);

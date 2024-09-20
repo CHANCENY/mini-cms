@@ -4,10 +4,11 @@ namespace Mini\Cms\Modules\FormControllerBase;
 
 use Mini\Cms\Modules\FileSystem\File;
 use Mini\Cms\Theme\MarkUp;
+use Symfony\Component\HttpFoundation\Request;
 
 class FormState
 {
-
+    public string $redirect_url;
     private array $errors;
 
     private bool $validated;
@@ -52,6 +53,7 @@ class FormState
             $this->defaultValidation();
             $this->processSubmitted();
         }
+        $this->redirect_url = Request::createFromGlobals()->headers->get('referer');
     }
 
     public function getErrors(): array
@@ -108,5 +110,19 @@ class FormState
         }
     }
 
+    public function getRedirectUrl(): string
+    {
+        return $this->redirect_url;
+    }
+
+    public function setRedirectUrl(string $redirect_url): void
+    {
+        $this->redirect_url = $redirect_url;
+    }
+
+    public function cache(): int
+    {
+        return 0;
+    }
 
 }

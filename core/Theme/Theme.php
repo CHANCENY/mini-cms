@@ -217,8 +217,9 @@ class Theme
 
     public function writeHtmlAttribute(): string
     {
-        //TODO: complete here
-        return "";
+        $html_attribute = [];
+        Extensions::runHooks('_html_attribute_alter',[&$html_attribute]);
+        return implode(' ', $html_attribute);
     }
 
     public static function override(string $theme): ?Theme

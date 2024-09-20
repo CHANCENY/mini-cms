@@ -32,7 +32,7 @@ class MailManager
                 $this->host = $smtp['smtp_server'] ?? '';
                 $this->port = (int) $smtp['smtp_port'] ?? 465;
                 $this->username = $smtp['smtp_username'] ?? '';
-                $this->email_address = $site->getContactInformation('Email');
+                $this->email_address = $site->getBrandingAssets('Email');
                 $this->site_name = $site->getBrandingAssets('Name');
             }
 

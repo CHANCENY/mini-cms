@@ -25,7 +25,7 @@ class AccessMiddleWare implements AccessMiddleWareInterface
             $current_user_roles = ['anonymous'];
         }
 
-        // Lets compare roles in route and of current user.
+        // Let's compare roles in route and of current user.
         if(!array_intersect($route_roles,$current_user_roles)) {
             $this->passed = false;
         }

@@ -23,6 +23,7 @@ use Mini\Cms\Routing\RouteBuilder;
 use Mini\Cms\Services\Services;
 use Mini\Cms\StorageManager\Connector;
 use Mini\Cms\Theme\Theme;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class UserRegistration implements ControllerInterface
 {
@@ -78,6 +79,8 @@ class UserRegistration implements ControllerInterface
                        'body' => '<p>Welcome to '.$site->getBrandingAssets("Name").'. Your account has been created. you are requested to activate your account.</p>
                                    <p><a href="' . $verification_url . '">Click here to activate your account</a></p>',
                    ]);
+                    (new RedirectResponse('/'))->send();
+                    exit;
                 }
             }
         }

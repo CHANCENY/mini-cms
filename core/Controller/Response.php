@@ -2,6 +2,8 @@
 
 namespace Mini\Cms\Controller;
 
+use Mini\Cms\Modules\Cache\CacheStorage;
+use Mini\Cms\Modules\ErrorSystem;
 use Mini\Cms\Modules\Storage\Tempstore;
 use Mini\Cms\Theme\Theme;
 
@@ -16,6 +18,7 @@ class Response
     private string $cacheHeader;
     private string $responseType;
     private string $generator;
+    private int $maxAge;
 
     public function __construct()
     {
@@ -23,7 +26,7 @@ class Response
         $this->responseType = 'normal';
         $this->generator = "Mini CMS";
         $this->statusCode = StatusCode::OK;
-        $this->cacheHeader = 'max-age=' . (60 * 60 * 24 * 365);
+        $this->cacheHeader = 'public, max-age=' . (60 * 60 * 24 * 365);
         $this->body = '';
     }
 
@@ -53,14 +56,16 @@ class Response
 
     public function send(): void
     {
+        $max_age = $this->maxAge ?? getConfigValue('caching_setting.max_age') ?? 12;
         // Setting headers
-        header("Content-Type: ".$this->contentType->value);
         header("min-cms-type: ".$this->responseType);
         header("Generator: $this->generator");
-        //header("Cache-Control: $this->cacheHeader");
-        header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1
-        header("Pragma: no-cache"); // HTTP 1.0
-        header("Expires: 0"); // Proxies
+
+        if($max_age) {
+            header("Cache-Control: ".$this->cacheHeader);
+            header("Pragma: cache");
+            header("Expires: " . gmdate("D, d M Y H:i:s", time() + 3600 * 60 * $max_age) . " GMT");
+        }
 
         // Setting response code.
         http_response_code($this->statusCode->value);
@@ -80,6 +85,7 @@ class Response
             // Making sure that on txt/html we are sending all required html content.
             if($this->contentType === ContentType::TEXT_HTML) {
 
+                header("Content-Type: ".$this->contentType->value);
                 $title = $route->getLoadedRoute()->getRouteTitle();
                 $in_response_data = "<!DOCTYPE html><html {{ATTRIBUTES}}>
                                      <head>
@@ -124,10 +130,27 @@ class Response
                 $in_response_data = str_replace('{{APPEND_ASSETS}}',$belowAssets, $in_response_data);
 
                 // Finishing
-                echo $theme->processBuildContentHtml($in_response_data);
+                $content = $theme->processBuildContentHtml($in_response_data);
+                try{
+                    $cache = new CacheStorage();
+                    $cache_tag = $cache->createCacheTag();
+                    $cache->set($cache_tag,$content);
+                }catch (\Exception $exception){
+                    $error = new ErrorSystem();
+                    $error->setException($exception);
+                }
+                echo $content;
                 exit;
             }
+
+            elseif ($this->contentType === ContentType::TEXT_CACHEABLE) {
+                header("Content-Type: ".(ContentType::TEXT_HTML)->value);
+                print_r($this->body);
+                exit;
+            }
+
             else {
+                header("Content-Type: ".$this->contentType->value);
                 // Lets response request with other content type.
                 // Checking if we are responding with json data.
                 if($this->contentType === ContentType::APPLICATION_JSON) {
@@ -141,6 +164,11 @@ class Response
             }
         }
 
+    }
 
+    public function setMaxAge(int $days): Response
+    {
+        $this->maxAge = $days;
+        return $this;
     }
 }

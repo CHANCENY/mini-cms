@@ -55,6 +55,51 @@ class QueryManager
         $this->connection = $connection;
     }
 
+    public function getFields(): array
+    {
+        return $this->fields;
+    }
+
+    public function getConditions(): array
+    {
+        return $this->conditions;
+    }
+
+    public function getQuery(): string
+    {
+        return $this->query;
+    }
+
+    public function getConnection(): PDO
+    {
+        return $this->connection;
+    }
+
+    public function getSelectFields(): array
+    {
+        return $this->selectFields;
+    }
+
+    public function getTable(): string
+    {
+        return $this->table;
+    }
+
+    public function getAlias(): string
+    {
+        return $this->alias;
+    }
+
+    public function getPdoStatement(): bool|PDOStatement
+    {
+        return $this->pdo_statement;
+    }
+
+    public function isInTransaction(): bool
+    {
+        return $this->inTransaction;
+    }
+
     /**
      * @return bool
      */
@@ -153,6 +198,16 @@ class QueryManager
     public function addCondition(string $field, mixed $value, string $operator = '=', string $conjunction = 'AND'): QueryManager
     {
         $this->conditions[] = compact('field', 'value', 'operator', 'conjunction');
+        $this->buildConditions();
+        return $this;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function addConditions(array $conditions): QueryManager
+    {
+        $this->conditions = array_merge($this->conditions, $conditions);
         $this->buildConditions();
         return $this;
     }

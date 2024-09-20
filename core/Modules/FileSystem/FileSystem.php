@@ -116,7 +116,7 @@ class FileSystem
      */
     private function confirmStorage(): void
     {
-        $database = new Database();
+        $database = new Database(true);
         if($database->getDatabaseType() === 'sqlite') {
             $query = "CREATE TABLE IF NOT EXISTS `file_managed` (fid INTEGER PRIMARY KEY AUTOINCREMENT, uri TEXT NOT NULL, size INTEGER DEFAULT 0, width INTEGER DEFAULT 0, height INTEGER DEFAULT 0, file_name TEXT NOT NULL, type TEXT NOT NULL, alt TEXT NOT NULL, uploaded_on TEXT NOT NULL, owner_uid INTEGER)";
             $statement = Database::database()->prepare($query);

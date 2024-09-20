@@ -37,42 +37,15 @@ class SiteConfiguration implements ControllerInterface
         if($this->request->getMethod() === 'POST' && !empty($this->request->getPayload()->get('op'))) {
             $payload = $this->request->getPayload();
             $site = new Site();
-            $site->setContactInformation('Email', $payload->get('site_email'));
-            $site->setContactInformation('Name', $payload->get('site_name'));
+            $site->setBrandingAssets('Email', $payload->get('site_email'));
+            $site->setBrandingAssets('Name', $payload->get('site_name'));
+            $site->setBrandingAssets('Phone', $payload->get('site_phone'));
             $site->setContactInformation('Smtp', [
                 'smtp_server' => $payload->get('smtp_server'),
                 'smtp_port' => $payload->get('smtp_port') ?? 465,
-                'smtp_username' => $payload->get('smtp_user'),
+                'smtp_username' => $payload->get('smtp_username'),
                 'smtp_password' => $payload->get('smtp_password'),
             ]);
-
-            if(!empty($_FILES['site_privacy'])){
-                $file = new FileSystem();
-                $file->connector(Connector::connect(external_connection: Database::database()));
-                $file->setAllowedExtension(FileTypeEnum::FILE_TEXT);
-                $file->setAllowedExtension(FileTypeEnum::FILE_PDF);
-                $file->setAllowedSize(FileSizeEnum::XX_MEDIUM_FILES);
-                $file->prepareUpload($_FILES['site_privacy']);
-                $file->save();
-                $site_privacy = $file->getUpload();
-            }
-            else{
-                $site_privacy['fid'] = trim($payload->get('site_privacy'),',' );
-            }
-
-            if(!empty($_FILES['site_terms'])) {
-                $file = new FileSystem();
-                $file->connector(Connector::connect(external_connection: Database::database()));
-                $file->setAllowedExtension(FileTypeEnum::FILE_TEXT);
-                $file->setAllowedExtension(FileTypeEnum::FILE_PDF);
-                $file->setAllowedSize(FileSizeEnum::XX_MEDIUM_FILES);
-                $file->prepareUpload($_FILES['site_terms']);
-                $file->save();
-                $site_terms = $file->getUpload();
-            }
-            else {
-                $site_terms['fid'] = trim($payload->get('site_terms'), ',');
-            }
 
             if(!empty($_FILES['site_logo'])) {
                 $file = new FileSystem();
@@ -86,25 +59,8 @@ class SiteConfiguration implements ControllerInterface
             else {
                 $site_logo['fid'] = $payload->get('site_logo');
             }
-
-            $site->setLegalInformation('PrivacyPolicy', $site_privacy);
-            $site->setLegalInformation('TermsOfService', $site_terms);
-
             $site->setBrandingAssets('Logo', $site_logo);
-            $site->setBrandingAssets('Name', $payload->get('site_name'));
-            $site->setBrandingAssets('Slogan', $payload->get('site_slogan'));
 
-            $site->setDomain($payload->get('domain_name'));
-            $site->setPurpose($payload->get('purpose'));
-
-            $site->setSocial([
-                'Facebook' => $payload->get('site_facebook'),
-                'Instagram' => $payload->get('site_instagram'),
-                'Twitter' => $payload->get('site_twitter'),
-                'LinkedIn' => $payload->get('LinkedIn'),
-                'WhatsApp' => $payload->get('site_whatsapp'),
-            ]
-            );
             if($site->save()) {
                 (new RedirectResponse('/user/register',StatusCode::PERMANENT_REDIRECT->value))->send();
                 exit;

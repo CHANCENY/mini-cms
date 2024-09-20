@@ -228,6 +228,10 @@ class MiniWrapper implements StreamWrapper
         if(str_starts_with($uri, 'theme://')) {
             $uri = str_replace('theme://', 'themes/', $uri);
         }
+        if (str_starts_with($uri, 'cache://')) {
+            $uri = str_replace('cache://', 'sites/default/files/cache/', $uri);
+        }
+
         return $uri;
     }
 }

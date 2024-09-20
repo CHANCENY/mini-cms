@@ -4,6 +4,7 @@ namespace Mini\Cms\Entities;
 
 use Mini\Cms\Configurations\ConfigFactory;
 use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Connections\Database\Queries\QueryManager;
 use Mini\Cms\Mini;
 use Mini\Cms\Modules\Extensions\Extensions;
 use Mini\Cms\Modules\FileSystem\File;
@@ -199,10 +200,10 @@ class User
         $connection = Mini::connection();
         $query = null;
         if($connection->getAttribute(PDO::ATTR_DRIVER_NAME) === 'sqlite') {
-            $query = "CREATE TABLE IF NOT EXISTS $this->user_tables_query (uid INTEGER PRIMARY KEY AUTOINCREMENT,email varchar(255), name varchar(255), password varchar(255), role varchar(255), active varchar(255), created varchar(255), updated varchar(255), firstname varchar(255), lastname varchar(255), image varchar(30))";
+            $query = "CREATE TABLE IF NOT EXISTS $this->user_tables_query (uid INTEGER PRIMARY KEY AUTOINCREMENT,email varchar(255), name varchar(255), password varchar(255), role varchar(255), active varchar(255), created varchar(255), updated varchar(255), login varchar(255), firstname varchar(255), lastname varchar(255), image varchar(30))";
         }
         if($connection->getAttribute(PDO::ATTR_DRIVER_NAME) === 'mysql') {
-            $query = "CREATE TABLE IF NOT EXISTS $this->user_tables_query (uid int(11) PRIMARY KEY AUTO_INCREMENT,email varchar(255), name varchar(255), password varchar(255), role varchar(255), active varchar(255), created varchar(255), updated varchar(255), firstname varchar(255), lastname varchar(255), image varchar(30))";
+            $query = "CREATE TABLE IF NOT EXISTS $this->user_tables_query (uid int(11) PRIMARY KEY AUTO_INCREMENT,email varchar(255), name varchar(255), password varchar(255), role varchar(255), active varchar(255), created varchar(255), updated varchar(255), login varchar(255), firstname varchar(255), lastname varchar(255), image varchar(30))";
 
         }
         $query = $connection->prepare($query);
@@ -821,4 +822,14 @@ class User
         }
         return in_array(true, $flag);
     }
+
+    public static function users(): array {
+        (new User(0));
+        $query_manager = new QueryManager(Database::database());
+        $query_manager->select('users', 'ss');
+        $query_manager->orderBy('created');
+        $query_manager->execute();
+        return $query_manager->fetchAll();
+    }
+
 }

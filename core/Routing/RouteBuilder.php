@@ -113,6 +113,16 @@ class RouteBuilder
         $this->new_route['options']['unauthorized_access'] = $state;
     }
 
+    public function isFormRoute(): void
+    {
+        $this->new_route['controller_type'] = '_form';
+    }
+
+    public function isNormalRoute(): void
+    {
+        $this->new_route['controller_type'] = '_controller';
+    }
+
     /**
      * @param string $method
      * @return void
@@ -125,11 +135,16 @@ class RouteBuilder
     /**
      * The handle must implement ControllerInterface.
      * @param string $handler This is class that will be handling the request on this route.
+     * @param bool $validated
      * @return void
      * @throws \Exception
      */
-    public function setHandler(string $handler): void
+    public function setHandler(string $handler, bool $validated = true): void
     {
+        if(!$validated) {
+            $this->new_route['handler'] = $handler;
+            return;
+        }
         if(class_exists($handler) && (new $handler(new Request(), new Response())) instanceof ControllerInterface) {
             $this->new_route['handler'] = $handler;
         }

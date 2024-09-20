@@ -4,20 +4,81 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="94f10dfb-8858-44c2-a819-3faaa754f477" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/core/Modules/FormControllerBase/FormBase.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/Modules/FormControllerBase/FormBuilder.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/Modules/FormControllerBase/FormControllerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/Modules/FormControllerBase/FormState.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/Modules/FormControllerBase/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/mini-cms.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/mini-cms.iml" afterDir="false" />
+    <list default="true" id="9a843d78-d8d4-4f56-9402-63f4f92bdf0d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/core/Modules/Cache/CacheStorage.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/Modules/Cache/CacheTagExistException.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/default/Controllers/CacheSettings.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/src/forms/default_cache_settings.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.name" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/mini-cms.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.lando.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.lando.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/configs.default/configurations.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/configs.default/custom_commands.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/configs.default/custom_routes.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/configs.default/menus.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/configs.default/services.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Connections/Database/Queries/QueryManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Connections/Database/Queries/QueryManager.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Connections/Smtp/MailManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Connections/Smtp/MailManager.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Controller/ContentType.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Controller/ContentType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Controller/ContentTypeEnum.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Controller/ContentTypeEnum.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Controller/ControllerInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Controller/ControllerInterface.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/Controller/Response.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Controller/Response.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/Controller/Route.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Controller/Route.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Modules/FileSystem/File.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/FileSystem/File.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Entities/DefaultNodeFieldNotProvidedException.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Entities/EntityNameNotFoundException.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Entities/FieldDefaultValueNotFoundForRequiredException.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Entities/FieldMaxSizeException.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Entities/FieldNotFoundException.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Entities/Node.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Entities/NodeTitleNotProvidedException.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Entities/Term.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Entities/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Entities/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/EmailField.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/FieldViewDisplay/FieldViewDisplayInterface.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/FileField.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/FileFieldSubmitter.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/EmailFieldMarkUp.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/FileFieldMarkUp.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/PhoneFieldMarkUp.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/ReferenceFieldMarkUp.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/SelectFieldMarkUp.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/TextAreaFieldMarkUp.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/MarkUp/TextFieldMarkUp.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/PhoneField.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/ReferenceField.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/SelectField.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/TextAreaField.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/TextField.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Fields/assets/Arial-Unicode-Regular.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/core/Fields/assets/Arial-Unicode-Regular.ttf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Hooks/Hook.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Hooks/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Mini.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Mini.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Modules/Access/AccessMiddleWare.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/Access/AccessMiddleWare.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Modules/CurrentUser/Authenticator.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/CurrentUser/Authenticator.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Modules/ErrorSystem.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/ErrorSystem.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Modules/FileSystem/FileSystem.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/FileSystem/FileSystem.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Modules/FormControllerBase/FormState.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/FormControllerBase/FormState.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Modules/Site/Site.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/Site/Site.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Modules/Streams/MiniWrapper.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/Streams/MiniWrapper.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/Routing/Route.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Routing/Route.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Routing/RouteBuilder.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Routing/RouteBuilder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/StorageManager/Connector.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/StorageManager/Connector.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/System/System.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/System/System.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Theme/Theme.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Theme/Theme.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/bootstrap/boot.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/bootstrap/boot.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/Controllers/SiteConfiguration.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/Controllers/SiteConfiguration.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/Controllers/UserRegistration.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/Controllers/UserRegistration.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/default_routes.json" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/default_routes.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/menu.json" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/menu.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/__theme_libraries.json" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/src/__theme_libraries.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/installations/site_configurations.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/src/installations/site_configurations.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/controllers/Sample.php" beforeDir="false" afterPath="$PROJECT_DIR$/web/controllers/Sample.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/web/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/new-install.php" beforeDir="false" afterPath="$PROJECT_DIR$/web/new-install.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,7 +87,6 @@
   </component>
   <component name="ComposerConfigs">
     <option name="configs">
-      <option value="$PROJECT_DIR$/web/themes/global/tinymce/composer.json" />
       <option value="$PROJECT_DIR$/web/themes/global/js/tinymce/composer.json" />
     </option>
   </component>
@@ -39,51 +99,38 @@
   </component>
   <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/bin/php">
     <include_path>
-      <path value="$PROJECT_DIR$/vendor/ramsey/uuid" />
-      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php83" />
-      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-mbstring" />
-      <path value="$PROJECT_DIR$/vendor/symfony/var-dumper" />
-      <path value="$PROJECT_DIR$/vendor/symfony/http-foundation" />
-      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php80" />
       <path value="$PROJECT_DIR$/vendor/composer" />
       <path value="$PROJECT_DIR$/vendor/brick/math" />
-      <path value="$PROJECT_DIR$/vendor/ramsey/collection" />
+      <path value="$PROJECT_DIR$/vendor/symfony/var-dumper" />
       <path value="$PROJECT_DIR$/vendor/phpmailer/phpmailer" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-mbstring" />
+      <path value="$PROJECT_DIR$/vendor/symfony/http-foundation" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php83" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-php80" />
+      <path value="$PROJECT_DIR$/vendor/ramsey/collection" />
+      <path value="$PROJECT_DIR$/vendor/ramsey/uuid" />
     </include_path>
   </component>
-  <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 4
-}</component>
-  <component name="ProjectId" id="2gePlDMvGcnyJu6Z8F4ePpt5ALZ" />
-  <component name="ProjectLevelVcsManager">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 5
+}]]></component>
+  <component name="ProjectId" id="2mJtR1weNF2isRKxRzhAPJw1jd1" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/sv/Documents/mini-cms&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;php.override.implement.member.chooser.php.doc&quot;: &quot;NONE&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\xampp\htdocs\mini-cms\core\default\themes\mini_cms\src\forms" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\xampp\htdocs\mini-cms\web\core" />
-    </key>
-  </component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -95,34 +142,12 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="94f10dfb-8858-44c2-a819-3faaa754f477" name="Changes" comment="" />
-      <created>1716055232470</created>
+      <changelist id="9a843d78-d8d4-4f56-9402-63f4f92bdf0d" name="Changes" comment="" />
+      <created>1726806495243</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1716055232470</updated>
-      <workItem from="1716055234074" duration="177000" />
-      <workItem from="1716055524177" duration="6028000" />
-      <workItem from="1716100084548" duration="13357000" />
-      <workItem from="1716194553127" duration="5035000" />
-      <workItem from="1716566283689" duration="4519000" />
-      <workItem from="1716615482733" duration="9831000" />
-      <workItem from="1716641923656" duration="2700000" />
-      <workItem from="1716647049357" duration="4762000" />
-      <workItem from="1716702469228" duration="3369000" />
-      <workItem from="1716716279196" duration="15981000" />
-      <workItem from="1716910205436" duration="4303000" />
-      <workItem from="1716998293984" duration="894000" />
-      <workItem from="1717175623709" duration="308000" />
-      <workItem from="1717216291873" duration="2154000" />
-      <workItem from="1718032429472" duration="202000" />
-      <workItem from="1718123223057" duration="478000" />
-      <workItem from="1718205991199" duration="704000" />
-      <workItem from="1718513397555" duration="45000" />
-      <workItem from="1718515484543" duration="101000" />
-      <workItem from="1718515649273" duration="2599000" />
-      <workItem from="1718536629669" duration="3771000" />
-      <workItem from="1724150380787" duration="3301000" />
-      <workItem from="1726029840661" duration="8000" />
+      <updated>1726806495243</updated>
+      <workItem from="1726806496428" duration="16358000" />
     </task>
     <servers />
   </component>

@@ -13,6 +13,7 @@ enum ContentType: string
     case TEXT_CSV = 'text/csv';
     case TEXT_JAVASCRIPT = 'text/javascript';
     case TEXT_MARKDOWN = 'text/markdown';
+    case TEXT_CACHEABLE = 'text/cacheable';
 
     // Application
     case APPLICATION_JSON = 'application/json';

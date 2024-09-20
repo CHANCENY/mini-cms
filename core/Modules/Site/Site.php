@@ -8,36 +8,19 @@ use Mini\Cms\Services\Services;
 class Site
 {
     private array $siteInformation = [
-        'DomainName' => '',
-        'Purpose' => '',
-        'TargetAudience' => [
-            'Demographics' => '',
-            'Interests' => ''
-        ],
         'BrandingAssets' => [
             'Logo' => '',
-            'Slogan' => '',
-            'Name' => ''
-        ],
-        'LegalInformation' => [
-            'PrivacyPolicy' => '',
-            'TermsOfService' => ''
+            'Phone' => '',
+            'Name' => '',
+            'Email' => '',
         ],
         'ContactInformation' => [
-            'Email' => '',
             'Smtp' => [
-                'stmp_server' => '',
-                'stmp_port' => '',
-                'stmp_username' => '',
-                'stmp_password' => ''
+                'smtp_server' => '',
+                'smtp_port' => '',
+                'smtp_username' => '',
+                'smtp_password' => ''
             ],
-        ],
-        'SocialMediaIntegration' => [
-            'Facebook' => '',
-            'Instagram' => '',
-            'Twitter' => '',
-            'LinkedIn' => '',
-            'WhatsApp' => ''
         ],
     ];
 
@@ -46,15 +29,6 @@ class Site
         $config = Services::create('config.factory');
         if($config instanceof ConfigFactory && !empty($config->get('site_information'))) {
             $this->siteInformation = $config->get('site_information');
-        }
-    }
-
-    // Setter method for setting LegalInformation
-    public function setLegalInformation(string $type, mixed $content): void
-    {
-        $type = ucfirst($type); // Capitalize the type name
-        if (array_key_exists($type, $this->siteInformation['LegalInformation'])) {
-            $this->siteInformation['LegalInformation'][$type] = $content;
         }
     }
 
@@ -67,15 +41,6 @@ class Site
         }
     }
 
-    // Setter method for setting TargetAudience
-    public function setTargetAudience(string $category, string $value): void
-    {
-        $category = ucfirst($category); // Capitalize the category name
-        if (array_key_exists($category, $this->siteInformation['TargetAudience'])) {
-            $this->siteInformation['TargetAudience'][$category] = $value;
-        }
-    }
-
     // Setter method for setting BrandingAssets
     public function setBrandingAssets(string $asset, mixed $value): void
     {
@@ -85,25 +50,11 @@ class Site
         }
     }
 
-    // Getter method for LegalInformation
-    public function getLegalInformation(string $type): ?string
-    {
-        $type = ucfirst($type); // Capitalize the type name
-        return $this->siteInformation['LegalInformation'][$type] ?? null;
-    }
-
     // Getter method for ContactInformation
     public function getContactInformation(string $type): mixed
     {
         $type = ucfirst($type); // Capitalize the type name
         return $this->siteInformation['ContactInformation'][$type] ?? null;
-    }
-
-    // Getter method for TargetAudience
-    public function getTargetAudience(string $category): ?string
-    {
-        $category = ucfirst($category); // Capitalize the category name
-        return $this->siteInformation['TargetAudience'][$category] ?? null;
     }
 
     // Getter method for BrandingAssets
@@ -121,20 +72,5 @@ class Site
             return $config->save();
         }
         return false;
-    }
-
-    public function setDomain(float|bool|int|string|null $get): void
-    {
-        $this->siteInformation['DomainName'] = $get;
-    }
-
-    public function setPurpose(float|bool|int|string|null $get): void
-    {
-        $this->siteInformation['Purpose'] = $get;
-    }
-
-    public function setSocial(array $array): void
-    {
-        $this->siteInformation['SocialMediaIntegration'] = array_merge($this->siteInformation['SocialMediaIntegration'], $array);
     }
 }

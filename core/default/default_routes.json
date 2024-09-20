@@ -34,6 +34,72 @@
         "handler": "Mini\\Cms\\default\\Controllers\\Installation"
     },
     {
+        "id": "6335a6e9-2cd2-4914-ba9e-fc3dac-e12b29-5985-884747",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "People",
+        "description": "People display page",
+        "url": "/users",
+        "handler": "Mini\\Cms\\default\\Controllers\\People"
+    },
+    {
+        "id": "6335a6e9-2cd2-4914-ba9e-fc3dac-e12b29-5985-884747-i4844-373636-55322",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Development Caching",
+        "description": "People display page",
+        "url": "/development",
+        "handler": "Mini\\Cms\\default\\Controllers\\CacheSettings"
+    },
+    {
+        "id": "6335a6e9-2cd2-4914-ba9e-fc3dac-e12b29--09877765985-884747",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Roles",
+        "description": "Roles display page",
+        "url": "/user/roles",
+        "handler": "Mini\\Cms\\default\\Controllers\\People::roles"
+    },
+    {
+        "id": "6335a6e9-2cd2-4914-ba9eac-e12b29-09877765985-884747",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "New Role",
+        "description": "Role display page",
+        "url": "/user/role/add",
+        "handler": "Mini\\Cms\\default\\Controllers\\People::newRole"
+    },
+    {
         "id": "a82ec6dd-e996-4798-90e2-d86692dd2e35",
         "options": {
             "unauthorized_access": true,
@@ -61,9 +127,7 @@
                 "POST"
             ],
             "roles": [
-                "anonymous",
-                "authenticated",
-                "administrator"
+                "*"
             ]
         },
         "name": "Home",
@@ -136,6 +200,7 @@
                 "GET"
             ],
             "roles": [
+                "*",
                 "authenticated",
                 "administrator"
             ]
@@ -144,6 +209,23 @@
         "description": "Logout user from mini",
         "url": "\/user\/logout",
         "handler": "Mini\\Cms\\default\\Controllers\\LogOut"
+    },
+    {
+        "id": "70ddc081-3a9c-4d7a-b047-810165a64c-9976-544-4443-333-332",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Pages",
+        "description": "pages user from mini",
+        "url": "/system/pages",
+        "handler": "Mini\\Cms\\default\\Controllers\\Pages"
     },
     {
         "id": "b24ae4bf-a371-419b-9d7a-a22da61c9e96",
@@ -200,437 +282,6 @@
         "description": "This is for changing password",
         "url": "\/user\/reset-password\/{token}",
         "handler": "Mini\\Cms\\default\\Controllers\\PasswordChange"
-    },
-    {
-        "id": "032eb437-c9b3-4ca8-9f38-47928dd22af6",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Content Types Structures",
-        "description": "This is content type page",
-        "url": "\/structure\/content-type",
-        "handler": "Mini\\Cms\\default\\Controllers\\ContentStructures"
-    },
-    {
-        "id": "61540f20-07ba-4749-9114-d56de7a84220",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET",
-                "POST"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Content Type Definition Creation",
-        "description": "this is for creating content type definitions",
-        "url": "\/structure\/content-type\/new",
-        "handler": "Mini\\Cms\\default\\Controllers\\ContentStructureCreation"
-    },
-    {
-        "id": "38fe45cb-86df-4ff6-8da0-d73e46f22396",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET",
-                "POST"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Content type definition viewing",
-        "description": "this is for viewing content type",
-        "url": "\/structure\/content-type\/view\/{content_type_name}",
-        "handler": "Mini\\Cms\\default\\Controllers\\ContentStructureView"
-    },
-    {
-        "id": "b17977c4-654f-4115-b849-7afee62b40f3",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET",
-                "POST"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Content Structure Edit",
-        "description": "This is for editing content type",
-        "url": "\/structure\/content-type\/{content_type_name}\/edit",
-        "handler": "Mini\\Cms\\default\\Controllers\\ContentStructureEdit"
-    },
-    {
-        "id": "068c4d03-a8b9-4bfc-b9ed-173ab6e360a2",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Content Structure Deletion",
-        "description": "This is for delete content type",
-        "url": "\/structure\/content-type\/{content_type_name}\/delete",
-        "handler": "Mini\\Cms\\default\\Controllers\\ContentStructureDelete"
-    },
-    {
-        "id": "60d97a07-21dc-4d32-a902-f6b8b80d3485",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Content Structures Fields Listing",
-        "description": "This is for listing content type fields",
-        "url": "\/structure\/content-type\/{content_type_name}\/fields",
-        "handler": "Mini\\Cms\\default\\Controllers\\ContentStructuresFieldsListing"
-    },
-    {
-        "id": "a5f72888-077d-4ba3-a509-bac2b9e592aa",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET",
-                "POST"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Field Creation",
-        "description": "This is for creation of fields",
-        "url": "\/structure\/content-type\/field\/{content_type_name}\/new",
-        "handler": "Mini\\Cms\\default\\Controllers\\FieldCreation"
-    },
-    {
-        "id": "0bb64ac7-0049-431e-90c8-277d76f79567",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Field View",
-        "description": "this is for viewing field information",
-        "url": "\/structure\/content-type\/field\/{field_name}\/view",
-        "handler": "Mini\\Cms\\default\\Controllers\\FieldView"
-    },
-    {
-        "id": "d5fea50b-9fdf-4509-86b7-4927467a0d01",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET",
-                "POST"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Field Edit",
-        "description": "This is for editing field",
-        "url": "\/structure\/content-type\/field\/{field_name}\/edit",
-        "handler": "Mini\\Cms\\default\\Controllers\\FieldEdit"
-    },
-    {
-        "id": "cf1d501b-d59c-490f-b5ec-d44326380832",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Field Deletion",
-        "description": "This is for deleting field",
-        "url": "\/structure\/content-type\/field\/{field_name}\/delete",
-        "handler": "Mini\\Cms\\default\\Controllers\\FieldDelete"
-    },
-    {
-        "id": "cf1d501b-d59c-490f-b5ec-d80832",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET",
-                "POST"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Content",
-        "description": "This is for creating content",
-        "url": "\/structure\/content-type\/{content_type_name}\/content-form",
-        "handler": "Mini\\Cms\\default\\Controllers\\CreationContentForm"
-    },
-    {
-        "id": "e80990d1-a5ae-492e-b63a-0108ec819260",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Contents",
-        "description": "This is content listing route",
-        "url": "\/structure\/contents",
-        "handler": "Mini\\Cms\\default\\Controllers\\StructuresContents"
-    },
-    {
-        "id": "5848928c-8af6-4ca0-a810-eb4c98d211bf",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Content View",
-        "description": "This is for displaying content",
-        "url": "\/structure\/content\/node\/{node_id}",
-        "handler": "Mini\\Cms\\default\\Controllers\\ContentView"
-    },
-    {
-        "id": "5332dfbc-0339-4d3b-bd81-46bad1b35e3d",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Prashant Page",
-        "description": "ghg",
-        "url": "\/prashant",
-        "handler": "Mini\\Cms\\default\\Controllers\\ContactUs"
-    },
-    {
-        "id": "e59e452a-1f65-4bcf-8ebb-147647fe9e32",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET",
-                "POST"
-            ],
-            "roles": [
-                "administrator",
-                "authenticated",
-                "anonymous"
-            ]
-        },
-        "name": "Auto Complete",
-        "description": "This route is for autocomplete api call",
-        "url": "\/filters\/autocomplete",
-        "handler": "Mini\\Cms\\default\\Controllers\\AutoComplete"
-    },
-    {
-        "id": "ae4816ff-059e-4bf9-ad5c-370d9e8644bb",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET",
-                "POST"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Content Edit",
-        "description": "This is from deleting content",
-        "url": "\/structure\/content\/node\/{node}\/edit",
-        "handler": "Mini\\Cms\\default\\Controllers\\ContentEdit"
-    },
-    {
-        "id": "721c4657-04c2-4455-b6be-59edb8112483",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Content Delete",
-        "description": "This is for deleting content",
-        "url": "\/structure\/content\/node\/{node}\/delete",
-        "handler": "Mini\\Cms\\default\\Controllers\\ContentDelete"
-    },
-    {
-        "id": "b6a246e2-b411-4921-817f-5346511d6038",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Vocabularies",
-        "description": "This is for listing Vocabularies",
-        "url": "\/structure\/vocabularies",
-        "handler": "Mini\\Cms\\default\\Controllers\\VocabularyListing"
-    },
-    {
-        "id": "8b5928bf-ccfe-44b9-90c2-7d3b4c2f985b",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET",
-                "POST"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Vocabulary Creation",
-        "description": "This is for creating vocabulary",
-        "url": "\/structure\/vocabularies\/new",
-        "handler": "Mini\\Cms\\default\\Controllers\\VocabularyCreation"
-    },
-    {
-        "id": "d2b0190c-a4a8-4ef5-b4ed-371239d4bb5b",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Vocabulary delete",
-        "description": "This is voca deletion",
-        "url": "\/structure\/vocabularies\/{vid}\/delete",
-        "handler": "Mini\\Cms\\default\\Controllers\\VocabularyDelete"
-    },
-    {
-        "id": "e7175e0d-24e1-418b-ae71-72eb6b356846",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET",
-                "POST"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Vocabulary Edit",
-        "description": "This is for deleting voca",
-        "url": "\/structure\/vocabularies\/{vid}\/edit",
-        "handler": "Mini\\Cms\\default\\Controllers\\VocabularyEdit"
-    },
-    {
-        "id": "0f8d9541-d6c2-4d67-b0e0-9d2c7e00e8f5",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET",
-                "POST"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "New Term Item",
-        "description": "This is for adding terms",
-        "url": "\/structure\/vocabularies\/{vid}\/term\/new",
-        "handler": "Mini\\Cms\\default\\Controllers\\TermCreation"
-    },
-    {
-        "id": "9e8b9e1a-11a2-4ff4-abdf-e39e51bb4f68",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Terms",
-        "description": "This is displaying terms",
-        "url": "\/vocabularies\/{vid}\/term\/list",
-        "handler": "Mini\\Cms\\default\\Controllers\\TermListing"
-    },
-    {
-        "id": "57b5186f-fb96-42af-961e-2d647f016301",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET",
-                "POST"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Term Edit",
-        "description": "This is term edit",
-        "url": "\/structure\/vocabularies\/{vid}\/term\/{tid}\/edit",
-        "handler": "Mini\\Cms\\default\\Controllers\\TermEdit"
-    },
-    {
-        "id": "afc20ed4-b451-4cec-9d74-1862bb058438",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET"
-            ],
-            "roles": [
-                "administrator"
-            ]
-        },
-        "name": "Term Deletion",
-        "description": "This is term deletion",
-        "url": "\/structure\/vocabularies\/{vid}\/term\/{tid}\/delete",
-        "handler": "Mini\\Cms\\default\\Controllers\\TermDelete"
-    },
-    {
-        "id": "a7322f9d-3dd0-4be0-8bd4-a156b520b742",
-        "options": {
-            "unauthorized_access": true,
-            "methods": [
-                "GET"
-            ],
-            "roles": [
-                "administrator",
-                "authenticated"
-            ]
-        },
-        "name": "Content By Term",
-        "description": "This is for displaying content by terms",
-        "url": "\/content\/term\/{tid}",
-        "handler": "Mini\\Cms\\default\\Controllers\\ContentByTerm"
     },
     {
         "id": "0f71643e-6548-47c9-89e6-f35ab54d8bab",

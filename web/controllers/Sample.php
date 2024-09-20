@@ -3,11 +3,9 @@
 namespace Mini\Cms\Web\Controllers;
 
 use Mini\Cms\Controller\ContentType;
-use Mini\Cms\Controller\ControllerInterface;
 use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Response;
 use Mini\Cms\Controller\StatusCode;
-use Mini\Cms\Modules\FormControllerBase\FormBuilder;
 use Mini\Cms\Modules\FormControllerBase\FormControllerInterface;
 use Mini\Cms\Modules\FormControllerBase\FormState;
 
@@ -33,14 +31,9 @@ class Sample implements FormControllerInterface
             ->write("<h1>Hello World!</h1>");
     }
 
-    public function getFormId(): string
-    {
-       return "sample_form_form";
-    }
+    public function getFormId(): string{ return "sample_form_form"; }
 
-    public function validateForm(array &$form, FormState &$formState): void
-    {
-    }
+    public function validateForm(array &$form, FormState &$formState): void{}
 
     public function submitForm(array &$form, FormState $formState): void
     {
@@ -50,14 +43,14 @@ class Sample implements FormControllerInterface
     public function buildForm(array $form, FormState $formState): array
     {
         return [
-            'first_name' => [
-                '#type' => 'text',
-                '#title' => 'First Name',
-                '#required' => true,
-                '#placeholder' => 'First Name',
-                '#attributes' => ['class' => 'form-control', 'id' => 'first_name'],
-                '#description' => 'Please enter your first name.',
-                '#default_value' => $formState->get('first_name'),
+            "field_sample" => [
+                "#type" => "text",
+                "#title" => "Sample field",
+                "#required" => true,
+                "#placeholder" => "enter sample data",
+                "#attributes" => ["class" => "form-control", "id" => "sample-field"],
+                "#description" => "Please enter your sample data.",
+                "#default_value" => $formState->get("field_sample"),
             ],
             'profile_image' => [
                 '#type' => 'file',
