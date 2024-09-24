@@ -129,7 +129,7 @@ function construct_address_field(string $address_field_name, string $default_cou
     return $collection;
 }
 
-function clean_string(string $input, string $remove_char = '', string $replace_char = ''): string
+function clean_string(string $input, string $remove_char = ' ', string $replace_char = ''): string
 {
     // Remove specified characters and replace them
     return str_replace($remove_char, $replace_char, $input);

@@ -18,7 +18,8 @@
       "ext-pdo": "*",
         "phpmailer/phpmailer": "^6.9",
       "ext-zip": "*",
-      "ext-dom": "*"
+      "ext-dom": "*",
+        "symfony/yaml": "^7.1"
     },
     "autoload": {
         "psr-4": {

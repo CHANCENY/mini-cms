@@ -327,7 +327,6 @@ class Theme
             // Get input type and name
             $type = strtolower($input->getAttribute('type'));
             $name = $input->getAttribute('name');
-
             if($type === 'file') {
                 $file_input_exist = true;
             }
@@ -361,6 +360,11 @@ class Theme
         }
         if($address_field_exists) {
             $file_script .= "<script type='text/javascript'>".file_get_contents(AddressFormat::addressAsset()) . "</script>";
+        }
+
+        $is_application_phone = getConfigValue('phone_app.silent_client');
+        if($is_application_phone) {
+            $file_script .= "<script type='text/javascript'>".file_get_contents('../core/default/themes/mini_cms/assets/js/application-silent.js'). '</script>';
         }
 
         $dom_content = $dom->saveHTML();

@@ -28,49 +28,66 @@ if(fileInputTags){
                     xhr.open('POST', '/files/assets/uploader', true);
                     xhr.onload = function() {
                         if (xhr.status === 200) {
-                            const data = JSON.parse(xhr.responseText);
-                            const ids = [];
-                            data.forEach((item)=>{
-                                const con = document.createElement('div');
-                                con.className = "col px-5 ps-0 mt-1 mb-1";
-                                const aTag = document.createElement('a');
-                                aTag.href = "/"+ item.link;
-                                aTag.textContent = item.name;
-                                aTag.target = '_blank';
-                                const span = document.createElement('span');
-                                const f = field.name;
-                                span.className = "remove float-end text-danger";
-                                span.style.cursor = "pointer";
-                                span.setAttribute('field',f);
-                                span.title = 'remove';
-                                span.ariaLabel = "remove";
-                                span.textContent = 'x';
-                                span.setAttribute('data',item.id);
-                                span.addEventListener('click',(e)=>{
-                                    remove_file(span);
-                                    const list = field.value.split(',');
-                                    const thisId = span.getAttribute('data');
-                                    const filtered = list.filter((item)=> { return item !== thisId; });
-                                    field.value = filtered.join(',');
-                                    span.parentElement.remove();
-                                    if(field.value.length === 0) {
-                                        field.type = 'file';
-                                        if(document.getElementById(field.id+'-progress')) {
-                                            document.getElementById(field.id+'-progress').remove();
+                            try{
+                                const data = JSON.parse(xhr.responseText);
+                                const ids = [];
+                                const span_error = document.getElementById(field.name + '-error-message');
+                                if(span_error) {
+                                    span_error.remove();
+                                }
+                                data.forEach((item)=>{
+                                    const con = document.createElement('div');
+                                    con.className = "col px-5 ps-0 mt-1 mb-1";
+                                    const aTag = document.createElement('a');
+                                    aTag.href = "/"+ item.link;
+                                    aTag.textContent = item.name;
+                                    aTag.target = '_blank';
+                                    const span = document.createElement('span');
+                                    const f = field.name;
+                                    span.className = "remove float-end text-danger";
+                                    span.style.cursor = "pointer";
+                                    span.setAttribute('field',f);
+                                    span.title = 'remove';
+                                    span.ariaLabel = "remove";
+                                    span.textContent = 'x';
+                                    span.setAttribute('data',item.id);
+                                    span.addEventListener('click',(e)=>{
+                                        remove_file(span);
+                                        const list = field.value.split(',');
+                                        const thisId = span.getAttribute('data');
+                                        const filtered = list.filter((item)=> { return item !== thisId; });
+                                        field.value = filtered.join(',');
+                                        span.parentElement.remove();
+                                        if(field.value.length === 0) {
+                                            field.type = 'file';
+                                            if(document.getElementById(field.id+'-progress')) {
+                                                document.getElementById(field.id+'-progress').remove();
+                                            }
                                         }
-                                    }
-                                    console.log(field.value);
+                                        console.log(field.value);
+                                    });
+                                    ids.push(item.id);
+
+                                    con.appendChild(aTag);
+                                    con.appendChild(span);
+
+                                    const parent = field.parentElement;
+                                    parent.appendChild(con);
                                 });
-                                ids.push(item.id);
+                                field.type = 'hidden';
+                                field.value = ids.join(',');
+                            }catch (e) {
+                                const progressBar = document.getElementById(field.name + '-progress');
+                                if(progressBar) {
+                                    const span = document.createElement('span');
+                                    span.id = field.name + '-error-message';
+                                    span.textContent = 'error occurred please try again.';
+                                    span.className = 'text-danger';
+                                    progressBar.remove();
+                                    field.parentElement.appendChild(span)
+                                }
+                            }
 
-                                con.appendChild(aTag);
-                                con.appendChild(span);
-
-                                const parent = field.parentElement;
-                                parent.appendChild(con);
-                            });
-                            field.type = 'hidden';
-                            field.value = ids.join(',');
                         } else {
                             alert('Error uploading files.');
                         }

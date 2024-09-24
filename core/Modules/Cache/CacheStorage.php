@@ -38,7 +38,7 @@ class CacheStorage
         }
         $statement = Database::database()->prepare("CREATE TABLE IF NOT EXISTS $this->database_storage (cache_id SERIAL PRIMARY KEY, cache_tag VARCHAR(255), cache_type VARCHAR(255), cache_expire_time INT, cache_file_path VARCHAR(255));");
         $statement->execute();
-        $this->settings = getConfigValue('caching_setting');
+        $this->settings = getConfigValue('caching_setting') ?? ['max_age' => 0, 'enabled' => 0];
     }
 
     /**
