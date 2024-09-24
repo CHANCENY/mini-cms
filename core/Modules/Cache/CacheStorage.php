@@ -34,6 +34,7 @@ class CacheStorage
     {
         if(!is_dir($this->cache_storage)){
             @mkdir($this->cache_storage);
+            file_put_contents($this->cache_storage.'/.htaccess', "Deny from all");
         }
         $statement = Database::database()->prepare("CREATE TABLE IF NOT EXISTS $this->database_storage (cache_id SERIAL PRIMARY KEY, cache_tag VARCHAR(255), cache_type VARCHAR(255), cache_expire_time INT, cache_file_path VARCHAR(255));");
         $statement->execute();

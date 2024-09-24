@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a843d78-d8d4-4f56-9402-63f4f92bdf0d" name="Changes" comment="" />
+    <list default="true" id="9a843d78-d8d4-4f56-9402-63f4f92bdf0d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/core/Modules/Content/Node/NodeBase.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/Modules/Content/Node/NodeFieldNotExistException.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/Modules/Content/Node/NodeInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/core/Modules/Content/Node/NodeTypeInterface.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Modules/Cache/CacheStorage.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/Cache/CacheStorage.php" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -53,6 +60,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;php.override.implement.member.chooser.php.doc&quot;: &quot;NONE&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -73,6 +81,7 @@
       <option name="presentableId" value="Default" />
       <updated>1726806495243</updated>
       <workItem from="1726806496428" duration="16358000" />
+      <workItem from="1727068394820" duration="2000" />
     </task>
     <servers />
   </component>
