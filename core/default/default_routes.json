@@ -507,5 +507,22 @@
         "description": "This is password less login confirmation",
         "url": "/user/login/method/{session_code}/{auth_method}/{code}",
         "handler": "Mini\\Cms\\default\\Controllers\\PasswordLessConfirmation"
+    },
+    {
+        "id": "905d8ebb-1086665f-6669674d3a-84-6958473-690493838-i765432345678",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Content Type Form",
+        "description": "This is for creating content type",
+        "url": "/admin/content-type/{stage}/new",
+        "handler": "Mini\\Cms\\default\\Controllers\\ContentTypeForm"
     }
 ]

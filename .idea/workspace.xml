@@ -4,26 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a843d78-d8d4-4f56-9402-63f4f92bdf0d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/core/Modules/Content/Field/FieldNotFoundException.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/Modules/Content/Field/FieldType.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/Modules/Content/Field/FieldTypeEnum.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/Modules/Content/Field/FieldTypeInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/Modules/Content/Node/NodeType.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/Modules/Content/Storage/FieldStorage.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/Modules/Content/Storage/FieldStorageInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/Modules/Content/Tait/ActionTrait.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/Modules/Content/Tait/ConfigFileAlreadyExistException.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Modules/Cache/CacheStorage.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/Cache/CacheStorage.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Modules/Content/Node/NodeTypeInterface.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/Content/Node/NodeTypeInterface.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/Theme/Theme.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Theme/Theme.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/bootstrap/boot.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/bootstrap/boot.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/assets/js/file_manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/assets/js/file_manager.js" afterDir="false" />
-    </list>
+    <list default="true" id="9a843d78-d8d4-4f56-9402-63f4f92bdf0d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -41,7 +22,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\xampp\php\php.exe">
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="/bin/php">
     <include_path>
       <path value="$PROJECT_DIR$/vendor/composer" />
       <path value="$PROJECT_DIR$/vendor/brick/math" />
@@ -65,19 +46,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;php.override.implement.member.chooser.php.doc&quot;: &quot;NONE&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/home/sv/Desktop/mini-cms",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "php.override.implement.member.chooser.php.doc": "NONE",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -99,6 +81,7 @@
       <workItem from="1727165138017" duration="6160000" />
       <workItem from="1727175663667" duration="128000" />
       <workItem from="1727175846310" duration="11242000" />
+      <workItem from="1727261048068" duration="72000" />
     </task>
     <servers />
   </component>

@@ -374,4 +374,14 @@ class Theme
         return $dom_content;
     }
 
+    /**
+     * @param string $section head or footer
+     * @param string $asset
+     * @return void
+     */
+    public function setAsset(string $section, string $asset): void
+    {
+        $this->assets[$section][] = $asset;
+    }
+
 }

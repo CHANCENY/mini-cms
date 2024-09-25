@@ -197,3 +197,23 @@
         }
     }
 </script>
+<div class="container mt-lg-5">
+    <div class="status-container-admin w-75" id="status-container-admin">
+        <?php
+
+        /**@var $theme \Mini\Cms\Theme\Theme **/
+        $theme = \Mini\Cms\Modules\Storage\Tempstore::load('theme_loaded');
+        if($theme->getThemTitle() === 'MiniCMS' || $theme->getThemTitle() === 'Classy') {
+            try {
+                $status_in_stack = \Mini\Cms\Mini::messenger()->getMessages();
+                foreach ($status_in_stack as $message) {
+                    echo $message;
+                }
+            } catch (Exception $e) {
+            }
+        }
+        ?>
+    </div>
+</div>
+
+
