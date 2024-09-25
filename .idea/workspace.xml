@@ -4,7 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a843d78-d8d4-4f56-9402-63f4f92bdf0d" name="Changes" comment="" />
+    <list default="true" id="9a843d78-d8d4-4f56-9402-63f4f92bdf0d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/core/default/themes/mini_cms/src/content_type/content_type_listing.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/Modules/Content/Node/NodeType.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/Modules/Content/Node/NodeType.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/Controllers/ContentTypeForm.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/Controllers/ContentTypeForm.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/default_routes.json" beforeDir="false" afterPath="$PROJECT_DIR$/core/default/default_routes.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/forms/content_form.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/forms/content_type_field_creation_form.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/forms/content_types_creation.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/forms/content_types_editing.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/forms/content_types_field_editing.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/forms/vocabulary_form.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/forms/vocabulary_form_edit.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/pages/content_type_field_viewing.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/pages/content_types_fields_listing.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/pages/content_types_listing.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/pages/content_types_viewing.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/pages/node_node_view_content.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/pages/structure_contents.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/pages/term_view_content.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/default/themes/mini_cms/src/pages/terms_listing.php" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -46,20 +67,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/home/sv/Desktop/mini-cms",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "php.override.implement.member.chooser.php.doc": "NONE",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/sv/Desktop/mini-cms&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;php.override.implement.member.chooser.php.doc&quot;: &quot;NONE&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>

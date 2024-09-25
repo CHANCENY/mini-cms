@@ -13,9 +13,11 @@ class NodeType implements NodeTypeInterface
 
     public function __construct(?string $content_type)
     {
+        $this->CONTENT_TYPE = [];
         $this->prepare();
         if(!is_null($content_type)) {
-
+            $content_file = 'private://configs/types/'.$content_type.'.yml';
+            $this->CONTENT_TYPE = $this->read($content_file);
         }
     }
 
@@ -86,5 +88,25 @@ class NodeType implements NodeTypeInterface
     public function setField(string $field_name): void
     {
         $this->CONTENT_TYPE['#fields'][] = clean_string($field_name,replace_char:'_');
+    }
+
+    public function getContentTypes(): ?array
+    {
+        $list_content_types = scandir('private://configs/types');
+
+        if($list_content_types) {
+            $list_content_types = array_diff($list_content_types,['.','..']);
+            foreach ($list_content_types as $key=>$content_type) {
+                $content_l = explode('.', $content_type);
+                $content_name = $content_l[0];
+                $list_content_types[$key] = new NodeType(trim($content_name));
+            }
+        }
+        return $list_content_types;
+    }
+
+    public static function loadTypes(): ?array
+    {
+        return (new self(null))->getContentTypes();
     }
 }

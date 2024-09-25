@@ -522,7 +522,23 @@
         },
         "name": "Content Type Form",
         "description": "This is for creating content type",
-        "url": "/admin/content-type/{stage}/new",
+        "url": "/admin/content-type/new",
         "handler": "Mini\\Cms\\default\\Controllers\\ContentTypeForm"
+    },
+    {
+        "id": "905d8ebb-1086665f-6669674d3a-84-6958473-690493838-i765432345678-content-list",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Content types",
+        "description": "This is for creating content type",
+        "url": "/admin/content-types",
+        "handler": "Mini\\Cms\\default\\Controllers\\ContentTypeForm::contentTypeListing"
     }
 ]

@@ -47,4 +47,10 @@ class ContentTypeForm implements ControllerInterface
         }
         $this->response->write(Services::create('render')->render('content_type_creation_form.php'));
     }
+
+    public function contentTypeListing(): void
+    {
+        $types = NodeType::loadTypes();
+        $this->response->write(Services::create('render')->render('content_type_listing.php',['content_types'=>$types]));
+    }
 }
