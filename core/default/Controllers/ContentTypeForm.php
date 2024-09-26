@@ -53,4 +53,28 @@ class ContentTypeForm implements ControllerInterface
         $types = NodeType::loadTypes();
         $this->response->write(Services::create('render')->render('content_type_listing.php',['content_types'=>$types]));
     }
+
+    public function updateContentType(): void
+    {
+        $type = new NodeType($this->request->get('type'));
+        if($this->request->getMethod() === 'POST') {
+            $type->setLabel($this->request->request->get('content_label'));
+            $type->setDescription($this->request->request->get('content_description'));
+            if($type->update()) {
+                Mini::messenger()->addSuccessMessage("Content Type Updated You can add fields");
+                (new RedirectResponse($this->request->headers->get('referer')))->send();
+                exit;
+            }
+        }
+        $this->response->write(Services::create('render')->render('content_type_creation_form.php',['content_type'=>$type]));
+    }
+
+    public function deleteContentType(): void
+    {
+        $type = new NodeType($this->request->get('type'));
+        if($type->delete()) {
+            Mini::messenger()->addSuccessMessage("Content Type Deleted You can add fields");
+            (new RedirectResponse('/admin/content-types'))->send();
+        }
+    }
 }

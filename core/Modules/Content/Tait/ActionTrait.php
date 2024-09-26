@@ -29,6 +29,20 @@ trait ActionTrait
         return Yaml::parseFile($location);
     }
 
+    protected function overwrite(string $location, mixed $data): bool
+    {
+       $data = Yaml::dump($data);
+        return !empty(file_put_contents($location, $data));
+    }
+
+    protected function remove(string $location): bool
+    {
+        if(file_exists($location)) {
+            return unlink($location);
+        }
+        return false;
+    }
+
     protected function prepare()
     {
         @mkdir("private://configs/storages");

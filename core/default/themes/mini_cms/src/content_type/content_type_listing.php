@@ -1,3 +1,12 @@
+<script>
+    function question(e) {
+        e.preventDefault();
+        if(window.confirm("Are you sure you want to delete this content type? note all fields related to this content type will be deleted together with its data."))
+        {
+            console.log(e.href)
+        }
+    }
+</script>
 <div class="container mt-lg-5">
     <div class="p-5 bg-light rounded">
         <div class="d-block">
@@ -24,7 +33,7 @@
                             <td>
                                 <a href="/admin/content-types/<?= $content_type->getTypeName() ?>/fields">Fields</a>
                                 <a href="/admin/content-types/<?= $content_type->getTypeName() ?>/edit">Edit</a>
-                                <a href="/admin/content-types/<?= $content_type->getTypeName() ?>/delete">Delete</a>
+                                <a onclick="question(this)" href="/admin/content-types/<?= $content_type->getTypeName() ?>/delete">Delete</a>
                             </td>
                          <?php endif; ?>
                      </tr>

@@ -2,19 +2,23 @@
 <div class="container mt-lg-5">
     <!-- MultiStep Form -->
     <div class="p-5 bg-light rounded w-50">
-        <h2>Content Type Creation</h2>
+        <?php if(!isset($content['content_type'])): ?>
+            <h2>Content Type Creation</h2>
+        <?php else: ?>
+            <h2>Update Type Creation</h2>
+        <?php endif; ?>
         <form action="" class="form mt-lg-4" method="post">
             <div class="form-group">
                 <label for="content-label">Name</label>
-                <input type="text" required name="content_label" id="content-label" class="form-control mt-3">
+                <input value="<?= isset($content['content_type']) ? $content['content_type']?->getLabel() : null; ?>" type="text" required name="content_label" id="content-label" class="form-control mt-3">
             </div>
             <div class="form-group mt-3 d-none">
                 <label for="content-name">Machine Name</label>
-                <input type="text" required name="content_name" id="content-name" class="form-control">
+                <input value="<?= isset($content['content_type']) ? $content['content_type']?->getTypeName() : null; ?>" type="text" required name="content_name" id="content-name" class="form-control">
             </div>
             <div class="form-group mt-3">
                 <label for="content-description">Description</label>
-                <textarea name="content_description" id="content-description" class="form-control"></textarea>
+                <textarea name="content_description" id="content-description" class="form-control"><?= isset($content['content_type']) ? $content['content_type']?->getDescription() : null; ?></textarea>
             </div>
             <div class="form-group mt-5">
                 <input type="submit" name="save-content-type" value="Save" class="btn btn-secondary">

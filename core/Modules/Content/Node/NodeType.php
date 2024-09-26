@@ -109,4 +109,17 @@ class NodeType implements NodeTypeInterface
     {
         return (new self(null))->getContentTypes();
     }
+
+    public function update(): bool
+    {
+        $content_file = "private://configs/types/".$this->CONTENT_TYPE['#content_name'].".yml";
+        return $this->overwrite($content_file, $this->CONTENT_TYPE);
+    }
+
+    public function delete(): bool
+    {
+        // TODO: delete fields and data in db.
+        $content_file = "private://configs/types/".$this->CONTENT_TYPE['#content_name'].".yml";
+        return $this->remove($content_file);
+    }
 }

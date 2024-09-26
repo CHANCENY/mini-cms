@@ -540,5 +540,39 @@
         "description": "This is for creating content type",
         "url": "/admin/content-types",
         "handler": "Mini\\Cms\\default\\Controllers\\ContentTypeForm::contentTypeListing"
+    },
+    {
+        "id": "1086665f-6669674d3a-84-6958473-690493838-i765432345678-content-update",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Update Content type",
+        "description": "This is for update content type",
+        "url": "/admin/content-types/{type}/edit",
+        "handler": "Mini\\Cms\\default\\Controllers\\ContentTypeForm::updateContentType"
+    },
+    {
+        "id": "8887-34567-87766-1086665f473-690493838-i765432345678-content-delete",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Delete Content type",
+        "description": "This is for delete content type",
+        "url": "/admin/content-types/{type}/delete",
+        "handler": "Mini\\Cms\\default\\Controllers\\ContentTypeForm::deleteContentType"
     }
 ]
