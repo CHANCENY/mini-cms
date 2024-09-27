@@ -439,6 +439,22 @@
         "handler": "Mini\\Cms\\default\\Controllers\\ErrorsReport"
     },
     {
+        "id": "905d8ebb-105f-4d3a-801a-67e8c83150d05-09880-99988-907547-473",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Error",
+        "description": "This is for listing modules",
+        "url": "/reporting/clear",
+        "handler": "Mini\\Cms\\default\\Controllers\\ErrorsReport::clearError"
+    },
+    {
         "id": "905d8ebb-105f-4d3a-801a-67e8c83150d05-09880999-88907-50987654-7473",
         "options": {
             "unauthorized_access": true,
@@ -574,5 +590,22 @@
         "description": "This is for delete content type",
         "url": "/admin/content-types/{type}/delete",
         "handler": "Mini\\Cms\\default\\Controllers\\ContentTypeForm::deleteContentType"
+    },
+    {
+        "id": "34567-87766-1086665f473-690493838-i765432345678-field-new",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Field Creation",
+        "description": "This is for delete content type",
+        "url": "/admin/content-type/{type}/field/new",
+        "handler": "Mini\\Cms\\default\\Controllers\\ContentTypeForm::newFieldCreation"
     }
 ]

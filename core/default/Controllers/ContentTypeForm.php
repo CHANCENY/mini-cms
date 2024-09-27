@@ -6,6 +6,7 @@ use Mini\Cms\Controller\ControllerInterface;
 use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Response;
 use Mini\Cms\Mini;
+use Mini\Cms\Modules\Content\Field\FieldTypeEnum;
 use Mini\Cms\Modules\Content\Node\NodeType;
 use Mini\Cms\Modules\Storage\Tempstore;
 use Mini\Cms\Services\Services;
@@ -66,7 +67,13 @@ class ContentTypeForm implements ControllerInterface
                 exit;
             }
         }
-        $this->response->write(Services::create('render')->render('content_type_creation_form.php',['content_type'=>$type]));
+        $this->response->write(Services::create('render')->render('content_type_edit_page.php',
+            [
+                'content_type'=>$type,
+                'fields_types'=>FieldTypeEnum::getAll(),
+                'fields' => $type->getFields(),
+            ])
+        );
     }
 
     public function deleteContentType(): void
@@ -76,5 +83,15 @@ class ContentTypeForm implements ControllerInterface
             Mini::messenger()->addSuccessMessage("Content Type Deleted You can add fields");
             (new RedirectResponse('/admin/content-types'))->send();
         }
+    }
+
+    public function newFieldCreation(): void
+    {
+        $type = new NodeType($this->request->get('type'));
+        $this->response->write(Services::create('render')->render('content_type_field_form.php',
+            [
+                'fields_types'=>FieldTypeEnum::getValues()
+            ])
+        );
     }
 }

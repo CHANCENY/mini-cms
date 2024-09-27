@@ -384,4 +384,8 @@ class Theme
         $this->assets[$section][] = $asset;
     }
 
+    public static function build(string $view, $options = []): ?string
+    {
+        return Services::create('render')->render($view, $options);
+    }
 }

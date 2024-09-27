@@ -23,6 +23,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 $error = new \Mini\Cms\Modules\ErrorSystem();
 if($error->isOn()) {
     try {
+
         // Loading app in save mode where error is getting caught.
         Route::app($method, $parse_url);
     }

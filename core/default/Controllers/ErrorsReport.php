@@ -7,6 +7,7 @@ use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Response;
 use Mini\Cms\Modules\ErrorSystem;
 use Mini\Cms\Services\Services;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class ErrorsReport extends ErrorSystem implements ControllerInterface
 {
@@ -32,5 +33,12 @@ class ErrorsReport extends ErrorSystem implements ControllerInterface
             return;
         }
         $this->response->write(Services::create('render')->render('errors_report.php',['errors'=>$this->getErrors()]));
+    }
+
+    public function clearError(): void
+    {
+        $this->clear();
+        (new RedirectResponse('/reporting/errors'))->send();
+        exit;
     }
 }

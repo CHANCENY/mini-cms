@@ -79,13 +79,30 @@ class ErrorSystem
 
     public function getErrors(): array
     {
-        if(!is_dir($this->error_storage)){
+        if (!is_dir($this->error_storage)) {
             @mkdir($this->error_storage, 0777, true);
             return [];
         }
-        return array_map(function ($error){
-            return json_decode(file_get_contents($this->error_storage . '/'. $error,true));
-        },array_diff(scandir($this->error_storage),['.','..']));
+
+        // Get the list of error files
+        $files = array_diff(scandir($this->error_storage), ['.', '..']);
+
+        // Sort the files by creation time (oldest to newest)
+        usort($files, function ($a, $b) {
+            return filectime($this->error_storage . '/' . $a) - filectime($this->error_storage . '/' . $b);
+        });
+
+        // Map the sorted files to their content (decoding the JSON)
+        $errors = array_map(function ($error) {
+            return json_decode(file_get_contents($this->error_storage . '/' . $error, true));
+        }, $files);
+
+        // Sort the errors array by 'report_on' key in descending order
+        usort($errors, function ($a, $b) {
+            return $b->report_on - $a->report_on;  // DESC sorting
+        });
+
+        return $errors;
     }
 
     public function getError(string $error_id): \stdClass|null
@@ -108,5 +125,16 @@ class ErrorSystem
     public function setException(\Throwable|\Exception|\PDOException $exception): void
     {
        $this->error = $exception;
+    }
+
+    public function clear(): true
+    {
+        if (!is_dir($this->error_storage)) {
+            @mkdir($this->error_storage, 0777, true);
+        }
+        foreach (array_diff(scandir($this->error_storage), ['.','..']) as $file) {
+            unlink($this->error_storage . '/' . $file);
+        }
+        return true;
     }
 }

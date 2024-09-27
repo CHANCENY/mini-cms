@@ -31,7 +31,6 @@
                             <td><?= $content_type->getTypeName() ?></td>
                             <td><?= $content_type->getDescription() ?></td>
                             <td>
-                                <a href="/admin/content-types/<?= $content_type->getTypeName() ?>/fields">Fields</a>
                                 <a href="/admin/content-types/<?= $content_type->getTypeName() ?>/edit">Edit</a>
                                 <a onclick="question(this)" href="/admin/content-types/<?= $content_type->getTypeName() ?>/delete">Delete</a>
                             </td>

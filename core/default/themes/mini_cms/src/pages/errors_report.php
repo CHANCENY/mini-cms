@@ -1,7 +1,7 @@
 <div class="mt-lg-5 mb-lg-5">
     <div class="bg-light p-5">
         <div class="mb-5 mt-5">
-            <a href="/reporting/errors/delete" class="btn btn-danger">Clear</a>
+            <a href="/reporting/clear" class="btn btn-danger">Clear</a>
         </div>
         <table class="table datatable">
             <thead>
