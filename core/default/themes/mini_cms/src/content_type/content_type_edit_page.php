@@ -41,8 +41,20 @@
                       <th>Operations</th>
                   </tr>
                 </thead>
-                <?php if(!empty($content['fields'])): ?>
-                  <?php dump($content['fields']); ?>
+                <?php dump($content['fields']); if(!empty($content['fields'])): ?>
+                  <?php foreach ($content['fields'] as $field): ?>
+                    <?php if($field instanceof \Mini\Cms\Modules\Content\Field\FieldType): ?>
+                        <tr>
+                            <td><?= $field->getLabel() ?></td>
+                            <td><?= $field->getName() ?></td>
+                            <td><?= $field->getType() ?></td>
+                            <td>
+                                <a href="/admin/content-type/<?= $content['content_type']?->getTypeName() ?>/field/<?= $field->getName() ?>/edit">Edit</a>
+                                <a href="/admin/content-type/<?= $content['content_type']?->getTypeName() ?>/field/<?= $field->getName() ?>/delete">Delete</a>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                  <?php endforeach; ?>
                 <?php endif; ?>
             </table>
         </div>

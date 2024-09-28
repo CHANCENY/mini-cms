@@ -2,6 +2,7 @@
 
 namespace Mini\Cms\Modules\Content\Node;
 
+use Mini\Cms\Modules\Content\Field\FieldType;
 use Mini\Cms\Modules\Content\Field\FieldTypeInterface;
 use Mini\Cms\Modules\Content\Tait\ActionTrait;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
@@ -62,7 +63,9 @@ class NodeType implements NodeTypeInterface
 
     public function getFields(): array
     {
-        return $this->CONTENT_TYPE['#fields'] ?? [];
+        return array_map(function ($item){
+            return new FieldType($item);
+        },$this->CONTENT_TYPE['#fields'] ?? []);
     }
 
     public function getField(string $field_name): FieldTypeInterface

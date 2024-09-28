@@ -34,7 +34,7 @@ class FieldStorage implements FieldStorageInterface
 
     public function getSize(): int
     {
-        return $this->STORAGE['##settings']['#size'];
+        return $this->STORAGE['#settings']['#size'];
     }
 
     public function getDefault(): string|bool|null|int|float

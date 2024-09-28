@@ -81,7 +81,9 @@ class FieldType implements FieldTypeInterface
 
     public function save(): bool
     {
+        $this->fieldTableCreation();
         $path = "private://configs/fields/".$this->FIELD['#field_name'].'.yml';
         return $this->write($path, $this->FIELD);
     }
+
 }

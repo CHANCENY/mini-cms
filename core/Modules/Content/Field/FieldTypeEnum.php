@@ -18,4 +18,15 @@ enum FieldTypeEnum: string
     {
         return self::cases();
     }
+
+    public static function get(string $field_type): FieldTypeEnum|false|null
+    {
+        $field = array_filter(self::getAll(),function($item) use ($field_type){
+            return $item->value === $field_type;
+        });
+        if(empty($field)) {
+            return null;
+        }
+        return reset($field);
+    }
 }
