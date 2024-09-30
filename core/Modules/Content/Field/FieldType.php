@@ -86,10 +86,18 @@ class FieldType implements FieldTypeInterface
         return $this->write($path, $this->FIELD);
     }
 
-    public function delete(): bool {
+    public function update(): bool
+    {
         $path = "private://configs/fields/".$this->FIELD['#field_name'].'.yml';
-        $this->remove($path);
-        return $this->fieldTableDelete();
+        return $this->overwrite($path, $this->FIELD);
+    }
+
+    public function delete(): bool {
+        $this->fieldTableDelete();
+        $storage = new FieldStorage($this->FIELD['#field_storage']);
+        $storage->delete();
+        $path = "private://configs/fields/".$this->FIELD['#field_name'].'.yml';
+        return $this->remove($path);
     }
 
 }

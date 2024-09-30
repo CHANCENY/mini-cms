@@ -113,7 +113,7 @@ class ContentTypeForm implements ControllerInterface
                         }
                     }
                     $storage_new->setDefault($this->request->request->get('field_default_value',''));
-                    $storage_new->setSize($this->request->request->get('field_size'));
+                    $storage_new->setSize(((int)$this->request->request->get('field_size',1)) === 0 ? 1 : (int)$this->request->request->get('field_size',1));
                     $storage_new->setStorageType(FieldTypeEnum::get($this->request->request->get('field_type', '')));
                     $storage_new->save();
 
@@ -132,7 +132,7 @@ class ContentTypeForm implements ControllerInterface
                     $type->update();
                     Mini::messenger()->addSuccessMessage("Field added to content type successfully");
                 }catch (\Throwable $e) {
-                    Mini::messenger()->addErrorMessage("Field creation failed check error logs");
+                    Mini::messenger()->addErrorMessage("Field creation failed check error logs".$e->getMessage());
                     (new ErrorSystem())->setException($e);
                 }
             }
@@ -142,5 +142,40 @@ class ContentTypeForm implements ControllerInterface
                 'fields_types'=>FieldTypeEnum::getValues()
             ])
         );
+    }
+
+    public function fieldUpdate(): void
+    {
+        $type = new NodeType($this->request->get('type'));
+        $field = $type->getField($this->request->get('field_name'));
+        if($this->request->getMethod() === 'POST') {
+            $field->setLabel($this->request->request->get('field_label'));
+            if($field->update()) {
+                Mini::messenger()->addSuccessMessage("Field Updated successfully");
+                (new RedirectResponse($this->request->headers->get('referer',301)))->send();
+                exit;
+            }
+        }
+        $this->response->write(Services::create('render')->render('content_type_field_form_edit.php',
+            [
+                'fields_types'=>FieldTypeEnum::getValues(),
+                'field' => $field,
+                'type' => $type,
+            ])
+        );
+    }
+
+    public function deleteField(): void
+    {
+        $type = new NodeType($this->request->get('type'));
+        $field = $type->getField($this->request->get('field_name'));
+        if($type->unsetField($field->getName()) && $field->delete()) {
+            Mini::messenger()->addSuccessMessage("Field Deleted You can add fields");
+        }
+        else {
+            Mini::messenger()->addErrorMessage("Field Deleted You can add fields");
+        }
+        (new RedirectResponse($this->request->headers->get('referer',301)))->send();
+        exit;
     }
 }

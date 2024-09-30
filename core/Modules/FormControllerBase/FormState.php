@@ -48,7 +48,7 @@ class FormState
         $this->errors = [];
         $this->values = [];
         $this->formSettings = $form_settings;
-        $this->inputFields = $_POST;
+        $this->inputFields = array_merge($_POST,$_FILES);
         if ($is_submitted) {
             $this->defaultValidation();
             $this->processSubmitted();
@@ -70,18 +70,17 @@ class FormState
     {
         foreach ($this->formSettings as $key => $value) {
             if(in_array($key, $this->fields)) {
-                if(isset($value['#required']) && $value['#required'] && $this->get($key) !== null) {
-                  $this->values[$key] = $this->get($key);
-                }
-                elseif (isset($value['#required']) && $value['#required'] && $this->get($key) === null) {
-                    $this->setErrors($key, "{$value['#title']} field is required.");
-                }
-                if($this->get($key) !== null) {
-                    $this->values[$key] = $this->get($key);
-                }
-                if(empty($this->errors)) {
-                    $this->validated = true;
-                }
+               if($value['#required']) {
+                   if(empty($this->get($key))) {
+                       $this->errors[$key] = "This field is required.";
+                   }
+                   else {
+                       $this->values[$key] = $this->get($key);
+                   }
+               }
+               else {
+                   $this->values[$key] = $value;
+               }
             }
         }
     }

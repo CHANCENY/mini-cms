@@ -210,6 +210,9 @@ class Route
                             ];
                             Tempstore::save('_form_settings',$_form_setting);
                             $this->response->setStatusCode(StatusCode::OK)->setContentType(ContentType::TEXT_HTML);
+                            if($this->controllerHandler->getTemplate()) {
+                                $_string = Services::create('render')->render($this->controllerHandler->getTemplate(), ['_form' => $_string]);
+                            }
                             $this->response->write($_string);
                             Extensions::runHooks('_response_alter',[&$this->response]);
                             $this->response->send();

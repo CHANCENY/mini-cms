@@ -184,4 +184,9 @@ class Mini
     {
         return new RedirectResponse($url, $code);
     }
+
+    public static function currentTheme(): ?Theme
+    {
+        return Tempstore::load('theme_loaded') ?? null;
+    }
 }

@@ -26,23 +26,23 @@
                     <summary>Field Storage Settings</summary>
                     <div class="form-group mt-3">
                         <label for="field_multiple_allowed">Allow multiple</label>
-                        <input type="checkbox" required name="field_multiple_allowed" id="field_multiple_allowed" class="form-check">
+                        <input type="checkbox" name="field_multiple_allowed" id="field_multiple_allowed" class="form-check">
                     </div>
                     <div class="form-group mt-3 d-none">
                         <label for="field_multiple_count">Allowed Limit</label>
-                        <input type="number" required name="field_multiple_count" id="field_multiple_count" class="form-control">
+                        <input type="number" name="field_multiple_count" id="field_multiple_count" class="form-control">
                     </div>
                     <div class="form-group mt-3">
                         <label for="field_size">Max Size</label>
-                        <input type="number" required name="field_size" id="field_size" class="form-control">
+                        <input type="number" name="field_size" id="field_size" class="form-control">
                     </div>
                     <div class="form-group mt-3">
                         <label for="field_empty_allowed">Empty Allowed</label>
-                        <input type="checkbox" required name="field_empty_allowed" id="field_empty_allowed" class="form-check">
+                        <input type="checkbox" name="field_empty_allowed" id="field_empty_allowed" class="form-check">
                     </div>
                     <div class="form-group mt-3 d-none">
                         <label for="field_default_value">Default Value</label>
-                        <input type="text" required name="field_default_value" id="field_default_value" class="form-control">
+                        <input type="text" name="field_default_value" id="field_default_value" class="form-control">
                     </div>
                 </details>
             </div>

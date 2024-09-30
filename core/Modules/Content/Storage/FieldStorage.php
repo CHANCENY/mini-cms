@@ -19,37 +19,38 @@ class FieldStorage implements FieldStorageInterface
         }
         else {
             $this->STORAGE = [];
+            $this->STORAGE['#settings']['#is_nullable'] = false;
         }
     }
 
     public function getStorageName(): string
     {
-        return $this->STORAGE['#storage_name'];
+        return $this->STORAGE['#storage_name'] ?? '';
     }
 
     public function getStorageType(): string
     {
-        return $this->STORAGE['#storage_type'];
+        return $this->STORAGE['#storage_type'] ?? '';
     }
 
     public function getSize(): int
     {
-        return $this->STORAGE['#settings']['#size'];
+        return $this->STORAGE['#settings']['#size'] ?? 250;
     }
 
     public function getDefault(): string|bool|null|int|float
     {
-        return $this->STORAGE['#settings']['#default_value'];
+        return $this->STORAGE['#settings']['#default_value'] ?? null;
     }
 
     public function isNullable(): bool
     {
-        return $this->STORAGE['#settings']['#is_nullable'];
+        return $this->STORAGE['#settings']['#is_nullable'] ?? false;
     }
 
     public function isMultipleAllowed(): bool
     {
-        return $this->STORAGE['#settings']['#is_multiple'];
+        return $this->STORAGE['#settings']['#is_multiple'] ?? false;
     }
 
     public function getMultipleLimit(): int

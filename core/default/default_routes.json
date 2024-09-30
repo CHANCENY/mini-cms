@@ -607,5 +607,56 @@
         "description": "This is for delete content type",
         "url": "/admin/content-type/{type}/field/new",
         "handler": "Mini\\Cms\\default\\Controllers\\ContentTypeForm::newFieldCreation"
+    },
+    {
+        "id": "34567-87766-1086665f473-690493838-i765432345678-field-update",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Field Update",
+        "description": "This is for delete content type",
+        "url": "/admin/content-type/{type}/field/{field_name}/edit",
+        "handler": "Mini\\Cms\\default\\Controllers\\ContentTypeForm::fieldUpdate"
+    },
+    {
+        "id": "34567-87766-1086665f473-i765432345678-field-delete",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "Field Delete",
+        "description": "This is for delete content field",
+        "url": "/admin/content-type/{type}/field/{field_name}/delete",
+        "handler": "Mini\\Cms\\default\\Controllers\\ContentTypeForm::deleteField"
+    },
+    {
+        "id": "34567-87766-1086665f473-i765432345678-add-content",
+        "options": {
+            "unauthorized_access": true,
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "roles": [
+                "administrator"
+            ]
+        },
+        "name": "New Content",
+        "description": "This is for content",
+        "url": "/admin/content/{type}/add",
+        "handler": "Mini\\Cms\\default\\Controllers\\NodeForm",
+        "controller_type": "_form"
     }
 ]

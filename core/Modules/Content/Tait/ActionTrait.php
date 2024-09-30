@@ -71,7 +71,7 @@ trait ActionTrait
     
     protected function fieldTableDelete(): bool
     {
-        $query = "DROP TABLE node__field_{$this->FIELD['field_name']}";
+        $query = "DROP TABLE node__field_{$this->FIELD['#field_name']}";
         $st = Database::database()->prepare($query);
         return $st->execute();
     }
