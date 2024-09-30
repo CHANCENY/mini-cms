@@ -94,4 +94,10 @@ class FieldStorage implements FieldStorageInterface
         $name = clean_string($name, replace_char:'_');
         $this->STORAGE['#storage_name'] = $name;
     }
+
+    public function delete(): bool
+    {
+        $path = 'private://configs/storages/'.$this->STORAGE['#storage_name'].'.yml';
+        return $this->remove($path);
+    }
 }

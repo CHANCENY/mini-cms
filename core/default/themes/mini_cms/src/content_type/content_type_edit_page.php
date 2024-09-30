@@ -41,7 +41,7 @@
                       <th>Operations</th>
                   </tr>
                 </thead>
-                <?php dump($content['fields']); if(!empty($content['fields'])): ?>
+                <?php if(!empty($content['fields'])): ?>
                   <?php foreach ($content['fields'] as $field): ?>
                     <?php if($field instanceof \Mini\Cms\Modules\Content\Field\FieldType): ?>
                         <tr>
