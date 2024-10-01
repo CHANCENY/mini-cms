@@ -5,6 +5,7 @@ namespace Mini\Cms\Routing;
 use Mini\Cms\Modules\Access\Role;
 use Mini\Cms\Modules\Extensions\Extensions;
 use Mini\Cms\Modules\Extensions\ModuleHandler\ModuleHandler;
+use Symfony\Component\Yaml\Yaml;
 
 class Route
 {
@@ -12,13 +13,13 @@ class Route
      * Path to defaults routes.
      * @var string
      */
-    private string $default_routes = '../core/default/default_routes.json';
+    private string $default_routes = '../core/default/default_routes.yml';
 
     /**
      * Path to custom routes.
      * @var string
      */
-    private string $custom_routes = '../configs/custom_routes.json';
+    private string $custom_routes = '../configs/custom_routes.yml';
 
     /**
      * Custom routes.
@@ -64,23 +65,27 @@ class Route
             $this->defaults = [];
 
             if(file_exists($this->default_routes)) {
-                $this->defaults = json_decode(file_get_contents($this->default_routes), true) ?? [];
+                $this->defaults = Yaml::parseFile($this->default_routes) ?? [];
             }
             else {
-                $alternative_path ='../default/default_routes.json';
+                $alternative_path ='../default/default_routes.yml';
                 if(file_exists($alternative_path)) {
-                    $this->defaults = json_decode(file_get_contents($alternative_path), true) ?? [];
+                    $this->defaults = Yaml::parseFile($alternative_path) ?? [];
                 }
             }
 
             if(file_exists($this->custom_routes)) {
-                $this->routes = json_decode(file_get_contents($this->custom_routes), true) ?? [];
+                $this->routes = Yaml::parseFile($this->custom_routes) ?? [];
             }
             else {
-                $alternative_path = '../../configs/custom_routes.json';
+                $alternative_path = '../../configs/custom_routes.yml';
                 if(file_exists($alternative_path)) {
-                    $this->routes = json_decode(file_get_contents($alternative_path), true) ?? [];
+                    $this->routes = Yaml::parseFile($alternative_path) ?? [];
                 }
+            }
+
+            if($module_routes = Extensions::importRoutes()) {
+                $this->routes = array_merge($this->routes, $module_routes);
             }
             $fullCollection = array_merge($this->routes, $this->defaults);
             $routes['default'] = $this->defaults;

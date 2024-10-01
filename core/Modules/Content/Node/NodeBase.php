@@ -2,74 +2,75 @@
 
 namespace Mini\Cms\Modules\Content\Node;
 
-abstract class NodeBase implements NodeInterface
+use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Connections\Database\Queries\QueryManager;
+use Mini\Cms\Fields\FieldInterface;
+use Mini\Cms\Modules\Content\Node\NodeInterface;
+
+class NodeBase implements NodeInterface
 {
 
-    protected array $node;
+    protected array $NODE_DATA;
 
-    private bool $enforce_new;
+    protected bool $enforce_new = false;
 
-    public function id(): int
+    protected QueryManager $query_manager;
+
+    public function __construct(?int $nid = null)
     {
-        return $this->node['values']['#nid']['value'];
+        $this->NODE_DATA = [];
+        $this->query_manager = new QueryManager(Database::database());
+        if($nid) {
+            $this->query_manager->select("node_field_data", 'n');
+            $this->query_manager->addCondition("n.nid", $nid);
+            $statement = $this->query_manager->execute();
+            $node = $statement->fetch();
+            if($node) {
+                $node_type = new NodeType($node['type']);
+                $this->NODE_DATA['#entity_type'] = $node_type;
+                $fields = $node_type->getFields();
+                $this->NODE_DATA['#fields'] = $fields;
+                foreach($fields as $field) {
+                    if($field instanceof FieldInterface) {
+                        $this->NODE_DATA['node']['values']['#'.$field->getName()]['value'] = $field->queryData($nid);
+                    }
+                }
+            }
+        }
+    }
+
+    public function bundle(): string
+    {
+        return $this->NODE_DATA['node']['#type']['value'];
     }
 
     public function getTitle(): string
     {
-        return $this->node['values']['#title']['value'];
+       return $this->NODE_DATA['node']['values']['#title']['value'];
     }
 
-    /**
-     * @throws NodeFieldNotExistException
-     */
-    public function get(string $key): mixed
+    public function id(): int
     {
-        return $this->node['values'][$key] ?? throw new NodeFieldNotExistException("Field {$key} does not exist.");
+        return $this->NODE_DATA['node']['values']['#id']['value'];
     }
 
-    public function set(string $key, mixed $value): mixed
+    public function get(string $key)
     {
-       $this->node['values'][$key]['values'] = $value;
-       return $this;
+        return $this->NODE_DATA['node']['values']["#$key"]['value'] ?? null;
     }
 
-    public function enforceNew(bool $isNew): NodeInterface
+    public function set(string $key, $value)
     {
-        $this->enforce_new = $isNew;
-        return $this;
+        $this->NODE_DATA['node']['values']["#$key"]['value'] = $value;
     }
 
-    public function save(): mixed
+    public function enForceNew(bool $enforce_new = true): void
+    {
+        $this->enforce_new = $enforce_new;
+    }
+
+    public function save()
     {
         // TODO: Implement save() method.
-    }
-
-    public static function create(array $data): NodeInterface
-    {
-        $node = new static();
-        foreach ($data as $field => $value) {
-            $node->set($field, $value);
-        }
-        return $node;
-    }
-
-    public function find(int $id): ?NodeInterface
-    {
-
-    }
-
-    public static function load(int $id): NodeInterface
-    {
-
-    }
-
-    public function isPublished(): bool
-    {
-        // TODO: Implement isPublished() method.
-    }
-
-    public function setPublished(bool $published): NodeInterface
-    {
-        // TODO: Implement setPublished() method.
     }
 }

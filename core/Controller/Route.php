@@ -63,6 +63,7 @@ class Route
 
         // Getting all routes.
         $builder = new RouteBuilder();
+
         $matcher = new URIMatcher($builder->getPatterns());
         if ($matcher->matchCurrentURI($path)) {
             $params = $matcher->getParams();
@@ -150,15 +151,7 @@ class Route
             if($this->request->isMethod('POST')) {
                 $cache->purgeAll();
             }
-            $cache_tag = $cache->createCacheTag();
-            $cache_data = $cache->get($cache_tag);
-            if(!empty($cache_data)) {
-                $this->response->setStatusCode(StatusCode::OK)
-                    ->setContentType(ContentType::TEXT_CACHEABLE)
-                    ->write($cache_data)
-                    ->send();
-                exit;
-            }
+
             if($this->loadedRoute->getRouteType() === '_controller') {
                 $list = explode('::', $controller);
                 $controller = $list[0];

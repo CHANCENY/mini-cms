@@ -6,6 +6,7 @@ use Mini\Cms\Connections\Database\Database;
 use Mini\Cms\Modules\Extensions\ModuleHandler\ModuleHandler;
 use Mini\Cms\Modules\FileSystem\File;
 use Mini\Cms\Modules\FileSystem\FileSystem;
+use Symfony\Component\Yaml\Yaml;
 use ZipArchive;
 
 /**
@@ -60,14 +61,14 @@ final class Extensions
                 $files = array_diff(scandir($unzipping_path), ['..', '.']);
                 $info_file = null;
                 foreach ($files as $file) {
-                    if(str_ends_with($file, '.info.json')){
+                    if(str_ends_with($file, '.info.yml')){
                         $info_file = $unzipping_path . '/'. $file;
                         break;
                     }
                 }
 
                 if($info_file && file_exists($info_file)){
-                    $info = json_decode(file_get_contents($info_file), true);
+                    $info = Yaml::parseFile($info_file);
                     $name = $info['name'] ?? null;
                     if($name) {
                         $module_path_real = 'module://contrib/'.$name;
@@ -169,16 +170,14 @@ final class Extensions
         if(!empty($custom_modules)) {
             foreach ($custom_modules as $module) {
                 $module_path = substr($module, 0, strrpos($module, DIRECTORY_SEPARATOR));
-                $file_content = file_get_contents($module);
-                $file_content = json_decode($file_content, true);
+                $file_content = Yaml::parseFile($module);
                 $modules[] = array_merge($file_content, ['path' => $module_path]);
             }
         }
         if(!empty($contrib_modules)) {
             foreach ($contrib_modules as $module) {
                 $module_path = substr($module, 0, strrpos($module, DIRECTORY_SEPARATOR));
-                $file_content = file_get_contents($module);
-                $file_content = json_decode($file_content, true);
+                $file_content = Yaml::parseFile($module);
                 $modules[] = array_merge($file_content, ['path' => $module_path]);
             }
         }
@@ -219,14 +218,21 @@ final class Extensions
                 self::scanDirectories($fullPath, $infoFiles);
             }
             // If it's a file and ends with .info.json, add it to the array
-            elseif (is_file($fullPath) && preg_match('/\.info\.json$/', $file)) {
+            elseif (is_file($fullPath) && preg_match('/\.info\.yml$/', $file)) {
                 $infoFiles[] = $fullPath;
             }
         }
     }
 
-    public static function importRoutes(): bool {
-
+    public static function importRoutes(): array {
+        $modules = self::activeModules();
+        $routes = [];
+        foreach ($modules as $module) {
+            if($module instanceof ModuleHandler) {
+                $routes = array_merge($routes, $module->getModuleRoutes());
+            }
+        }
+        return $routes;
     }
 
 }

@@ -113,7 +113,7 @@ class ContentTypeForm implements ControllerInterface
                         }
                     }
                     $storage_new->setDefault($this->request->request->get('field_default_value',''));
-                    $storage_new->setSize(((int)$this->request->request->get('field_size',1)) === 0 ? 1 : (int)$this->request->request->get('field_size',1));
+                    $storage_new->setSize(((int)$this->request->request->get('field_size',0)) === 0 ? 250 : (int)$this->request->request->get('field_size',250));
                     $storage_new->setStorageType(FieldTypeEnum::get($this->request->request->get('field_type', '')));
                     $storage_new->save();
 

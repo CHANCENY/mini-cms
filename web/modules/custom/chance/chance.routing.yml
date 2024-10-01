@@ -1,0 +1,25 @@
+- id: 1a002d17-afc0-4dcb-89c7-f8f63b4213a99998
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+    roles:
+      - administrator
+  name: Test3
+  description: ookko
+  url: "/test1"
+  controller_type: _controller
+  handler: Mini\Cms\Web\Controllers\Testing\Testing
+
+- id: 1a002d17-afc0-4dcb-89c7-f8f63b998
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+    roles:
+      - administrator
+  name: Test4
+  description: ookko
+  url: "/test4"
+  controller_type: _controller
+  handler: Mini\Cms\Web\Controllers\Testing\Testing

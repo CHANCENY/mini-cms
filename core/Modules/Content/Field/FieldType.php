@@ -100,4 +100,9 @@ class FieldType implements FieldTypeInterface
         return $this->remove($path);
     }
 
+    public function queryData(int $node_id): array
+    {
+        return $this->fieldData($node_id);
+    }
+
 }

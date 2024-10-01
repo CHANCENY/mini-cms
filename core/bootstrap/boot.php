@@ -250,7 +250,7 @@ function time_ago(int $timestamp)
 $config = \Mini\Cms\Services\Services::create('config.factory');
 $maintain_mode = $config->get('maintain_mode');
 
-if($maintain_mode['is_active'] && isset($maintain_mode['test_mode']) && $maintain_mode['test_mode'] === false) {
+if(!empty($maintain_mode) && $maintain_mode['is_active'] && isset($maintain_mode['test_mode']) && $maintain_mode['test_mode'] === false) {
     $mail = $maintain_mode['mail'] ?? null;
     $downtime = $maintain_mode['downtime'] ?? null;
     echo <<<MAIN

@@ -55,11 +55,11 @@ trait ActionTrait
 
     protected function fieldTableCreation(): void
     {
-        if($this->FIELD['#field_type'] && $this->FIELD['#field_type'] === 'varchar') {
+        if($this->FIELD['#field_type'] && $this->FIELD['#field_type'] === 'text') {
             $table = "CREATE TABLE node__field_".$this->FIELD['#field_name'];
             $storage_new = new FieldStorage($this->FIELD['#field_storage']);
 
-            $table .= " (tid int(11) NULL, entity_id int(11) NOT NULL, field_".$this->FIELD['#field_name'].'_value varchar';
+            $table .= " (entity_id int(11) NOT NULL, field_".$this->FIELD['#field_name'].'_value varchar';
             $table .= "(".$storage_new->getSize().")";
             $table .= $storage_new->isNullable()  ? " NOT NULL" : " NULL";
             $table .= $storage_new->isNullable() ? " DEFAULT '".$storage_new->getDefault()."'" : null;
@@ -74,5 +74,13 @@ trait ActionTrait
         $query = "DROP TABLE node__field_{$this->FIELD['#field_name']}";
         $st = Database::database()->prepare($query);
         return $st->execute();
+    }
+
+    protected function fieldData(int $nid): array
+    {
+        $query = "SELECT field_{$this->FIELD['#field_name']}_value AS {$this->FIELD['#field_name']} FROM node__field_{$this->FIELD['#field_name']} WHERE entity_id = :nid";
+        $st = Database::database()->prepare($query);
+        $st->execute(['nid' => $nid]);
+        return $st->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

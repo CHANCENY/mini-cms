@@ -131,15 +131,8 @@ class Response
 
                 // Finishing
                 $content = $theme->processBuildContentHtml($in_response_data);
-                try{
-                    $cache = new CacheStorage();
-                    $cache_tag = $cache->createCacheTag();
-                    $cache->set($cache_tag,$content);
-                }catch (\Exception $exception){
-                    $error = new ErrorSystem();
-                    $error->setException($exception);
-                }
-                echo $content;
+                header("Content-Type: ".(ContentType::TEXT_HTML)->value);
+                print_r($content);
                 exit;
             }
 

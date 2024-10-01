@@ -9,15 +9,16 @@ use Mini\Cms\Routing\Route;
 use Mini\Cms\Routing\RouteBuilder;
 use Mini\Cms\Routing\URIMatcher;
 use Mini\Cms\Services\Services;
+use Symfony\Component\Yaml\Yaml;
 
 class Menus
 {
     private array $menus;
     private string $current_uri;
 
-    private string $default_menu = '../core/default/menu.json';
+    private string $default_menu = '../core/default/menu.yml';
 
-    private string $custom_menu = '../configs/menus.json';
+    private string $custom_menu = '../configs/menus.yml';
 
     private array $default_menus;
 
@@ -33,10 +34,10 @@ class Menus
     public function __construct(string $current_uri = '/')
     {
         if(file_exists($this->default_menu)) {
-            $this->default_menus = json_decode(file_get_contents($this->default_menu), true) ?? [];
+            $this->default_menus = Yaml::parseFile($this->default_menu) ?? [];
         }
         if(file_exists($this->custom_menu)) {
-            $this->custom_menus = json_decode(file_get_contents($this->custom_menu) ?? '{}', true) ?? [];
+            $this->custom_menus = Yaml::parseFile($this->custom_menu) ?? [];
         }
 
         $config = Services::create('config.factory');

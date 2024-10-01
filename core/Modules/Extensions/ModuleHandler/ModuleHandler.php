@@ -4,6 +4,7 @@ namespace Mini\Cms\Modules\Extensions\ModuleHandler;
 
 use Mini\Cms\Connections\Database\Database;
 use Mini\Cms\Modules\Streams\MiniWrapper;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  *
@@ -82,4 +83,12 @@ class ModuleHandler
         return null;
     }
 
+    public function getModuleRoutes(): array
+    {
+        $path = trim($this->module['ext_path'], '/') . '/'.$this->module['ext_name'].'.routing.yml';
+        if(file_exists($path)){
+            return Yaml::parseFile($path);
+        }
+        return [];
+    }
 }

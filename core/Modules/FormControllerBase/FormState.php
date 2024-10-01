@@ -49,11 +49,14 @@ class FormState
         $this->values = [];
         $this->formSettings = $form_settings;
         $this->inputFields = array_merge($_POST,$_FILES);
-        if ($is_submitted) {
-            $this->defaultValidation();
-            $this->processSubmitted();
-        }
-        $this->redirect_url = Request::createFromGlobals()->headers->get('referer');
+        $request = Request::createFromGlobals();
+        $this->redirect_url = $request->headers->get('referer');
+        $this->values = $request->request->all();
+    }
+
+    public function setValidated(bool $validated): void
+    {
+        $this->validated = $validated;
     }
 
     public function getErrors(): array
@@ -66,47 +69,19 @@ class FormState
         return $this->validated;
     }
 
-    private function defaultValidation(): void
-    {
-        foreach ($this->formSettings as $key => $value) {
-            if(in_array($key, $this->fields)) {
-               if($value['#required']) {
-                   if(empty($this->get($key))) {
-                       $this->errors[$key] = "This field is required.";
-                   }
-                   else {
-                       $this->values[$key] = $this->get($key);
-                   }
-               }
-               else {
-                   $this->values[$key] = $value;
-               }
-            }
-        }
-    }
-
     public function get(string $string): mixed
     {
-        return $this->values[$string] ?? $this->inputFields[$string] ?? null;
+        return $this->values[$string] ?? null;
+    }
+
+    public function getRaw(string $string): mixed
+    {
+        return $this->inputFields[trim($string)] ?? null;
     }
 
     public function setErrors(string $field_name, string|MarkUp $error_message): void
     {
         $this->errors[$field_name] = $error_message;
-    }
-
-    private function processSubmitted(): void
-    {
-        foreach ($this->values as $key => $value) {
-            $value_o = $this->formSettings[$key];
-            if(isset($value_o['#type']) && $value_o['#type'] === 'file') {
-                $list = explode(',', $this->get($key));
-                $files = array_map(function ($el) {
-                    return File::load($el);
-                },$list);
-                $this->values[$key] = $files;
-            }
-        }
     }
 
     public function getRedirectUrl(): string

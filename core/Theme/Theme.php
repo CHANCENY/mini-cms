@@ -13,6 +13,7 @@ use Mini\Cms\Modules\Respositories\Territory\AddressFormat;
 use Mini\Cms\Modules\Site\Site;
 use Mini\Cms\Modules\Storage\Tempstore;
 use Mini\Cms\Services\Services;
+use Symfony\Component\Yaml\Yaml;
 
 class Theme
 {
@@ -46,9 +47,9 @@ class Theme
         // Finding assets.
         if(!Theme::isDefaultTheme('default_admin')) {
             $theme_source = Theme::themeSource('default_admin');
-           $this->assets = json_decode(file_get_contents(trim($theme_source,'/') . "/__theme_libraries.json"),true);
+           $this->assets = Yaml::parseFile(trim($theme_source,'/') . "/__theme_libraries.yml");
         }
-        $custom = json_decode(file_get_contents(trim($this->theme_source,'/') . "/__theme_libraries.json"),true);
+        $custom = Yaml::parseFile(trim($this->theme_source,'/') . "/__theme_libraries.yml");
         if(!empty($custom['head'])) {
             foreach ($custom['head'] as $head) {
                 $this->assets['head'][] = $head;

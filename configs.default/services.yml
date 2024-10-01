@@ -1,0 +1,7 @@
+config.factory: Mini\Cms\Configurations\ConfigFactory
+messenger: Mini\Cms\Modules\Messenger\Messenger
+current.user: Mini\Cms\Modules\CurrentUser\CurrentUser
+authenticator: Mini\Cms\Modules\CurrentUser\Authenticator
+render: Mini\Cms\Theme\Render
+config.site: Mini\Cms\Modules\Site\Site
+config.roles: Mini\Cms\Modules\Access\Roles

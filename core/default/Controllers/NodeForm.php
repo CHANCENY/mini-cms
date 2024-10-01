@@ -4,6 +4,7 @@ namespace Mini\Cms\default\Controllers;
 
 use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Response;
+use Mini\Cms\Entities\Node;
 use Mini\Cms\Modules\Content\Node\NodeType;
 use Mini\Cms\Modules\FormControllerBase\FormControllerInterface;
 use Mini\Cms\Modules\FormControllerBase\FormState;
@@ -40,15 +41,16 @@ class NodeForm implements FormControllerInterface
 
     public function validateForm(array &$form, FormState &$formState): void
     {
-        dd($formState);
+        $formState->setValidated(true);
     }
 
     public function submitForm(array &$form, FormState $formState): void
     {
-        // TODO: Implement submitForm() method.
+        $node = Node::create($formState->getValues());
+        dd($node);
     }
 
-    public function getTemplate()
+    public function getTemplate(): string
     {
         return "content_type_form_.php";
     }

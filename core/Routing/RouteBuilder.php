@@ -5,7 +5,9 @@ namespace Mini\Cms\Routing;
 use Mini\Cms\Controller\ControllerInterface;
 use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Response;
+use Mini\Cms\Modules\Extensions\Extensions;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Yaml\Yaml;
 
 class RouteBuilder
 {
@@ -13,13 +15,13 @@ class RouteBuilder
      * Path to defaults routes.
      * @var string
      */
-    private string $default_routes = '../core/default/default_routes.json';
+    private string $default_routes = '../core/default/default_routes.yml';
 
     /**
      * Path to custom routes.
      * @var string
      */
-    private string $custom_routes = '../configs/custom_routes.json';
+    private string $custom_routes = '../configs/custom_routes.yml';
 
     private array $new_route;
     /**
@@ -42,23 +44,26 @@ class RouteBuilder
         $this->defaults = [];
 
         if(file_exists($this->default_routes)) {
-            $this->defaults = json_decode(file_get_contents($this->default_routes), true) ?? [];
+            $this->defaults = Yaml::parseFile($this->default_routes) ?? [];
         }
         else {
-            $alternative_path ='../default/default_routes.json';
+            $alternative_path ='../default/default_routes.yml';
             if(file_exists($alternative_path)) {
-                $this->defaults = json_decode(file_get_contents($alternative_path), true) ?? [];
+                $this->defaults = Yaml::parseFile($alternative_path) ?? [];
             }
         }
 
         if(file_exists($this->custom_routes)) {
-            $this->routes = json_decode(file_get_contents($this->custom_routes), true) ?? [];
+            $this->routes = Yaml::parseFile($this->custom_routes) ?? [];
         }
         else {
-            $alternative_path = '../../configs/custom_routes.json';
+            $alternative_path = '../../configs/custom_routes.yml';
             if(file_exists($alternative_path)) {
-                $this->routes = json_decode(file_get_contents($alternative_path), true) ?? [];
+                $this->routes = Yaml::parseFile($alternative_path) ?? [];
             }
+        }
+        if($module_routes = Extensions::importRoutes()) {
+            $this->routes = array_merge($this->routes, $module_routes);
         }
     }
 
@@ -134,7 +139,7 @@ class RouteBuilder
 
     /**
      * The handle must implement ControllerInterface.
-     * @param string $handler This is class that will be handling the request on this route.
+     * @param string $handler This is the class that will be handling the request on this route.
      * @param bool $validated
      * @return void
      * @throws \Exception
@@ -204,15 +209,15 @@ class RouteBuilder
     {
         if($is_default === false) {
             $this->routes[] = $this->new_route;
-            $alternative_path = '../../configs/custom_routes.json';
+            $alternative_path = '../../configs/custom_routes.yml';
             if(file_exists($this->custom_routes)) {
-                if(file_put_contents($this->custom_routes, json_encode($this->routes , JSON_PRETTY_PRINT))) {
+                if(file_put_contents($this->custom_routes, Yaml::dump($this->routes))) {
                     return true;
                 }
             }
             else {
                 if(file_exists($alternative_path)) {
-                    if(file_put_contents($alternative_path, json_encode($this->routes , JSON_PRETTY_PRINT))) {
+                    if(file_put_contents($alternative_path, Yaml::dump($this->routes))) {
                         return true;
                     }
                 }
@@ -220,15 +225,15 @@ class RouteBuilder
         }
         else {
             $this->defaults[] = $this->new_route;
-            $alternative_path  = '../default/default_routes.json';
+            $alternative_path  = '../default/default_routes.yml';
             if(file_exists($this->default_routes)) {
-                if(file_put_contents($this->default_routes, json_encode($this->defaults , JSON_PRETTY_PRINT))) {
+                if(file_put_contents($this->default_routes, Yaml::dump($this->defaults))) {
                     return true;
                 }
             }
             else {
                 if(file_exists($alternative_path)) {
-                    if(file_put_contents($alternative_path, json_encode($this->defaults , JSON_PRETTY_PRINT))) {
+                    if(file_put_contents($alternative_path, Yaml::dump($this->defaults))) {
                         return true;
                     }
                 }

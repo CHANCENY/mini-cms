@@ -22,7 +22,7 @@ class NodeType implements NodeTypeInterface
         $this->prepare();
         if(!is_null($content_type)) {
             $content_file = 'private://configs/types/'.$content_type.'.yml';
-            $this->CONTENT_TYPE = $this->read($content_file);
+            $this->CONTENT_TYPE = $this->read($content_file) ?? [];
         }
     }
 
@@ -143,6 +143,12 @@ class NodeType implements NodeTypeInterface
     public function delete(): bool
     {
         // TODO: delete fields and data in db.
+        $fields = $this->getFields();
+        foreach ($fields as $field) {
+            if($field instanceof FieldTypeInterface) {
+                $field->delete();
+            }
+        }
         $content_file = "private://configs/types/".$this->CONTENT_TYPE['#content_name'].".yml";
         return $this->remove($content_file);
     }

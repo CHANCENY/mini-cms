@@ -6,6 +6,7 @@ use Mini\Cms\Modules\Extensions\Extensions;
 use Mini\Cms\Modules\Storage\Tempstore;
 use Mini\Cms\System\System;
 use Mini\Cms\Theme\FileLoader;
+use Symfony\Component\Yaml\Yaml;
 
 class Services extends System implements ServiceInterface
 {
@@ -30,12 +31,12 @@ class Services extends System implements ServiceInterface
         parent::__construct();
 
         $file = new FileLoader($this->getAppConfigRoot());
-        $this->servicePath = $file->findFiles('services.json')[0] ?? null;
+        $this->servicePath = $file->findFiles('services.yml')[0] ?? null;
 
         $services = Tempstore::load('system.service');
         if(empty($services)) {
             if(isset($this->servicePath) && file_exists($this->servicePath)) {
-                $this->services = json_decode(file_get_contents($this->servicePath), true);
+                $this->services = Yaml::parseFile($this->servicePath);
                 Tempstore::save('system.service', $this->services);
             }
         }
