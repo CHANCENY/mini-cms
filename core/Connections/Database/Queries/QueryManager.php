@@ -418,7 +418,6 @@ class QueryManager
                 throw new \Exception("Unsupported query type.");
         }
         $stmt = $this->connection->prepare($this->query);
-
         $bindings = [];
         foreach ($this->fields as $value) {
             $bindings[] = $value;
@@ -432,10 +431,13 @@ class QueryManager
                 $bindings[] = $condition['value'];
             }
         }
-
-        $stmt->execute($bindings);
-        $this->pdo_statement = $stmt;
-        return $stmt;
+        try{
+            $stmt->execute($bindings);
+            $this->pdo_statement = $stmt;
+            return $stmt;
+        }catch (\Throwable $exception){
+            return $stmt;
+        }
     }
 
     /**

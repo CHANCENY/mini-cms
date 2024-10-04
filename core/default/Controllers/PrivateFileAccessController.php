@@ -59,4 +59,9 @@ class PrivateFileAccessController extends File implements ControllerInterface
     {
         return file_get_contents(__DIR__ .'/default_image.png');
     }
+
+    public function cacheable(): bool
+    {
+        return false;
+    }
 }

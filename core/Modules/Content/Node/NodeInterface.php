@@ -2,7 +2,7 @@
 
 namespace Mini\Cms\Modules\Content\Node;
 
-interface NodeInterface
+interface NodeInterface extends NodeEntityInterface
 {
     public function bundle(): string;
 

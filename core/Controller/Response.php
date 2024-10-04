@@ -3,7 +3,10 @@
 namespace Mini\Cms\Controller;
 
 use Mini\Cms\Modules\Cache\CacheStorage;
+use Mini\Cms\Modules\Cache\Caching;
+use Mini\Cms\Modules\CurrentUser\CurrentUser;
 use Mini\Cms\Modules\ErrorSystem;
+use Mini\Cms\Modules\FormControllerBase\FormControllerInterface;
 use Mini\Cms\Modules\Storage\Tempstore;
 use Mini\Cms\Theme\Theme;
 
@@ -77,9 +80,15 @@ class Response
 
             $route = Tempstore::load('current_route');
             $route_id = null;
+            $flag_cacheable = false;
+            $current_user = new CurrentUser();
 
             if($route instanceof Route) {
                 $route_id = $route->getLoadedRoute()->getRouteId();
+                $controller = $route->getControllerHandler();
+                if($controller instanceof ControllerInterface) {
+                    try{ $flag_cacheable = $controller->cacheable(); }catch (\Throwable){}
+                }
             }
 
             // Making sure that on txt/html we are sending all required html content.
@@ -132,14 +141,12 @@ class Response
                 // Finishing
                 $content = $theme->processBuildContentHtml($in_response_data);
                 header("Content-Type: ".(ContentType::TEXT_HTML)->value);
+                if($flag_cacheable) {
+                    $uid = $current_user->id();
+                    Caching::cache()->set($route_id.'_'.$uid,['headers'=> ['Content-Type' => ContentType::TEXT_HTML->value], 'content' => $content]);
+                }
                 print_r($content);
-                exit;
-            }
-
-            elseif ($this->contentType === ContentType::TEXT_CACHEABLE) {
-                header("Content-Type: ".(ContentType::TEXT_HTML)->value);
-                print_r($this->body);
-                exit;
+                return;
             }
 
             else {
@@ -152,6 +159,10 @@ class Response
                     }
                 }
                 // Writing to content.
+                if($flag_cacheable) {
+                    $uid = $current_user->id();
+                    Caching::cache()->set($route_id.'_'.$uid,['headers'=> ['Content-Type'=> $this->contentType->value], 'content' => $this->body]);
+                }
                 print_r($this->body);
                 exit;
             }

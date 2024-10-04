@@ -46,12 +46,17 @@ class NodeForm implements FormControllerInterface
 
     public function submitForm(array &$form, FormState $formState): void
     {
-        $node = Node::create($formState->getValues());
-        dd($node);
+        $node = Node::create($this->request->get('type'),$formState->getValues());
+        $node->save();
+
     }
 
     public function getTemplate(): string
     {
         return "content_type_form_.php";
+    }
+
+    public function editForm(): void
+    {
     }
 }

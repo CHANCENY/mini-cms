@@ -75,6 +75,21 @@
                         <th>Operations</th>
                     </tr>
                     </thead>
+                    <tbody>
+                     <?php if(!empty($content['nids'])): foreach ($content['nids'] as $key=>$nid): ?>
+                       <?php $node = \Mini\Cms\Entities\Node::load(reset($nid)); ?>
+                        <tr>
+                            <td><?= $node->getTitle() ?></td>
+                            <td><?= $node->get('status') === 1 ?></td>
+                            <td><?= date('d F, Y',$node->get('created')) ?></td>
+                            <td><?= date('d F, Y',$node->get('changed')) ?></td>
+                            <td>
+                                <a href="/node/<?= $node->id() ?>/edit">Edit</a>
+                                <a href="/node/<?= $node->id() ?>/delete">Delete</a>
+                            </td>
+                        </tr>
+                     <?php endforeach; endif; ?>
+                    </tbody>
                 </table>
             </div>
         </div>

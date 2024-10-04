@@ -84,4 +84,9 @@ class System
     {
         return is_dir($this->root . DIRECTORY_SEPARATOR . 'configs') ? $this->root . DIRECTORY_SEPARATOR . 'configs' : null;
     }
+
+    public static function boot(): System
+    {
+        return new self();
+    }
 }

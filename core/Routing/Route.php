@@ -3,6 +3,7 @@
 namespace Mini\Cms\Routing;
 
 use Mini\Cms\Modules\Access\Role;
+use Mini\Cms\Modules\Cache\Caching;
 use Mini\Cms\Modules\Extensions\Extensions;
 use Mini\Cms\Modules\Extensions\ModuleHandler\ModuleHandler;
 use Symfony\Component\Yaml\Yaml;
@@ -49,8 +50,6 @@ class Route
         $this->options[$key] = $value;
     }
 
-
-
     /**
      * Constructor to build up routes.
      */
@@ -91,6 +90,7 @@ class Route
             $routes['default'] = $this->defaults;
             $routes['custom'] = $this->routes;
             $routes['full'] = $fullCollection;
+            Caching::cache()->set('system_routes', $routes);
         }
         else {
             $this->routes = $routes['custom'];

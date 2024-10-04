@@ -40,30 +40,37 @@ class RouteBuilder
         $this->new_route['options']['unauthorized_access'] = false;
         $this->new_route['options']['methods'][] = 'GET';
 
+        global $routes;
         $this->routes = [];
         $this->defaults = [];
 
-        if(file_exists($this->default_routes)) {
-            $this->defaults = Yaml::parseFile($this->default_routes) ?? [];
-        }
-        else {
-            $alternative_path ='../default/default_routes.yml';
-            if(file_exists($alternative_path)) {
-                $this->defaults = Yaml::parseFile($alternative_path) ?? [];
+        if(empty($routes)) {
+            if(file_exists($this->default_routes)) {
+                $this->defaults = Yaml::parseFile($this->default_routes) ?? [];
             }
-        }
+            else {
+                $alternative_path ='../default/default_routes.yml';
+                if(file_exists($alternative_path)) {
+                    $this->defaults = Yaml::parseFile($alternative_path) ?? [];
+                }
+            }
 
-        if(file_exists($this->custom_routes)) {
-            $this->routes = Yaml::parseFile($this->custom_routes) ?? [];
-        }
-        else {
-            $alternative_path = '../../configs/custom_routes.yml';
-            if(file_exists($alternative_path)) {
-                $this->routes = Yaml::parseFile($alternative_path) ?? [];
+            if(file_exists($this->custom_routes)) {
+                $this->routes = Yaml::parseFile($this->custom_routes) ?? [];
+            }
+            else {
+                $alternative_path = '../../configs/custom_routes.yml';
+                if(file_exists($alternative_path)) {
+                    $this->routes = Yaml::parseFile($alternative_path) ?? [];
+                }
+            }
+            if($module_routes = Extensions::importRoutes()) {
+                $this->routes = array_merge($this->routes, $module_routes);
             }
         }
-        if($module_routes = Extensions::importRoutes()) {
-            $this->routes = array_merge($this->routes, $module_routes);
+        else {
+            $this->defaults = $routes['default'];
+            $this->routes = $routes['custom'];
         }
     }
 

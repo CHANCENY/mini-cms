@@ -4,6 +4,7 @@ namespace Mini\Cms\Theme;
 
 
 use Mini\Cms\Configurations\ConfigFactory;
+use Mini\Cms\Modules\Cache\Caching;
 use Mini\Cms\Modules\CurrentUser\CurrentUser;
 use Mini\Cms\Routing\Route;
 use Mini\Cms\Routing\RouteBuilder;
@@ -33,11 +34,20 @@ class Menus
      */
     public function __construct(string $current_uri = '/')
     {
-        if(file_exists($this->default_menu)) {
-            $this->default_menus = Yaml::parseFile($this->default_menu) ?? [];
+        global $menus;
+
+        if(empty($menus)) {
+            if(file_exists($this->default_menu)) {
+                $this->default_menus = Yaml::parseFile($this->default_menu) ?? [];
+            }
+            if(file_exists($this->custom_menu)) {
+                $this->custom_menus = Yaml::parseFile($this->custom_menu) ?? [];
+            }
+            Caching::cache()->set("system_menus", ['default'=>$this->default_menus, 'custom'=>$this->custom_menus]);
         }
-        if(file_exists($this->custom_menu)) {
-            $this->custom_menus = Yaml::parseFile($this->custom_menu) ?? [];
+        else {
+            $this->default_menus = $menus['default'] ?? [];
+            $this->custom_menus = $menus['custom'] ?? [];
         }
 
         $config = Services::create('config.factory');

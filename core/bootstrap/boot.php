@@ -5,22 +5,33 @@
  * Boot file contains variable on request to system will need.
  */
 
-use GeoIp2\Database\Reader;
 use Mini\Cms\Configurations\ConfigFactory;
-use Mini\Cms\Entities\Node;
 use Mini\Cms\Entities\User;
-use Mini\Cms\Fields\AddressField;
 use Mini\Cms\Modules\Extensions\Extensions;
-use Mini\Cms\Modules\Respositories\Territory\Country;
-use Mini\Cms\Modules\Respositories\Territory\State;
 use Mini\Cms\Modules\Storage\Tempstore;
+
+/**
+ * Booting the mini cms system
+ */
+global $bootstrap;
+
+$bootstrap = \Mini\Cms\System\System::boot();
 
 // Routes routes loaded
 global  $routes;
 
+$routes = \Mini\Cms\Modules\Cache\Caching::cache()->get('system_routes');
+
 global $database;
 
 global $configurations;
+$configurations = \Mini\Cms\Modules\Cache\Caching::cache()->get('system_configurations');
+
+global $modules;
+$modules = \Mini\Cms\Modules\Cache\Caching::cache()->get('system_modules');
+
+global $menus;
+$menus = \Mini\Cms\Modules\Cache\Caching::cache()->get('system_menus');
 
 /**
  * Get configuration value.
@@ -61,73 +72,6 @@ function getConfigValue(string $notation, $value = null): mixed
     }
 }
 
-/**
- * Get user entity.
- * @param int $user_id
- * @return User
- */
-function load_user(int $user_id): User
-{
-    return User::load($user_id);
-}
-
-/**
- * Get node entity.
- * @param int $node_id
- * @return Node|null
- */
-function load_node(int $node_id): ?Node
-{
-    return Node::load($node_id);
-}
-
-/**
- * Get address info.
- * @param int $address_id
- * @return array
- */
-function load_address(int $address_id): array
-{
-    $query = \Mini\Cms\Connections\Database\Database::database()->prepare("SELECT * FROM `address_fields_data` WHERE `lid` = :id");
-    $query->execute([':id' => $address_id]);
-    $address = $query->fetch();
-
-    $return = array(
-        'raw' => $address,
-    );
-    if($address)
-    {
-        $country = new Country($address['country_code']);
-        $return['country'] = $country;
-        if($address['state_code']) {
-            $state = new State($address['country_code'],$address['state_code']);
-            $return['state'] = $state;
-        }
-    }
-    return $return;
-}
-
-/**
- * Get address field
- * @param string $address_field_name
- * @param string $default_country_code
- * @return StdClass
- */
-function construct_address_field(string $address_field_name, string $default_country_code = 'US'): StdClass
-{
-    $address_field = new AddressField();
-    $address_field->setName(clean_string($address_field_name,replace_char: '_'));
-    $address_field->setLabel($address_field_name);
-    $address_field->setDefaultValue($default_country_code);
-    $address_field->setEntityID(0);
-
-    $markup = \Mini\Cms\Field::markUp($address_field->getType());
-    $markup->buildMarkup($address_field,['value'=>$default_country_code]);
-    $collection = new \StdClass();
-    $collection->markup = $markup;
-    $collection->address = $address_field;
-    return $collection;
-}
 
 function clean_string(string $input, string $remove_char = ' ', string $replace_char = ''): string
 {
@@ -156,22 +100,6 @@ function getClientIP(): mixed
     } elseif (isset($_SERVER['REMOTE_ADDR'])) {
         return $_SERVER['REMOTE_ADDR'];
     } else {
-        return null;
-    }
-}
-
-/**
- * Get Country code by ip
- * @param $ip
- * @return mixed|string|null
- */
-function getCountryByIP($ip): mixed
-{
-    try {
-        $reader = new Reader(__DIR__.'/GeoLite2-Country.mmdb');
-        $record = $reader->country($ip);
-        return $record->country->isoCode;
-    } catch (Exception $e) {
         return null;
     }
 }

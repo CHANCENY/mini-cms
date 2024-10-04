@@ -469,3 +469,17 @@
   url: "/admin/content/{type}/add"
   handler: Mini\Cms\default\Controllers\NodeForm
   controller_type: _form
+
+- id: 34567-87766-1086665f473-i765432345678-node-edit
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: Node Edit
+  description: This is editing node
+  url: "/node/{nid}/edit"
+  handler: Mini\Cms\default\Controllers\NodeFormEdit
+  controller_type: _form

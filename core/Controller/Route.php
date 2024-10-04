@@ -6,6 +6,8 @@ use Mini\Cms\Configurations\ConfigFactory;
 use Mini\Cms\Mini;
 use Mini\Cms\Modules\Access\AccessMiddleRunner;
 use Mini\Cms\Modules\Cache\CacheStorage;
+use Mini\Cms\Modules\Cache\Caching;
+use Mini\Cms\Modules\CurrentUser\CurrentUser;
 use Mini\Cms\Modules\Extensions\Extensions;
 use Mini\Cms\Modules\FormControllerBase\FormBuilder;
 use Mini\Cms\Modules\FormControllerBase\FormControllerInterface;
@@ -20,6 +22,7 @@ use Mini\Cms\Theme\MarkUp;
 use Mini\Cms\Theme\Menus;
 use Mini\Cms\Theme\Theme;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Throwable;
 
 class Route
 {
@@ -147,10 +150,18 @@ class Route
                 throw new AccessDeniedRouteException("Route is not allowed to be access by user with ".implode(',', $currentUserRoles). ' roles RD: '.$this->loadedRoute->getRouteId());
             }
 
-            $cache = new CacheStorage();
-            if($this->request->isMethod('POST')) {
-                $cache->purgeAll();
-            }
+            try{
+                $cacheable = (new $controller($this->request, $this->response))->cacheable();
+                if($cacheable) {
+                    $uid = (new CurrentUser())->id();
+                    $data_cached = Caching::cache()->get($this->loadedRoute->getRouteId().'_'.$uid);
+                    if(isset($data_cached['headers']) && isset($data_cached['content'])) {
+                        header("Content-type: {$data_cached['headers']['Content-Type']}");
+                        print($data_cached['content']);
+                        return;
+                    }
+                }
+            }catch (Throwable) {}
 
             if($this->loadedRoute->getRouteType() === '_controller') {
                 $list = explode('::', $controller);

@@ -3,10 +3,13 @@
 namespace Mini\Cms\Modules\Extensions;
 
 use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Modules\Cache\Caching;
+use Mini\Cms\Modules\ErrorSystem;
 use Mini\Cms\Modules\Extensions\ModuleHandler\ModuleHandler;
 use Mini\Cms\Modules\FileSystem\File;
 use Mini\Cms\Modules\FileSystem\FileSystem;
 use Symfony\Component\Yaml\Yaml;
+use Throwable;
 use ZipArchive;
 
 /**
@@ -129,10 +132,25 @@ final class Extensions
      */
     public static function activeModules(): array
     {
-        return array_map(function($module) {
-            return new ModuleHandler($module['ext_id']);
-        },
-            Database::database()->query("SELECT ext_id FROM `extensions` WHERE `ext_type` = 'module' AND ext_status = 'on'")->fetchAll());
+        global $modules;
+        try{
+            if(empty($modules)) {
+                $modules = Database::database()->query("SELECT ext_id FROM `extensions` WHERE `ext_type` = 'module' AND ext_status = 'on'")->fetchAll();
+                Caching::cache()->set("system_modules", $modules);
+                $modules = array_map(function($module) {
+                    return new ModuleHandler($module['ext_id']);
+                },$modules);
+                return $modules;
+            }
+            else {
+                return array_map(function($module) {
+                    return new ModuleHandler($module['ext_id']);
+                },$modules);
+            }
+        }catch (Throwable $exception){
+            (new ErrorSystem())->setException($exception);
+            return [];
+        }
     }
 
     public static function runHooks(string $hook_name, array $args = []): void

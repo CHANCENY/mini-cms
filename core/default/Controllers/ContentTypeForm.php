@@ -5,6 +5,7 @@ namespace Mini\Cms\default\Controllers;
 use Mini\Cms\Controller\ControllerInterface;
 use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Response;
+use Mini\Cms\Entities\Node;
 use Mini\Cms\Mini;
 use Mini\Cms\Modules\Content\Field\FieldType;
 use Mini\Cms\Modules\Content\Field\FieldTypeEnum;
@@ -70,11 +71,13 @@ class ContentTypeForm implements ControllerInterface
                 exit;
             }
         }
+        $nids = Node::loadMultiple(bundle: $this->request->get('type'));
         $this->response->write(Services::create('render')->render('content_type_edit_page.php',
             [
                 'content_type'=>$type,
                 'fields_types'=>FieldTypeEnum::getAll(),
                 'fields' => $type->getFields(),
+                'nids'=>$nids
             ])
         );
     }

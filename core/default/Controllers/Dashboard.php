@@ -38,4 +38,9 @@ class Dashboard implements ControllerInterface
         $this->response->setContentType(ContentType::TEXT_HTML);
         $this->response->write(Services::create('render')->render('default_dashboard.php',[]));
     }
+
+    public function cacheable(): bool
+    {
+        return true;
+    }
 }

@@ -56,4 +56,9 @@ class PasswordLessConfirmation implements ControllerInterface
        }
         $_callback->error($authentication_method['_error_route']);
     }
+
+    public function cacheable(): bool
+    {
+        return false;
+    }
 }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Mini\Cms\Configurations;
 
+use Mini\Cms\Modules\Cache\Caching;
 use Mini\Cms\System\System;
 use Mini\Cms\Theme\FileLoader;
 use Symfony\Component\Yaml\Yaml;
@@ -33,6 +34,7 @@ class ConfigFactory extends System implements ConfigFactoryInterface
         if(isset($this->configurationPath) && file_exists($this->configurationPath) && empty($configurations)) {
             $this->configurationObject = Yaml::parseFile($this->configurationPath) ?? [];
             $configurations = $this->configurationObject;
+            Caching::cache()->set('system_configurations', $this->configurationObject);
         }
         else {
             $this->configurationObject = $configurations;

@@ -3,6 +3,8 @@
 namespace Mini\Cms\Entities;
 
 
-class Node
+use Mini\Cms\Modules\Content\Node\NodeBase;
+
+class Node extends NodeBase
 {
 }

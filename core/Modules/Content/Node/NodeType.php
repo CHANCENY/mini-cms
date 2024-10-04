@@ -176,23 +176,38 @@ class NodeType implements NodeTypeInterface
                         "#title" => $field->getLabel(),
                         '#open' => true,
                     ];
-                    $form[$field_nme.'_section'][$field_nme.'[]'] = [
-                        "#type" => $field->getType(),
-                        "#title" => $field->getLabel(),
-                        '#required' => $storage->isNullable(),
-                        '#description' => 'enter '.strtolower($field->getLabel()),
-                        "#default_value" => $formState->get($field_nme),
-                        "#attributes" => ["class" => "form-control", "id" => clean_string($field_nme,'_','-'), 'multiple'=>$field->getType() === 'file' ? 'multiple' : null],
-                    ];
+                    if(is_array($formState->get($field_nme))) {
+                        foreach ($formState->get($field_nme) as $key => $value) {
+                            $form[$field_nme.'_section'][$field_nme."____{$key}[]"] = [
+                                "#type" => $field->getType(),
+                                "#title" => $field->getLabel(),
+                                '#required' => $storage->isNullable(),
+                                '#description' => 'enter '.strtolower($field->getLabel()),
+                                "#default_value" => $value,
+                                "#attributes" => ["class" => "form-control", "id" => clean_string($field_nme,'_','-'), 'multiple'=>$field->getType() === 'file' ? 'multiple' : null],
+                            ];
+                        }
+                    }
+                    elseif (empty($formState->get($field_nme))) {
+                        $form[$field_nme.'_section'][$field_nme.'[]'] = [
+                            "#type" => $field->getType(),
+                            "#title" => $field->getLabel(),
+                            '#required' => $storage->isNullable(),
+                            '#description' => 'enter '.strtolower($field->getLabel()),
+                            "#default_value" => $formState->get($field_nme),
+                            "#attributes" => ["class" => "form-control", "id" => clean_string($field_nme,'_','-'), 'multiple'=>$field->getType() === 'file' ? 'multiple' : null],
+                        ];
+                    }
                     $has_multiple = true;
                 }
                 else {
+                    $value = $formState->get($field_nme);
                     $form[$field_nme] = [
                         "#type" => $field->getType(),
                         "#title" => $field->getLabel(),
                         '#required' => $storage->isNullable(),
                         '#description' => 'enter '.strtolower($field->getLabel()),
-                        "#default_value" => $formState->get($field_nme),
+                        "#default_value" => is_array($formState->get($field_nme)) ? reset($value) : $formState->get($field_nme),
                         "#attributes" => ["class" => "form-control", "id" => clean_string($field_nme,'_','-')],
                     ];
                 }

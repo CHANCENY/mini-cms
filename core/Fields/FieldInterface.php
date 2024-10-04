@@ -5,7 +5,7 @@ namespace Mini\Cms\Fields;
 use Mini\Cms\Fields\FieldViewDisplay\FieldViewDisplayInterface;
 use Mini\Cms\StorageManager\Connector;
 
-interface FieldInterface extends FieldViewDisplayInterface
+interface FieldInterface
 {
     /**
      * Getting field type.

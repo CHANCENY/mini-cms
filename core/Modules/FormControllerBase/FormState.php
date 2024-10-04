@@ -50,7 +50,7 @@ class FormState
         $this->formSettings = $form_settings;
         $this->inputFields = array_merge($_POST,$_FILES);
         $request = Request::createFromGlobals();
-        $this->redirect_url = $request->headers->get('referer');
+        $this->redirect_url = $request->headers->get('referer', '/');
         $this->values = $request->request->all();
     }
 
@@ -67,6 +67,11 @@ class FormState
     public function isValidated(): bool
     {
         return $this->validated;
+    }
+
+    public function set(string $key, $value): void
+    {
+        $this->values[$key] = $value;
     }
 
     public function get(string $string): mixed

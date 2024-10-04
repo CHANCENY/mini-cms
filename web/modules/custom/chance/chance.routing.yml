@@ -1,25 +1,16 @@
-- id: 1a002d17-afc0-4dcb-89c7-f8f63b4213a99998
-  options:
-    unauthorized_access: true
-    methods:
-      - GET
-    roles:
-      - administrator
-  name: Test3
+-
+  id: 1a002d17-afc0-4dcb-89c7-f8f63b4213a9
+  options: { unauthorized_access: true, methods: [GET], roles: [administrator] }
+  name: Testing
   description: ookko
-  url: "/test1"
+  url: /test
   controller_type: _controller
   handler: Mini\Cms\Web\Controllers\Testing\Testing
-
-- id: 1a002d17-afc0-4dcb-89c7-f8f63b998
-  options:
-    unauthorized_access: true
-    methods:
-      - GET
-    roles:
-      - administrator
-  name: Test4
-  description: ookko
-  url: "/test4"
+-
+  id: aa56c5a3-e862-4036-8d83-072cb10738cd
+  options: { unauthorized_access: true, methods: [GET, GET], roles: [authenticated, anonymous, administrator] }
+  name: Articles
+  description: 'This is articles'
+  url: /articles
   controller_type: _controller
-  handler: Mini\Cms\Web\Controllers\Testing\Testing
+  handler: Mini\Cms\Web\Controllers\Articles\Articles

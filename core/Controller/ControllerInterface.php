@@ -14,7 +14,7 @@ interface ControllerInterface
     public function isAccessAllowed(): bool;
 
     /*
-     * Writing to a response object is way to go no need to return anything.
+     * Writing to a response object is a way to go no need to return anything.
      */
     public function writeBody(): void;
 
