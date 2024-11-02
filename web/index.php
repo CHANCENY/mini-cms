@@ -2,8 +2,6 @@
 require_once '../vendor/autoload.php';
 require_once '../core/bootstrap/boot.php';
 
-session_start();
-
 /**
  * Loading module and libraries.
  */

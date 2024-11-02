@@ -6,6 +6,7 @@ use Mini\Cms\Services\Services;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 require_once "../vendor/autoload.php";
+require_once '../core/bootstrap/boot.php';
 
 $request = \Mini\Cms\Controller\Request::createFromGlobals();
 
