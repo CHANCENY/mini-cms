@@ -1,26 +1,59 @@
 <?php
-
+@session_start();
 
 /**
  * Boot file contains variable on request to system will need.
  */
 
-use GeoIp2\Database\Reader;
 use Mini\Cms\Configurations\ConfigFactory;
-use Mini\Cms\Entities\Node;
 use Mini\Cms\Entities\User;
-use Mini\Cms\Fields\AddressField;
 use Mini\Cms\Modules\Extensions\Extensions;
-use Mini\Cms\Modules\Respositories\Territory\Country;
-use Mini\Cms\Modules\Respositories\Territory\State;
 use Mini\Cms\Modules\Storage\Tempstore;
+use Symfony\Component\Yaml\Yaml;
+
+/**
+ * Booting the mini cms system
+ */
+global $bootstrap;
+
+global $services;
+
+$bootstrap = \Mini\Cms\System\System::boot();
+
+$cache_global = Yaml::parseFile(__DIR__.'/../../configs/configurations.yml')['caching.cache_global'] ?? false;
+
+// Boot up the services.
+$services = \Mini\Cms\Modules\Cache\Caching::cache()->get('system-services-register');
+if(empty($services)) {
+    $services = Extensions::bootServices();
+}
+
+Extensions::bootRoutes();
 
 // Routes routes loaded
 global  $routes;
 
+if($cache_global) {
+    $routes = \Mini\Cms\Modules\Cache\Caching::cache()->get('system_routes');
+}
+
 global $database;
 
 global $configurations;
+
+if($cache_global) {
+    $configurations = \Mini\Cms\Modules\Cache\Caching::cache()->get('system_configurations');
+}
+global $modules;
+
+if($cache_global) {
+    $modules = \Mini\Cms\Modules\Cache\Caching::cache()->get('system_modules');
+}
+global $menus;
+
+if($cache_global) {
+    $menus = \Mini\Cms\Modules\Cache\Caching::cache()->get('system_menus');
+}
 
 /**
  * Get configuration value.
@@ -61,78 +94,25 @@ function getConfigValue(string $notation, $value = null): mixed
     }
 }
 
-/**
- * Get user entity.
- * @param int $user_id
- * @return User
- */
-function load_user(int $user_id): User
-{
-    return User::load($user_id);
-}
-
-/**
- * Get node entity.
- * @param int $node_id
- * @return Node|null
- */
-function load_node(int $node_id): ?Node
-{
-    return Node::load($node_id);
-}
-
-/**
- * Get address info.
- * @param int $address_id
- * @return array
- */
-function load_address(int $address_id): array
-{
-    $query = \Mini\Cms\Connections\Database\Database::database()->prepare("SELECT * FROM `address_fields_data` WHERE `lid` = :id");
-    $query->execute([':id' => $address_id]);
-    $address = $query->fetch();
-
-    $return = array(
-        'raw' => $address,
-    );
-    if($address)
-    {
-        $country = new Country($address['country_code']);
-        $return['country'] = $country;
-        if($address['state_code']) {
-            $state = new State($address['country_code'],$address['state_code']);
-            $return['state'] = $state;
-        }
-    }
-    return $return;
-}
-
-/**
- * Get address field
- * @param string $address_field_name
- * @param string $default_country_code
- * @return StdClass
- */
-function construct_address_field(string $address_field_name, string $default_country_code = 'US'): StdClass
-{
-    $address_field = new AddressField();
-    $address_field->setName(clean_string($address_field_name,replace_char: '_'));
-    $address_field->setLabel($address_field_name);
-    $address_field->setDefaultValue($default_country_code);
-    $address_field->setEntityID(0);
-
-    $markup = \Mini\Cms\Field::markUp($address_field->getType());
-    $markup->buildMarkup($address_field,['value'=>$default_country_code]);
-    $collection = new \StdClass();
-    $collection->markup = $markup;
-    $collection->address = $address_field;
-    return $collection;
-}
 
 function clean_string(string $input, string $remove_char = ' ', string $replace_char = ''): string
 {
     // Remove specified characters and replace them
     return str_replace($remove_char, $replace_char, $input);
+}
+
+function clean_string_advance($string)
+{
+    // Step 1: Replace all non-alphanumeric characters (including /, \) with a single space
+    $cleanedString = preg_replace('/[^a-zA-Z0-9]/', ' ', $string);
+
+    // Step 2: Replace multiple spaces with a single space
+    $cleanedString = preg_replace('/\s+/', ' ', $cleanedString);
+
+    // Step 3: Trim leading/trailing spaces and replace remaining spaces with '-'
+    $finalString = str_replace(' ', '-', trim($cleanedString));
+
+    return $finalString;
 }
 
 /**
@@ -156,22 +136,6 @@ function getClientIP(): mixed
     } elseif (isset($_SERVER['REMOTE_ADDR'])) {
         return $_SERVER['REMOTE_ADDR'];
     } else {
-        return null;
-    }
-}
-
-/**
- * Get Country code by ip
- * @param $ip
- * @return mixed|string|null
- */
-function getCountryByIP($ip): mixed
-{
-    try {
-        $reader = new Reader(__DIR__.'/GeoLite2-Country.mmdb');
-        $record = $reader->country($ip);
-        return $record->country->isoCode;
-    } catch (Exception $e) {
         return null;
     }
 }
@@ -250,7 +214,7 @@ function time_ago(int $timestamp)
 $config = \Mini\Cms\Services\Services::create('config.factory');
 $maintain_mode = $config->get('maintain_mode');
 
-if($maintain_mode['is_active'] && isset($maintain_mode['test_mode']) && $maintain_mode['test_mode'] === false) {
+if(!empty($maintain_mode) && $maintain_mode['is_active'] && isset($maintain_mode['test_mode']) && $maintain_mode['test_mode'] === false) {
     $mail = $maintain_mode['mail'] ?? null;
     $downtime = $maintain_mode['downtime'] ?? null;
     echo <<<MAIN

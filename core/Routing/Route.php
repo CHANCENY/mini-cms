@@ -3,22 +3,20 @@
 namespace Mini\Cms\Routing;
 
 use Mini\Cms\Modules\Access\Role;
+use Mini\Cms\Modules\Cache\Caching;
 use Mini\Cms\Modules\Extensions\Extensions;
 use Mini\Cms\Modules\Extensions\ModuleHandler\ModuleHandler;
+use Symfony\Component\Yaml\Yaml;
 
 class Route
 {
-    /**
-     * Path to defaults routes.
-     * @var string
-     */
-    private string $default_routes = '../core/default/default_routes.json';
+
 
     /**
      * Path to custom routes.
      * @var string
      */
-    private string $custom_routes = '../configs/custom_routes.json';
+    private string $custom_routes = '../configs/custom_routes.yml';
 
     /**
      * Custom routes.
@@ -48,8 +46,6 @@ class Route
         $this->options[$key] = $value;
     }
 
-
-
     /**
      * Constructor to build up routes.
      */
@@ -57,43 +53,17 @@ class Route
     {
         global $routes;
 
-        $fullCollection = [];
-
         if(empty($routes)) {
             $this->routes = [];
-            $this->defaults = [];
-
-            if(file_exists($this->default_routes)) {
-                $this->defaults = json_decode(file_get_contents($this->default_routes), true) ?? [];
+            if($module_routes = Extensions::importRoutes()) {
+                $this->routes = array_merge($this->routes, $module_routes);
             }
-            else {
-                $alternative_path ='../default/default_routes.json';
-                if(file_exists($alternative_path)) {
-                    $this->defaults = json_decode(file_get_contents($alternative_path), true) ?? [];
-                }
-            }
-
-            if(file_exists($this->custom_routes)) {
-                $this->routes = json_decode(file_get_contents($this->custom_routes), true) ?? [];
-            }
-            else {
-                $alternative_path = '../../configs/custom_routes.json';
-                if(file_exists($alternative_path)) {
-                    $this->routes = json_decode(file_get_contents($alternative_path), true) ?? [];
-                }
-            }
-            $fullCollection = array_merge($this->routes, $this->defaults);
-            $routes['default'] = $this->defaults;
-            $routes['custom'] = $this->routes;
-            $routes['full'] = $fullCollection;
-        }
-        else {
-            $this->routes = $routes['custom'];
-            $this->defaults = $routes['default'];
-            $fullCollection = $routes['full'];
+            Caching::cache()->set('system_routes', $this->routes);
+        }else {
+            $this->routes = $routes;
         }
 
-        $this->route = array_filter($fullCollection, function ($route) use ($route_id) {
+        $this->route = array_filter($this->routes, function ($route) use ($route_id) {
             return $route['id'] === $route_id;
         });
         $this->route = reset($this->route);

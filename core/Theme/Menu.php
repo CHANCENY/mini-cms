@@ -42,4 +42,8 @@ class Menu
     {
         return $this->menu['options'] ?? [];
     }
+
+    public function setActive(): void {
+        $this->menu['options']['active'] = true;
+    }
 }

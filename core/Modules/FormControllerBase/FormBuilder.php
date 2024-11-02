@@ -30,12 +30,24 @@ class FormBuilder {
 
     protected function createElement($name, $field): false|\DOMElement|null
     {
+
         switch ($field['#type']) {
+            case 'checkbox':
+            case 'color':
+            case 'datetime-local':
+            case 'image':
+            case 'month':
+            case 'radio':
+            case 'range':
+            case 'tel':
             case 'text':
-            case 'email':
-            case 'password':
-            case 'number':
+            case 'time':
+            case 'url':
             case 'date':
+            case 'number':
+            case 'password':
+            case 'email':
+            case 'week':
                 return $this->createInputField($name, $field);
             case 'textarea':
                 return $this->createTextarea($name, $field);
@@ -76,7 +88,6 @@ class FormBuilder {
         $textarea = $this->dom->createElement('textarea', $field['#default_value'] ?? '');
         $textarea->setAttribute('name', $name);
         $textarea->setAttribute('placeholder', $field['#placeholder'] ?? '');
-
         $this->setAttributes($textarea, $field['#attributes'] ?? []);
         return $this->wrapWithLabel($name, $field, $textarea);
     }

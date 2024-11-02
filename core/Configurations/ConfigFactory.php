@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace Mini\Cms\Configurations;
 
+use Mini\Cms\Modules\Cache\Caching;
 use Mini\Cms\System\System;
 use Mini\Cms\Theme\FileLoader;
+use Symfony\Component\Yaml\Yaml;
 
 class ConfigFactory extends System implements ConfigFactoryInterface
 {
@@ -28,10 +30,11 @@ class ConfigFactory extends System implements ConfigFactoryInterface
     {
         global $configurations;
         parent::__construct();
-        $this->configurationPath = (new FileLoader($this->getAppConfigRoot()))->findFiles('configurations.json')[0] ?? null;
+        $this->configurationPath = (new FileLoader($this->getAppConfigRoot()))->findFiles('configurations.yml')[0] ?? null;
         if(isset($this->configurationPath) && file_exists($this->configurationPath) && empty($configurations)) {
-            $this->configurationObject = json_decode(file_get_contents($this->configurationPath), true) ?? [];
+            $this->configurationObject = Yaml::parseFile($this->configurationPath) ?? [];
             $configurations = $this->configurationObject;
+            Caching::cache()->set('system_configurations', $this->configurationObject);
         }
         else {
             $this->configurationObject = $configurations;
@@ -60,13 +63,13 @@ class ConfigFactory extends System implements ConfigFactoryInterface
     public function save(bool $take_backup = false): bool
     {
         if($take_backup) {
-            $backup = (new FileLoader($this->getAppConfigRoot()))->findFiles('backup_configurations.json')[0] ?? null;
+            $backup = (new FileLoader($this->getAppConfigRoot()))->findFiles('backup_configurations.yml')[0] ?? null;
             if(!empty($backup)) {
                 copy($this->configurationPath, $backup);
             }
         }
-        return !empty(file_put_contents($this->configurationPath, json_encode($this->configurationObject, JSON_PRETTY_PRINT
-        )));
+        $data = Yaml::dump($this->configurationObject);
+        return !empty(file_put_contents($this->configurationPath, $data));
     }
 
     /**

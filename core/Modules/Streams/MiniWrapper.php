@@ -216,22 +216,24 @@ class MiniWrapper implements StreamWrapper
 
     public function getRealPath($uri): array|string
     {
-        if(str_starts_with($uri, 'public://')) {
-            $uri = str_replace('public://', 'sites/default/files/public/', $uri);
-        }
-        if(str_starts_with($uri, 'private://')) {
-            $uri = str_replace('private://', 'sites/default/files/private/', $uri);
-        }
-        if(str_starts_with($uri, 'module://')) {
-            $uri = str_replace('module://', 'modules/', $uri);
-        }
-        if(str_starts_with($uri, 'theme://')) {
-            $uri = str_replace('theme://', 'themes/', $uri);
-        }
-        if (str_starts_with($uri, 'cache://')) {
-            $uri = str_replace('cache://', 'sites/default/files/cache/', $uri);
-        }
+        $brk = DIRECTORY_SEPARATOR;
 
+        if(str_starts_with($uri, 'public://')) {
+            $uri = str_replace('public://', "sites{$brk}default{$brk}files{$brk}public{$brk}", $uri);
+        }
+        elseif(str_starts_with($uri, 'private://')) {
+            $uri = str_replace('private://', "sites{$brk}default{$brk}files{$brk}private{$brk}", $uri);
+        }
+        elseif(str_starts_with($uri, 'module://')) {
+            $uri = str_replace('module://', "modules{$brk}", $uri);
+        }
+        elseif(str_starts_with($uri, 'theme://')) {
+            $uri = str_replace('theme://', "themes{$brk}", $uri);
+        }
+        elseif(str_starts_with($uri, 'default://')) {
+            $uri = str_replace('default://', "..{$brk}core{$brk}default{$brk}modules{$brk}default{$brk}", $uri);
+        }
+        
         return $uri;
     }
 }

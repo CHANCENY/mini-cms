@@ -26,10 +26,10 @@ class Installer
             $files = array_diff(scandir($path_to_module), ['..', '.']);
             foreach ($files as $file) {
                 if(str_ends_with($file, '.info.json')){
-                    $this->info_file = $path_to_module . '/'. $file;
+                    $this->info_file = $path_to_module . DIRECTORY_SEPARATOR . $file;
                 }
                 if(str_ends_with($file, '.schema.json')){
-                    $this->schema_file = $path_to_module . '/'. $file;
+                    $this->schema_file = $path_to_module . DIRECTORY_SEPARATOR . $file;
                 }
             }
         }

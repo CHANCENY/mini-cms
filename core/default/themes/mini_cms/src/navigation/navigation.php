@@ -188,6 +188,38 @@
         }
 
     }
+    /* Style the entire details element */
+    details {
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border-radius: 4px;
+    }
+
+    /* Style the summary element (the clickable part) */
+    summary {
+        font-weight: bold;
+        cursor: pointer;
+        color: black;
+    }
+
+    /* Change the summary hover effect */
+    summary:hover {
+        color: #007BFF;
+    }
+
+    /* Style the content inside the details when opened */
+    details[open] {
+        background-color: #f0f0f0;
+    }
+
+    /* Style the content inside the details element */
+    details p {
+        margin: 10px 0 0;
+        font-size: 14px;
+        color: #333;
+    }
+
 </style>
 <?php if(!empty($content)): ?>
 <?php $menus = $content; ?>

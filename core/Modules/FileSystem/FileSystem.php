@@ -108,6 +108,7 @@ class FileSystem
         $this->private_dir = 'private://';
         $this->is_public = true;
         $this->save_as = $this->public_dir;
+        $this->upload = [];
     }
 
     /**

@@ -86,10 +86,49 @@ class FieldType implements FieldTypeInterface
         return $this->write($path, $this->FIELD);
     }
 
-    public function delete(): bool {
+    public function update(): bool
+    {
         $path = "private://configs/fields/".$this->FIELD['#field_name'].'.yml';
-        $this->remove($path);
-        return $this->fieldTableDelete();
+        return $this->overwrite($path, $this->FIELD);
     }
 
+    public function delete(): bool {
+        $this->fieldTableDelete();
+        $storage = new FieldStorage($this->FIELD['#field_storage']);
+        $storage->delete();
+        $path = "private://configs/fields/".$this->FIELD['#field_name'].'.yml';
+        return $this->remove($path);
+    }
+
+    public function fetchData(int $node_id): array
+    {
+        return $this->fieldData($node_id);
+    }
+
+    public function id($value): ?int
+    {
+        return $this->getFieldDataId($value);
+    }
+
+    public function updateFieldData(mixed $old_data, mixed $new_data): bool
+    {
+
+        if(is_array($old_data)) {
+            $flag = [];
+            foreach($old_data as $field => $value) {
+                $field_id = $this->getFieldDataId($value);
+                if($field_id) {
+                    $field[] = $this->updateFieldAction($field_id,$new_data[$field] ?? '');
+                }
+            }
+            return in_array(true,$flag);
+        }
+        else {
+            $field_id = $this->getFieldDataId($old_data);
+            if($field_id) {
+                return $this->updateFieldAction($field_id,$new_data);
+            }
+        }
+        return false;
+    }
 }

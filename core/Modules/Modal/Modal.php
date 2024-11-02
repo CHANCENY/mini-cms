@@ -465,5 +465,11 @@ abstract class Modal
         return $sql;
     }
 
-
+    public function random(int $limit = 10): RecordCollections
+    {
+        $query = "SELECT * FROM {$this->main_table} ORDER BY RAND() LIMIT $limit";
+        $query = Database::database()->prepare($query);
+        $query->execute();
+        return new RecordCollections($query->fetchAll() ?? []);
+    }
 }

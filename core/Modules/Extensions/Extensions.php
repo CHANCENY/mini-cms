@@ -3,9 +3,14 @@
 namespace Mini\Cms\Modules\Extensions;
 
 use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Mini;
+use Mini\Cms\Modules\Cache\Caching;
+use Mini\Cms\Modules\ErrorSystem;
 use Mini\Cms\Modules\Extensions\ModuleHandler\ModuleHandler;
 use Mini\Cms\Modules\FileSystem\File;
 use Mini\Cms\Modules\FileSystem\FileSystem;
+use Symfony\Component\Yaml\Yaml;
+use Throwable;
 use ZipArchive;
 
 /**
@@ -19,7 +24,7 @@ final class Extensions
      */
     public static function extensionsStorage(): void
     {
-        $database = new Database();
+        $database = new Database(true);
         if($database->getDatabaseType() === 'mysql') {
             $query_line = "CREATE TABLE IF NOT EXISTS `extensions` (ext_id INT(11) PRIMARY KEY AUTO_INCREMENT, ext_name VARCHAR(255) NOT NULL, ext_version VARCHAR(255), ext_status VARCHAR(255), ext_type VARCHAR(255) NOT NULL, ext_path VARCHAR(500) NOT NULL)";
            $database->connect()->query($query_line)->execute();
@@ -60,17 +65,17 @@ final class Extensions
                 $files = array_diff(scandir($unzipping_path), ['..', '.']);
                 $info_file = null;
                 foreach ($files as $file) {
-                    if(str_ends_with($file, '.info.json')){
-                        $info_file = $unzipping_path . '/'. $file;
+                    if(str_ends_with($file, '.info.yml')){
+                        $info_file = $unzipping_path . DIRECTORY_SEPARATOR . $file;
                         break;
                     }
                 }
 
                 if($info_file && file_exists($info_file)){
-                    $info = json_decode(file_get_contents($info_file), true);
+                    $info = Yaml::parseFile($info_file);
                     $name = $info['name'] ?? null;
                     if($name) {
-                        $module_path_real = 'module://contrib/'.$name;
+                        $module_path_real = 'module://contrib'. DIRECTORY_SEPARATOR .$name;
                         if(!is_dir($module_path_real)) {
                             mkdir($module_path_real);
 
@@ -128,16 +133,23 @@ final class Extensions
      */
     public static function activeModules(): array
     {
-        return array_map(function($module) {
-            return new ModuleHandler($module['ext_id']);
-        },
-            Database::database()->query("SELECT ext_id FROM `extensions` WHERE `ext_type` = 'module' AND ext_status = 'on'")->fetchAll());
+        self::extensionsStorage();
+        $modules = Database::database()->query("SELECT ext_id FROM `extensions` WHERE `ext_type` = 'module' AND ext_status = 'on'")->fetchAll();
+        try{
+            return array_map(function ($module) {
+                return new ModuleHandler($module['ext_id']);
+            }, $modules);
+        }catch (Throwable $exception){
+            (new ErrorSystem())->setException($exception);
+            return [];
+        }
     }
 
     public static function runHooks(string $hook_name, array $args = []): void
     {
         self::extensionsStorage();
         $modules = self::activeModules();
+        
         if(!empty($modules)) {
             foreach ($modules as $module) {
                 if($module instanceof ModuleHandler) {
@@ -152,36 +164,12 @@ final class Extensions
                 }
             }
         }
+    
     }
 
     public static function moduleInSystem(): array
     {
-        $contrib_modules = [];
-        if(is_dir('module://contrib')) {
-            self::scanDirectories('module://contrib', $contrib_modules);
-        }
-        $custom_modules = [];
-        if(is_dir('module://custom')) {
-            self::scanDirectories('module://custom', $custom_modules);
-        }
-
-        $modules = array();
-        if(!empty($custom_modules)) {
-            foreach ($custom_modules as $module) {
-                $module_path = substr($module, 0, strrpos($module, DIRECTORY_SEPARATOR));
-                $file_content = file_get_contents($module);
-                $file_content = json_decode($file_content, true);
-                $modules[] = array_merge($file_content, ['path' => $module_path]);
-            }
-        }
-        if(!empty($contrib_modules)) {
-            foreach ($contrib_modules as $module) {
-                $module_path = substr($module, 0, strrpos($module, DIRECTORY_SEPARATOR));
-                $file_content = file_get_contents($module);
-                $file_content = json_decode($file_content, true);
-                $modules[] = array_merge($file_content, ['path' => $module_path]);
-            }
-        }
+        $modules = self::attachModules();
         foreach ($modules as $module) {
             $query = Database::database()->prepare("SELECT ext_id FROM `extensions` WHERE `ext_name` = :name");
             $query->execute(['name' =>trim( $module['name'])]);
@@ -219,14 +207,127 @@ final class Extensions
                 self::scanDirectories($fullPath, $infoFiles);
             }
             // If it's a file and ends with .info.json, add it to the array
-            elseif (is_file($fullPath) && preg_match('/\.info\.json$/', $file)) {
+            elseif (is_file($fullPath) && preg_match('/\.info\.yml$/', $file)) {
                 $infoFiles[] = $fullPath;
             }
         }
     }
 
-    public static function importRoutes(): bool {
-
+    public static function importRoutes(): array {
+        $modules = self::activeModules();
+        $routes = [];
+        foreach ($modules as $module) {
+            if($module instanceof ModuleHandler) {
+                $routes = array_merge($routes, $module->getModuleRoutes());
+            }
+        }
+        return $routes;
     }
 
+    public static function bootServices(): array
+    {
+        $modules = self::attachModules();
+        if(empty($modules)) {
+            return [];
+        }
+        $services = array();
+        foreach ($modules as $module) {
+            $service_path = ($module['path'] ?? '') . DIRECTORY_SEPARATOR . $module['name'] . '.services.api.yml';
+            if(file_exists($service_path)) {
+                $services = array_merge($services, Yaml::parseFile($service_path));
+            }
+        }
+
+        if(!empty($services)) {
+            Caching::cache()->set('system-services-register',$services);
+        }
+        return $services;
+    }
+
+    private static function attachModules(): array
+    {
+        $default_modules = [];
+        if(is_dir('default://')) {
+            self::scanDirectories('default://', $default_modules);
+        }
+
+        $contrib_modules = [];
+        if(is_dir('module://contrib')) {
+            self::scanDirectories('module://contrib', $contrib_modules);
+        }
+
+        $custom_modules = [];
+        if(is_dir('module://custom')) {
+            self::scanDirectories('module://custom', $custom_modules);
+        }
+
+        $modules = array();
+        if(!empty($default_modules)) {
+            foreach ($default_modules as $module) {
+                $module_path = substr($module, 0, strrpos($module, DIRECTORY_SEPARATOR));
+                $file_content = Yaml::parseFile($module);
+                $modules[] = array_merge($file_content, ['path' => $module_path]);
+            }
+        }
+
+        if(!empty($custom_modules)) {
+            foreach ($custom_modules as $module) {
+                $module_path = substr($module, 0, strrpos($module, DIRECTORY_SEPARATOR));
+                $file_content = Yaml::parseFile($module);
+                $modules[] = array_merge($file_content, ['path' => $module_path]);
+            }
+        }
+
+        if(!empty($contrib_modules)) {
+            foreach ($contrib_modules as $module) {
+                $module_path = substr($module, 0, strrpos($module, DIRECTORY_SEPARATOR));
+                $file_content = Yaml::parseFile($module);
+                $modules[] = array_merge($file_content, ['path' => $module_path]);
+            }
+        }
+
+        return $modules;
+    }
+
+    public static function bootRoutes(): void
+    {
+        $counter = 0;
+        up:
+        $modules = self::attachModules();
+        if(!empty($modules)) {
+            foreach ($modules as $module){
+                if(isset($module['auto_installable']) && $module['auto_installable'] === true)
+                {
+                    $query = "SELECT ext_id, ext_status FROM extensions WHERE ext_name = :name AND ext_status = 0";
+                    try{
+                        $connect = Mini::connection();
+                        $query = $connect->prepare($query);
+                        $query->bindValue(':name', $module['name']);
+                        $query->execute();
+                        $data = $query->fetch();
+                        if(!empty($data)) {
+                            $query = "UPDATE extensions SET ext_status = 'on' WHERE ext_id = :id";
+                            $query = $connect->prepare($query);
+                            $query->bindValue(':id', $data['ext_id']);
+                            $query->execute();
+                        }else {
+                            $query = Database::database()->prepare("INSERT INTO `extensions` (ext_name, ext_version, ext_status,ext_type, ext_path) VALUES(:name, :version, :status, :type, :path)");
+                            $query->execute([
+                                'name' => $module['name'],
+                                'version' => $module['version'],
+                                'status' => 'on',
+                                'type' => $module['type'],
+                                'path' => $module['path'],
+                            ]);
+                        }
+                    }catch (Throwable $exception){
+                        $counter++;
+                        if($counter >= 10) {
+                            goto up;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

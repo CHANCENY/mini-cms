@@ -4,6 +4,7 @@ namespace Mini\Cms\Modules\Extensions\ModuleHandler;
 
 use Mini\Cms\Connections\Database\Database;
 use Mini\Cms\Modules\Streams\MiniWrapper;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  *
@@ -75,11 +76,40 @@ class ModuleHandler
      */
     public function getHooksFile(): string|null
     {
-        $path = trim($this->module['ext_path'], '/') . '/'.$this->module['ext_name'].'.module';
+        $path = trim($this->module['ext_path'], DIRECTORY_SEPARATOR) .DIRECTORY_SEPARATOR.$this->module['ext_name'].'.module';
         if(file_exists($path)){
             return (new MiniWrapper())->getRealPath($path);
         }
         return null;
     }
 
+    public function getModuleRoutes(): array
+    {
+        $path = trim($this->module['ext_path'], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR .$this->module['ext_name'].'.routing.yml';
+        if(file_exists($path)){
+            return Yaml::parseFile($path);
+        }
+        return [];
+    }
+
+    public function getServices(): array
+    {
+        $path = trim($this->module['ext_path'], DIRECTORY_SEPARATOR) .DIRECTORY_SEPARATOR.$this->module['ext_name'].'.services.api.yml';
+        if(file_exists($path)){
+           $services = Yaml::parseFile($path);
+        }
+        return [];
+    }
+
+    public function getMenus(): array
+    {
+        $path = trim($this->module['ext_path'], DIRECTORY_SEPARATOR) .DIRECTORY_SEPARATOR.$this->module['ext_name'].'.menus.yml';
+        if(file_exists($path)){
+            $menus = Yaml::parseFile($path);
+            if(!empty($menus)) {
+                return $menus;
+            }
+        }
+        return [];
+    }
 }

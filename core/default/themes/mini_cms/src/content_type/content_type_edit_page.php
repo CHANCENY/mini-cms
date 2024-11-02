@@ -6,7 +6,7 @@
         <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Fields settings</button>
     </li>
     <li class="nav-item" role="presentation">
-        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Contact</button>
+        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">Content</button>
     </li>
 </ul>
 <div class="tab-content" id="myTabContent">
@@ -59,5 +59,39 @@
             </table>
         </div>
     </div>
-    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+        <div class="p-5 rounded bg-light">
+            <div class="d-block">
+                <a class="btn btn-outline-primary" href="/admin/content/<?= isset($content['content_type']) ? $content['content_type']?->getTypeName() : null; ?>/add">New Content</a>
+            </div>
+            <div class="mt-5 table-responsive">
+                <table class="table table-stripped">
+                    <thead>
+                    <tr>
+                       <th>Title</th>
+                        <th>Published</th>
+                        <th>Created On</th>
+                        <th>Updated On</th>
+                        <th>Operations</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                     <?php if(!empty($content['nids'])): foreach ($content['nids'] as $key=>$nid): ?>
+                       <?php $node = \Mini\Cms\Entities\Node::load(reset($nid)); ?>
+                        <tr>
+                            <td><?= $node->getTitle() ?></td>
+                            <td><?= $node->get('status') === 1 ?></td>
+                            <td><?= date('d F, Y',$node->get('created')) ?></td>
+                            <td><?= date('d F, Y',$node->get('changed')) ?></td>
+                            <td>
+                                <a href="/node/<?= $node->id() ?>/edit">Edit</a>
+                                <a href="/node/<?= $node->id() ?>/delete">Delete</a>
+                            </td>
+                        </tr>
+                     <?php endforeach; endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>

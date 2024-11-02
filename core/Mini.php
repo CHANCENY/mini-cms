@@ -5,6 +5,7 @@ namespace Mini\Cms;
 use Mini\Cms\Configurations\ConfigFactory;
 use Mini\Cms\Connections\Database\Database;
 use Mini\Cms\Connections\Database\Queries\QueryManager;
+use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Route;
 use Mini\Cms\Entities\Node;
 use Mini\Cms\Entities\Term;
@@ -183,5 +184,15 @@ class Mini
     public static function redirect(string $url, int $code = 302): RedirectResponse
     {
         return new RedirectResponse($url, $code);
+    }
+
+    public static function currentTheme(): ?Theme
+    {
+        return Tempstore::load('theme_loaded') ?? null;
+    }
+
+    public static function request(): Request
+    {
+        return Request::createFromGlobals();
     }
 }

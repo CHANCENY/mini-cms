@@ -5,7 +5,8 @@ namespace Mini\Cms\Controller;
 use Mini\Cms\Configurations\ConfigFactory;
 use Mini\Cms\Mini;
 use Mini\Cms\Modules\Access\AccessMiddleRunner;
-use Mini\Cms\Modules\Cache\CacheStorage;
+use Mini\Cms\Modules\Cache\Caching;
+use Mini\Cms\Modules\CurrentUser\CurrentUser;
 use Mini\Cms\Modules\Extensions\Extensions;
 use Mini\Cms\Modules\FormControllerBase\FormBuilder;
 use Mini\Cms\Modules\FormControllerBase\FormControllerInterface;
@@ -20,6 +21,7 @@ use Mini\Cms\Theme\MarkUp;
 use Mini\Cms\Theme\Menus;
 use Mini\Cms\Theme\Theme;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Throwable;
 
 class Route
 {
@@ -63,6 +65,7 @@ class Route
 
         // Getting all routes.
         $builder = new RouteBuilder();
+
         $matcher = new URIMatcher($builder->getPatterns());
         if ($matcher->matchCurrentURI($path)) {
             $params = $matcher->getParams();
@@ -74,6 +77,10 @@ class Route
             Extensions::runHooks('_global_definitions_alter',[]);
 
             Tempstore::save('current_route',$this);
+            // Found matched route info
+            $routeBuilder = new RouteBuilder();
+            $this->loadedRoute = $routeBuilder->getRouteByPattern($pattern);
+
             $theme = Theme::loader();
             Extensions::runHooks('_theme_alter',[&$theme]);
 
@@ -81,7 +88,7 @@ class Route
             Tempstore::save('theme_loaded',$theme);
 
             $menus = new Menus($path);
-            Extensions::runHooks('_menus_alter',[&$menus]);
+            Extensions::runHooks('_menus_alter', [&$menus]);
             Tempstore::save('theme_navigation', $menus);
 
             $footer = new Footer();
@@ -93,10 +100,7 @@ class Route
                 $_GET = array_merge($_GET, $params);
                 Extensions::runHooks('_request_params_alter',[&$_GET]);
             }
-
-            // Found matched route info
-            $routeBuilder = new RouteBuilder();
-            $this->loadedRoute = $routeBuilder->getRouteByPattern($pattern);
+            
             Extensions::runHooks('_loaded_route_alter',[&$this->loadedRoute]);
 
             // Let's load controller here.
@@ -146,19 +150,19 @@ class Route
                 throw new AccessDeniedRouteException("Route is not allowed to be access by user with ".implode(',', $currentUserRoles). ' roles RD: '.$this->loadedRoute->getRouteId());
             }
 
-            $cache = new CacheStorage();
-            if($this->request->isMethod('POST')) {
-                $cache->purgeAll();
-            }
-            $cache_tag = $cache->createCacheTag();
-            $cache_data = $cache->get($cache_tag);
-            if(!empty($cache_data)) {
-                $this->response->setStatusCode(StatusCode::OK)
-                    ->setContentType(ContentType::TEXT_CACHEABLE)
-                    ->write($cache_data)
-                    ->send();
-                exit;
-            }
+            try{
+                $cacheable = (new $controller($this->request, $this->response))->cacheable();
+                if($cacheable) {
+                    $uid = (new CurrentUser())->id();
+                    $data_cached = Caching::cache()->get($this->loadedRoute->getRouteId().'_'.$uid);
+                    if(isset($data_cached['headers']) && isset($data_cached['content'])) {
+                        header("Content-type: {$data_cached['headers']['Content-Type']}");
+                        print($data_cached['content']);
+                        return;
+                    }
+                }
+            }catch (Throwable) {}
+
             if($this->loadedRoute->getRouteType() === '_controller') {
                 $list = explode('::', $controller);
                 $controller = $list[0];
@@ -210,6 +214,9 @@ class Route
                             ];
                             Tempstore::save('_form_settings',$_form_setting);
                             $this->response->setStatusCode(StatusCode::OK)->setContentType(ContentType::TEXT_HTML);
+                            if($this->controllerHandler->getTemplate()) {
+                                $_string = Services::create('render')->render($this->controllerHandler->getTemplate(), ['_form' => $_string]);
+                            }
                             $this->response->write($_string);
                             Extensions::runHooks('_response_alter',[&$this->response]);
                             $this->response->send();

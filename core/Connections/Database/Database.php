@@ -15,7 +15,7 @@ class Database
 
     private string $sqlite_file = '../configs/database';
 
-    private \PDO $connection;
+    private \PDO|null $connection;
 
     /**
      * @throws \Exception
@@ -23,6 +23,7 @@ class Database
     public function __construct(bool $reset= false)
     {
         global $database;
+        $this->connection = null;
         if(!isset($database) || $reset === true) {
             $config = Services::create('config.factory');
             if($config instanceof ConfigFactory) {

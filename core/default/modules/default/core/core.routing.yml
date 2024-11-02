@@ -1,0 +1,499 @@
+---
+- id: cf2fcaa9-f729-4dc3-a348-256cb9eefaf9
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: Dashboard
+  description: Dashboard route
+  url: "/dashboard"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\Dashboard
+- id: 6335a6e9-2cd2-4914-ba9e-fc3dace12b29
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - anonymous
+  name: Installation
+  description: Installation route
+  url: "/install"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\Installation
+- id: 6335a6e9-2cd2-4914-ba9e-fc3dac-e12b29-5985-884747
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+    roles:
+      - administrator
+  name: People
+  description: People display page
+  url: "/users"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\People
+- id: 6335a6e9-2cd2-4914-ba9e-fc3dac-e12b29-5985-884747-i4844-373636-55322
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: Development Caching
+  description: People display page
+  url: "/development"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\CacheSettings
+- id: 6335a6e9-2cd2-4914-ba9e-fc3dac-e12b29--09877765985-884747
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+    roles:
+      - administrator
+  name: Roles
+  description: Roles display page
+  url: "/user/roles"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\People::roles
+- id: 6335a6e9-2cd2-4914-ba9eac-e12b29-09877765985-884747
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: New Role
+  description: Role display page
+  url: "/user/role/add"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\People::newRole
+- id: a82ec6dd-e996-4798-90e2-d86692dd2e35
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - anonymous
+      - authenticated
+      - administrator
+  name: Site Configuration
+  description: Configuration of site
+  url: "/site-configuration"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\SiteConfiguration
+- id: dc551189-d1e1-4d56-b331-2bf50956c957
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - "*"
+  name: Home
+  description: Home page of mini cms
+  url: "/"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\HomePage
+- id: 35543daa-9360-4f4d-967b-6c0ea47fb0de
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - anonymous
+      - authenticated
+      - administrator
+  name: User Registration
+  description: Registration of user
+  url: "/user/register"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\UserRegistration
+- id: 145772de-0349-4d59-a452-2bb657ca7a70
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - '*'
+      - anonymous
+      - administrator
+      - authenticated
+  name: Files Uploader
+  url: "/files/assets/uploader"
+  description: File uploader
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\FilesUploader
+- id: b61763e1-9193-45a4-8a7e-61c7235b50ad
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - anonymous
+      - authenticated
+      - administrator
+  name: Login
+  description: Login user to user
+  url: "/user/login"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\Login
+- id: 70ddc081-3a9c-4d7a-b047-810165a64c32
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+    roles:
+      - "*"
+      - authenticated
+      - administrator
+  name: Logout
+  description: Logout user from mini
+  url: "/user/logout"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\LogOut
+- id: 70ddc081-3a9c-4d7a-b047-810165a64c-9976-544-4443-333-332
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: Pages
+  description: pages user from mini
+  url: "/system/pages"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\Pages
+- id: b24ae4bf-a371-419b-9d7a-a22da61c9e96
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+    roles:
+      - authenticated
+      - administrator
+      - anonymous
+  name: User Verification
+  description: This is for verifying new user
+  url: "/user/verify/{token}"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\UserVerification
+- id: ce4f51da-f0a9-4b4e-9793-d74cfef42a8e
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - anonymous
+      - authenticated
+      - administrator
+  name: Password
+  description: This is changing password
+  url: "/user/password"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\Password
+- id: 80185310-6a54-4753-8add-cd03a38c7dce
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - anonymous
+      - authenticated
+      - administrator
+  name: Password Change
+  description: This is for changing password
+  url: "/user/reset-password/{token}"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\PasswordChange
+- id: 0f71643e-6548-47c9-89e6-f35ab54d8bab
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+    roles:
+      - administrator
+      - authenticated
+      - anonymous
+  name: Profile
+  description: This is user profile page
+  url: "/user/{uid}"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\UserProfile
+- id: 63aa2a5e-cf7a-4d9f-987a-b7ce4387bf2d
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+      - authenticated
+  name: Profile edit
+  description: This is for user edit
+  url: "/user/{uid}/edit"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\UserEdit
+- id: 646800e4-c9db-4a30-a56c-a81656d2aa7d
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+    roles:
+      - administrator
+      - authenticated
+  name: Profile deletion
+  description: this user delete
+  url: "/user/{uid}/delete"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\ProfileDelete
+- id: 1ec00237-00a4-4220-b075-2c4e22876b48
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+    roles:
+      - administrator
+      - authenticated
+      - anonymous
+  name: Profile
+  description: This is profile
+  url: "/user"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\Profile
+- id: ad6ccb4c-a72b-450b-952a-71f0dcbfd09c
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+    roles:
+      - administrator
+      - authenticated
+      - anonymous
+  name: AddressFieldFetcher
+  description: This is for address
+  url: "/assets/address/auto/{country_code}/{field_name}"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\AddressFieldFetcher
+- id: 8f36b8ba-ca58-4f03-a25a-8b0b940d6b85
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: Extensions
+  description: This is for installing extension
+  url: "/extension/install"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\Extensions
+- id: 905d8ebb-105f-4d3a-801a-67e8c83150d0
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: Extend
+  description: This is for listing modules
+  url: "/extension/extend"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\Extend
+- id: 905d8ebb-105f-4d3a-801a-67e8c83150d057547473
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+    roles:
+      - administrator
+  name: Errors
+  description: This is for listing modules
+  url: "/reporting/errors"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\ErrorsReport
+- id: 905d8ebb-105f-4d3a-801a-67e8c83150d05-0988099988907547473
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+    roles:
+      - administrator
+  name: Error
+  description: This is for listing modules
+  url: "/reporting/errors/{error_id}"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\ErrorsReport
+- id: 905d8ebb-105f-4d3a-801a-67e8c83150d05-09880-99988-907547-473
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+    roles:
+      - administrator
+  name: Error
+  description: This is for listing modules
+  url: "/reporting/clear"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\ErrorsReport::clearError
+- id: 905d8ebb-105f-4d3a-801a-67e8c83150d05-09880999-88907-50987654-7473
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - anonymous
+  name: Importer
+  description: This is for listing modules
+  url: "/admin/route-import"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\ImportRoute
+- id: 905d8ebb-105f-4d3a-801a-67e8c83150d05-09880999-88907-50987654-7473-98765432345678
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: Database processes monitor dashboard
+  description: This is for listing modules
+  url: "/admin/database-processes"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\DatabaseProcessMonitor
+- id: 905d8ebb-105f-4d3a-801a-6gigif-fdid-idids-isisi-sididii765432345678
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+    roles:
+      - administrator
+      - authenticated
+      - anonymous
+  name: Private file
+  description: This is for private file
+  url: "/sites/default/private/{fid}/{style}"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\PrivateFileAccessController
+- id: 905d8ebb-1086665f-6669674d3a-85747801a-6g0598584-6958473-690493838-i765432345678
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+    roles:
+      - administrator
+      - authenticated
+      - anonymous
+  name: Confirm password less login
+  description: This is password less login confirmation
+  url: "/user/login/method/{session_code}/{auth_method}/{code}"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\PasswordLessConfirmation
+- id: 905d8ebb-1086665f-6669674d3a-84-6958473-690493838-i765432345678
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: Content Type Form
+  description: This is for creating content type
+  url: "/admin/content-type/new"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\ContentTypeForm
+- id: 905d8ebb-1086665f-6669674d3a-84-6958473-690493838-i765432345678-content-list
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+    roles:
+      - administrator
+  name: Content types
+  description: This is for creating content type
+  url: "/admin/content-types"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\ContentTypeForm::contentTypeListing
+- id: 1086665f-6669674d3a-84-6958473-690493838-i765432345678-content-update
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: Update Content type
+  description: This is for update content type
+  url: "/admin/content-types/{type}/edit"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\ContentTypeForm::updateContentType
+- id: 8887-34567-87766-1086665f473-690493838-i765432345678-content-delete
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: Delete Content type
+  description: This is for delete content type
+  url: "/admin/content-types/{type}/delete"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\ContentTypeForm::deleteContentType
+- id: 34567-87766-1086665f473-690493838-i765432345678-field-new
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: Field Creation
+  description: This is for delete content type
+  url: "/admin/content-type/{type}/field/new"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\ContentTypeForm::newFieldCreation
+- id: 34567-87766-1086665f473-690493838-i765432345678-field-update
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: Field Update
+  description: This is for delete content type
+  url: "/admin/content-type/{type}/field/{field_name}/edit"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\ContentTypeForm::fieldUpdate
+- id: 34567-87766-1086665f473-i765432345678-field-delete
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+    roles:
+      - administrator
+  name: Field Delete
+  description: This is for delete content field
+  url: "/admin/content-type/{type}/field/{field_name}/delete"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\ContentTypeForm::deleteField
+- id: 34567-87766-1086665f473-i7654-323-45678-add-content
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: New Content
+  description: This is for content
+  url: "/admin/content/{type}/add"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\NodeForm
+  controller_type: _form
+
+- id: 34567-87766-1086665f473-i765432345678-node-edit
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: Node Edit
+  description: This is editing node
+  url: "/node/{nid}/edit"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\NodeFormEdit
+  controller_type: _form
+
+- id: 34567-87766-1086665f473-i765432345678-caching
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: Caching Settings
+  description: This is editing caching
+  url: "/caching/settings"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\CachingSettings

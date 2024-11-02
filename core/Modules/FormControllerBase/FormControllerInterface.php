@@ -37,4 +37,6 @@ interface FormControllerInterface extends ControllerInterface
      */
     public function submitForm(array &$form, FormState $formState): void;
 
+    public function getTemplate();
+
 }

@@ -44,4 +44,5 @@ enum MetagEnum: string
 
     // Icon meta tag
     case Icon = '<link rel="icon" type="image/{{TYPE}}" href="{{VALUE}}">';
+    case jsonLd = '<script type="application/ld+json">{{VALUE}}</script>';
 }

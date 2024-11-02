@@ -3,7 +3,11 @@
 namespace Mini\Cms\Controller;
 
 use Mini\Cms\Modules\Cache\CacheStorage;
+use Mini\Cms\Modules\Cache\Caching;
+use Mini\Cms\Modules\CurrentUser\CurrentUser;
 use Mini\Cms\Modules\ErrorSystem;
+use Mini\Cms\Modules\Extensions\Extensions;
+use Mini\Cms\Modules\FormControllerBase\FormControllerInterface;
 use Mini\Cms\Modules\Storage\Tempstore;
 use Mini\Cms\Theme\Theme;
 
@@ -77,13 +81,27 @@ class Response
 
             $route = Tempstore::load('current_route');
             $route_id = null;
+            $flag_cacheable = false;
+            $current_user = new CurrentUser();
 
             if($route instanceof Route) {
                 $route_id = $route->getLoadedRoute()->getRouteId();
+                $controller = $route->getControllerHandler();
+                if($controller instanceof ControllerInterface) {
+                    try{ $flag_cacheable = $controller->cacheable(); }catch (\Throwable){}
+                }
             }
 
             // Making sure that on txt/html we are sending all required html content.
             if($this->contentType === ContentType::TEXT_HTML) {
+
+                $inline_head = [];
+                $inline_footer = [];
+
+                Extensions::runHooks('_inline_head_script_alter', [&$inline_head, &$inline_footer]);
+
+                $inline_head = implode("\n", $inline_head);
+                $inline_footer = implode("\n", $inline_footer);
 
                 header("Content-Type: ".$this->contentType->value);
                 $title = $route->getLoadedRoute()->getRouteTitle();
@@ -92,6 +110,7 @@ class Response
                                        {{META_TAGS}}
                                        {{HEAD_ASSETS}}
                                        <title>$title</title>
+                                        {{INLINE_SCRIPT_HEAD}}
                                      </head>
                                      <body class='body-content full-content-$route_id'>
                                        {{NAVIGATION}}
@@ -99,6 +118,7 @@ class Response
                                        {{FOOTER}}
                                        {{APPEND_ASSETS}}
                                        {{DEFAULTS_ASSETS}}
+                                       {{INLINE_SCRIPT_FOOTER}}
                                      </body>
                                      </html>";
 
@@ -113,6 +133,9 @@ class Response
                 // Html attributes
                 $htmlAttribute = $theme->writeHtmlAttribute();
                 $in_response_data = str_replace('{{ATTRIBUTES}}',$htmlAttribute, $in_response_data);
+
+                $in_response_data = str_replace('{{INLINE_SCRIPT_HEAD}}',$inline_head, $in_response_data);
+                $in_response_data = str_replace('{{INLINE_SCRIPT_FOOTER}}', $inline_head, $in_response_data);
 
                 // Adding navigation content.
                 $navigation = $theme->writeNavigation();
@@ -131,22 +154,13 @@ class Response
 
                 // Finishing
                 $content = $theme->processBuildContentHtml($in_response_data);
-                try{
-                    $cache = new CacheStorage();
-                    $cache_tag = $cache->createCacheTag();
-                    $cache->set($cache_tag,$content);
-                }catch (\Exception $exception){
-                    $error = new ErrorSystem();
-                    $error->setException($exception);
-                }
-                echo $content;
-                exit;
-            }
-
-            elseif ($this->contentType === ContentType::TEXT_CACHEABLE) {
                 header("Content-Type: ".(ContentType::TEXT_HTML)->value);
-                print_r($this->body);
-                exit;
+                if($flag_cacheable) {
+                    $uid = $current_user->id();
+                    Caching::cache()->set($route_id.'_'.$uid,['headers'=> ['Content-Type' => ContentType::TEXT_HTML->value], 'content' => $content]);
+                }
+                print_r($content);
+                return;
             }
 
             else {
@@ -159,6 +173,10 @@ class Response
                     }
                 }
                 // Writing to content.
+                if($flag_cacheable) {
+                    $uid = $current_user->id();
+                    Caching::cache()->set($route_id.'_'.$uid,['headers'=> ['Content-Type'=> $this->contentType->value], 'content' => $this->body]);
+                }
                 print_r($this->body);
                 exit;
             }

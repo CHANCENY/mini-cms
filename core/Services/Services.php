@@ -6,42 +6,19 @@ use Mini\Cms\Modules\Extensions\Extensions;
 use Mini\Cms\Modules\Storage\Tempstore;
 use Mini\Cms\System\System;
 use Mini\Cms\Theme\FileLoader;
+use Symfony\Component\Yaml\Yaml;
 
 class Services extends System implements ServiceInterface
 {
-
-    /**
-     * Services array.
-     * @var array|mixed
-     */
     private array $services;
-
-    /**
-     * Declarations file.
-     * @var string
-     */
-    private string $servicePath;
-
     /**
      * Construct loads declarations.
      */
     public function __construct()
     {
         parent::__construct();
-
-        $file = new FileLoader($this->getAppConfigRoot());
-        $this->servicePath = $file->findFiles('services.json')[0] ?? null;
-
-        $services = Tempstore::load('system.service');
-        if(empty($services)) {
-            if(isset($this->servicePath) && file_exists($this->servicePath)) {
-                $this->services = json_decode(file_get_contents($this->servicePath), true);
-                Tempstore::save('system.service', $this->services);
-            }
-        }
-        else {
-            $this->services = $services;
-        }
+        global $services;
+        $this->services = $services;
     }
 
     /**

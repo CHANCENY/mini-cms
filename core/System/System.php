@@ -19,7 +19,7 @@ class System
             'private' => 'Mini\Cms\Modules\Streams\MiniWrapper',
             'module' => 'Mini\Cms\Modules\Streams\MiniWrapper',
             'theme' => 'Mini\Cms\Modules\Streams\MiniWrapper',
-            'cache' => 'Mini\Cms\Modules\Streams\MiniWrapper',
+            'default' => 'Mini\Cms\Modules\Streams\MiniWrapper'
         ];
 
         foreach ($wrappers as $key=>$wrapper) {
@@ -83,5 +83,10 @@ class System
     public function getAppConfigRoot(): ?string
     {
         return is_dir($this->root . DIRECTORY_SEPARATOR . 'configs') ? $this->root . DIRECTORY_SEPARATOR . 'configs' : null;
+    }
+
+    public static function boot(): System
+    {
+        return new self();
     }
 }

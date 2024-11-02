@@ -3,6 +3,7 @@
 namespace Mini\Cms\Theme;
 
 use Mini\Cms\Configurations\ConfigFactory;
+use Mini\Cms\Modules\Cache\Caching;
 use Mini\Cms\Services\Services;
 
 class FileLoader
@@ -18,9 +19,15 @@ class FileLoader
         }
     }
 
+    private function cacheTag(): string
+    {
+        $tag = clean_string($this->path,DIRECTORY_SEPARATOR,'_');
+        $tag = trim($tag,'.');
+        return trim($tag,'_');
+    }
+
     public function findFiles(string $fileName): array
     {
-        $foundFiles = [];
         return $this->recursive_finder($this->path, $fileName);
     }
 
@@ -36,6 +43,7 @@ class FileLoader
                     $foundFiles = array_merge($foundFiles, $results);
                 }
             }
+
             if(is_file($fullPath) && $file === $file_name){
                 $foundFiles[] = $fullPath;
             }

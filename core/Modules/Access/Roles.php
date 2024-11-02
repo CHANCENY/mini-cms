@@ -3,6 +3,7 @@
 namespace Mini\Cms\Modules\Access;
 
 use Mini\Cms\Configurations\ConfigFactory;
+use Mini\Cms\Modules\Extensions\Extensions;
 use Mini\Cms\Services\Services;
 
 class Roles
@@ -39,6 +40,7 @@ class Roles
         $roles_in_config = Services::create('config.factory')?->get('access')['roles'] ?? [];
         $this->roles = array_merge($this->roles, $roles_in_config);
         $this->roles = $this->uniqueByName($this->roles);
+        Extensions::runHooks('_user_roles_list_alter',[&$this->roles]);
     }
 
     public function getRoles(): array

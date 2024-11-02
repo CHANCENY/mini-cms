@@ -1,8 +1,5 @@
 <div class="mt-lg-5 mb-lg-5">
     <div class="bg-light p-5">
-        <div class="mb-5 mt-5">
-            <a href="/user/register" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Add Page</a>
-        </div>
         <table class="table datatable">
             <thead>
             <tr>
