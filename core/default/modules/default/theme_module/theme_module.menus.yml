@@ -1,0 +1,17 @@
+---
+menu_theme_build:
+  label: Themes
+  link: "/theme-extend"
+  icon: theme
+  children: []
+  attributes:
+    class: nav-item
+    id: nav-item-user
+    title: Profile
+  options:
+    roles:
+      - administrator
+      - authenticated
+    permission:
+      - administrator_access
+      - authenticated_access

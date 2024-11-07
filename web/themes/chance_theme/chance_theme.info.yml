@@ -1,0 +1,6 @@
+title: 'Chance Theme'
+name: chance_theme
+icon: 'theme://chance_theme\icon\ye.jpg'
+description: 'This is theme descriptions'
+source_directory: 'theme://chance_theme\src'
+active: false

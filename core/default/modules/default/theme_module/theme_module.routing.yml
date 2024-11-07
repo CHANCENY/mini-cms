@@ -1,0 +1,27 @@
+---
+
+- id: cf2fcaa9-f729-4dc3-a348-256cb9eefaf9-theme
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: Themes
+  description: Dashboard route
+  url: "/theme-extend"
+  handler: Mini\Cms\default\modules\default\theme_module\src\Controllers\DashboardThemeController
+
+- id: cf2fcaa9-f729-4dc3-a348-256cb9eefaf9-theme-new
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: New Theme
+  description: Dashboard route
+  url: "/theme-extend/new"
+  handler: Mini\Cms\default\modules\default\theme_module\src\Controllers\DashboardThemeController::newThemeController

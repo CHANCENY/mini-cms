@@ -1,0 +1,4 @@
+name: theme_module
+type: module
+version: 3
+auto_installable: true

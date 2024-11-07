@@ -41,7 +41,47 @@ class Services extends System implements ServiceInterface
      */
     private function get(string $service_name): mixed
     {
-        $found = $this->services[$service_name] ?? throw new \Exception("Service '$service_name' not found");
-        return new $found();
+        // Check if the service exists in the service array or can be instantiated directly
+        $found = $this->services[$service_name] ?? null;
+        if (is_null($found) && class_exists($service_name)) {
+            $found = $service_name;
+        }
+
+        $reflection = new \ReflectionClass($found);
+        // If there's no constructor, return a new instance directly
+        if ($reflection->getConstructor() === null) {
+            return $reflection->newInstance();
+        }
+
+        // Get constructor parameters
+        $constructor = $reflection->getConstructor();
+        $parameters = $constructor->getParameters();
+        $dependencies = [];
+
+        // Check if the class has a static 'create' method to provide default values
+        $static_defaults = method_exists($found, 'create') ? $found::create() : [];
+
+        foreach ($parameters as $parameter) {
+            $dependency_class = $parameter->getType()?->getName();
+
+            if ($dependency_class && class_exists($dependency_class)) {
+                // Resolve class dependency recursively
+                $dependencies[] = $this->get($dependency_class);
+            } elseif (isset($static_defaults[$parameter->getName()])) {
+                // Use value from static create method if available
+                $dependencies[] = $static_defaults[$parameter->getName()];
+            } elseif ($parameter->isDefaultValueAvailable()) {
+                // Use default value if provided
+                $dependencies[] = $parameter->getDefaultValue();
+            } else {
+                // Throw an exception if no way to resolve dependency
+                throw new \Exception("Cannot resolve parameter '{$parameter->getName()}' for service '$service_name'");
+            }
+        }
+
+        // Create the instance with resolved dependencies
+        return $reflection->newInstanceArgs($dependencies);
     }
+
+
 }
