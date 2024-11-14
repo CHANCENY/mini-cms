@@ -3,7 +3,10 @@
 namespace Mini\Cms\Modules\Extensions\ModuleHandler;
 
 use Mini\Cms\Connections\Database\Database;
+use Mini\Cms\Mini;
+use Mini\Cms\Modules\Cache\Caching;
 use Mini\Cms\Modules\Streams\MiniWrapper;
+use Mini\Cms\Routing\Route;
 use Symfony\Component\Yaml\Yaml;
 
 /**
@@ -111,5 +114,27 @@ class ModuleHandler
             }
         }
         return [];
+    }
+
+    public function eTagRegisterRoutes(): bool
+    {
+        $routes = $this->getModuleRoutes();
+        $etags = [];
+        foreach ($routes as $route) {
+            $route_obj = new Route($route['id']);
+            if($route_obj->isUserAllowed(['anonymous']) && !(str_contains($route_obj->getUrl(), '{') || str_contains($route_obj->getUrl(), '}')) && $route_obj->isMethod('GET')) {
+                $response = $route_obj->loadController();
+                $data = $response->getBody();
+                $etags[$route_obj->getRouteId()] = [
+                    'id' => md5($data),
+                    'last_modified' => time()
+                ];
+            }
+        }
+        if(!empty($etags)) {
+            Caching::cache()->set('etag-register', $etags);
+            return true;
+        }
+        return false;
     }
 }

@@ -62,6 +62,10 @@ class Response
 
     public function send(): void
     {
+        // Check for etag
+        if(!isset($this->headers['ETag']) && !empty($this->body) && !is_array($this->body)) {
+            $this->headers['ETag'] = md5($this->body);
+        }
         // Setting headers
         foreach ($this->headers as $name => $value){
             header($name . ': ' . $value);
@@ -177,6 +181,11 @@ class Response
             }
         }
 
+    }
+
+    public function getBody()
+    {
+        return $this->body;
     }
 
 }

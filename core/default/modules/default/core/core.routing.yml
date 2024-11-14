@@ -522,4 +522,17 @@
   name: Settings Action
   description: Setting route
   url: "/caching/rebuild/{setting_name}"
-  handler: Mini\Cms\default\modules\default\core\src\Controllers\CachingSettings::settingsAction  
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\CachingSettings::settingsAction
+
+- id: cf2fcaa9-f729-4dc3-a348-256cb9-theme-extend
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: Theme Extend
+  description: theme extend route
+  url: "/extend/theme/system"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\Theming

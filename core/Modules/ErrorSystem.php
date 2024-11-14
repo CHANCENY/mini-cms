@@ -79,11 +79,11 @@ class ErrorSystem
         $this->savable_error = [
             'message' => $errstr,
             'line' => $errline,
-            'code' => 0,
+            'code' => $errno,
             'file' => $errfile,
             'trace' => $errfile,
             'report_on' => time(),
-            'type' => $errno
+            'type' => 'Php Error'
         ];
     }
 

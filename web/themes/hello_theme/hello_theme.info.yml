@@ -1,0 +1,5 @@
+name: hello_theme
+title: 'Hello Theme'
+version: v2
+description: 'This is hello theme v2 sampling'
+source_directory: 'theme://hello_theme/src'

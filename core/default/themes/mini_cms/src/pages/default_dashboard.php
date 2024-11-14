@@ -23,14 +23,6 @@
                             </a>
                         </article>
                     </div>
-                    <div class="col-md-6 col-lg-4">
-                        <article class="p-4 rounded shadow-sm border-left mb-4">
-                            <a href="/extension/extend" class="d-flex align-items-center">
-                                <span class="bi bi-person-check h5"></span>
-                                <h5 class="ml-2">Extension</h5>
-                            </a>
-                        </article>
-                    </div>
                 </section>
 
                 <section class="row">

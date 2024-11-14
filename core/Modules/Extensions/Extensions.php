@@ -156,7 +156,7 @@ final class Extensions
                 if($module instanceof ModuleHandler) {
                     $module_file = $module->getHooksFile();
                     $module_name = $module->getName(). $hook_name;
-                    if(file_exists($module_file)) {
+                    if(!empty($module_file) && file_exists($module_file)) {
                         require_once $module_file;
                         if(function_exists($module_name)) {
                             call_user_func_array($module_name,$args);

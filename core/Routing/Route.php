@@ -2,6 +2,8 @@
 
 namespace Mini\Cms\Routing;
 
+use Mini\Cms\Controller\Request;
+use Mini\Cms\Controller\Response;
 use Mini\Cms\Modules\Access\Role;
 use Mini\Cms\Modules\Cache\Caching;
 use Mini\Cms\Modules\Extensions\Extensions;
@@ -207,5 +209,29 @@ class Route
     public function __toString()
     {
         return $this->replacePlaceholdersInUrl($this->options ?? []);
+    }
+
+    public function loadController(): ?Response
+    {
+        $controller = $this->getRouteHandler();
+        $class_name = str_contains($controller, '::') ? explode('::', $controller)[0] : $controller;
+        $request = Request::createFromGlobals();
+        $response = new Response();
+        $class_name_obj = new $class_name($request, $response);
+        if($class_name_obj->isAccessAllowed()) {
+
+            if(str_contains($controller, '::')) {
+                $function = explode('::', $controller);
+                $function = end($function);
+                $class_name_obj->{$function}();
+                return $response;
+            }
+            else {
+                $function = 'writeBody';
+                $class_name_obj->{$function}();
+                return $response;
+            }
+        }
+        return null;
     }
 }

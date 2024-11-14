@@ -57,6 +57,12 @@ class Site
         return $this->siteInformation['ContactInformation'][$type] ?? null;
     }
 
+    // Getter method for ContactInformation
+    public function getSmtpInformation(string $type): mixed
+    {
+        return $this->siteInformation['ContactInformation']['Smtp'][$type] ?? null;
+    }
+
     // Getter method for BrandingAssets
     public function getBrandingAssets(string $asset): mixed
     {
