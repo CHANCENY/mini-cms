@@ -1,9 +1,5 @@
 <?php
-
-/**@var \Mini\Cms\Connections\Database\Database $database **/
 $database = $content['database'];
-
-/**@var \Mini\Cms\Modules\Site\Site $site **/
 $site = $content['site'];
 ?>
 <div class="container mt-lg-5">
@@ -32,6 +28,7 @@ $site = $content['site'];
                             <a href="/caching/rebuild/servicesregister" class="btn btn-outline-primary">Rebuild Services</a>
                             <a href="/caching/rebuild/routesregister" class="btn btn-outline-primary">Rebuild Routes</a>
                             <a href="/caching/rebuild/menus" class="btn btn-outline-primary">Rebuild Menus</a>
+                            <a href="/caching/rebuild/themes" class="btn btn-outline-primary">Rebuild Themes</a>
                         </div>
                         <hr>
                         <div class="d-block mt-5">

@@ -10,6 +10,7 @@ use Mini\Cms\Modules\Extensions\Extensions;
 use Mini\Cms\Modules\FileSystem\File;
 use Mini\Cms\Services\Services;
 use PDO;
+use Symfony\Component\Yaml\Yaml;
 
 class User
 {
@@ -829,5 +830,10 @@ class User
         $query_manager->execute();
         return $query_manager->fetchAll();
     }
+
+    public function __toString()
+    {
+        return Yaml::dump($this->user);
+    } 
 
 }

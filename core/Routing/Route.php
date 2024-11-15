@@ -175,9 +175,6 @@ class Route
 
     public function isUserAllowed(array $roles): bool
     {
-        if(in_array('*', $this->getRoles())) {
-            return true;
-        }
         return !empty(array_intersect($roles, $this->getRoles()));
     }
 

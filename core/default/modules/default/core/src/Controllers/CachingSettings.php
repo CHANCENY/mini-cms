@@ -5,6 +5,7 @@ namespace Mini\Cms\default\modules\default\core\src\Controllers;
 use Mini\Cms\Mini;
 use Mini\Cms\Modules\Extensions\ModuleHandler\ModuleHandler;
 use Mini\Cms\Modules\Site\Site;
+use Mini\Cms\Modules\Themes\ThemeExtension;
 use Mini\Cms\Routing\Route;
 use Mini\Cms\Services\Services;
 use Mini\Cms\Controller\Request;
@@ -98,7 +99,7 @@ class CachingSettings implements ControllerInterface
                     'site'=>new Site(),
                     'extend'=>$response->getBody(),
                     'role_controller'=>$response_r->getBody(),
-                    'theme_controller'=>$response_t->getBody(),
+                    'theme_controller'=>$response_t->getBody()
                 ]
             )
         );
@@ -141,6 +142,13 @@ class CachingSettings implements ControllerInterface
                         Mini::messenger()->addMessage("ETag data generated successfully");
                     }else {
                         Mini::messenger()->addMessage("ETag data already generated");
+                    }
+                    break;
+                case 'themes':
+                    if(ThemeExtension::rebuildThemes()){
+                        Mini::messenger()->addMessage("Themes registered successfully");
+                    }else {
+                        Mini::messenger()->addMessage("Themes not registered successfully");
                     }
                     break;
             }

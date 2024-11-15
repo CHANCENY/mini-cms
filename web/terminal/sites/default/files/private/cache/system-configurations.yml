@@ -1,0 +1,20 @@
+file_auto_uploader:
+    is_active: true
+    file_type: [image/png, image/gif, image/jpeg, image/svg, image/jpg, application/pdf, application/zip]
+    file_size: '20011000'
+    is_public: true
+maintain_mode:
+    is_active: false
+error_saver: true
+theme:
+    - { title: MiniCMS, description: 'Theme for admin dashboard', source_directory: ../core/default/themes/mini_cms/src, active: true, name: default_admin }
+    - { title: Classy, description: 'Theme for classy theme', source_directory: themes/classy/src, active: false, name: default_theme }
+database:
+    db_host: null
+    db_user: null
+    db_password: null
+    db_name: mini_cms_version4_db
+    db_type: sqlite
+site_information:
+    BrandingAssets: { Logo: { fid: '1' }, Phone: '8699522190', Name: 'Mini Cms Version 4', Email: test@articlepulsehub.com }
+    ContactInformation: { Smtp: { smtp_server: smtp.hostinger.com, smtp_port: 465, smtp_username: test@articlepulsehub.com, smtp_password: Chance@5090. } }

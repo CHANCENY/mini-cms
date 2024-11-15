@@ -75,6 +75,7 @@ class Caching
      */
     public function is_exists(string $key): bool
     {
+        $key = clean_string_advance($key);
         $cache_file = $this->cache_dir . "/{$key}.yml";
         return file_exists($cache_file);
     }
@@ -86,6 +87,7 @@ class Caching
      */
     public function delete(string $key): bool
     {
+        $key = clean_string_advance($key);
         $cache_file = $this->cache_dir . "/{$key}.yml";
         if (file_exists($cache_file)) {
             return unlink($cache_file);

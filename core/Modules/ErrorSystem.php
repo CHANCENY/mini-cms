@@ -61,7 +61,7 @@ class ErrorSystem
         return null;
     }
 
-    public function setException(\Throwable|\Exception|\PDOException $exception): void
+    public function setException(\Throwable|\Exception|\PDOException $exception): ErrorSystem
     {
         $this->savable_error = [
             'message' => $exception->getMessage(),
@@ -72,9 +72,10 @@ class ErrorSystem
             'report_on' => time(),
             'type' => 'Exception'
         ];
+        return $this;
     }
 
-    public function setError($errno, $errstr, $errfile, $errline)
+    public function setError($errno, $errstr, $errfile, $errline): ErrorSystem
     {
         $this->savable_error = [
             'message' => $errstr,
@@ -85,6 +86,7 @@ class ErrorSystem
             'report_on' => time(),
             'type' => 'Php Error'
         ];
+        return $this;
     }
 
     public function clear(): true

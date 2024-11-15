@@ -55,9 +55,26 @@ class Theming implements ControllerInterface
             }
             (new RedirectResponse($this->request->headers->get('referer'), 308))->send();
         }
+        $themes = ThemeExtension::bootThemes();
         $this->response->write(
             Services::create('render')
-            ->render('dashboard-theme-view.php')
+            ->render('dashboard-theme-view.php',['themes' => $themes])
         );
     }
+
+    public function themeStatusUpdateController(): void
+    {
+        $theme_name = $this->request->get('theme_name');
+        $status = $this->request->get('status_value', 0);
+        if($theme_name) {
+            if(ThemeExtension::enableTheme($theme_name, $status)) {
+                Mini::messenger()->addMessage("Theme updated successfully");
+            }else {
+                Mini::messenger()->addErrorMessage("Failed to update the theme");
+            }
+        }
+        (new RedirectResponse($this->request->headers->get('referer'), 308))->send();
+    }
+
+
 }

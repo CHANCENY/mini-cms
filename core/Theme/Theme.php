@@ -6,12 +6,15 @@ use DOMDocument;
 use Mini\Cms\Configurations\ConfigFactory;
 use Mini\Cms\Controller\Request;
 use Mini\Cms\Controller\Route;
+use Mini\Cms\Mini;
+use Mini\Cms\Modules\Cache\Caching;
 use Mini\Cms\Modules\CurrentUser\CurrentUser;
 use Mini\Cms\Modules\Extensions\Extensions;
 use Mini\Cms\Modules\MetaTag\MetaTag;
 use Mini\Cms\Modules\Respositories\Territory\AddressFormat;
 use Mini\Cms\Modules\Site\Site;
 use Mini\Cms\Modules\Storage\Tempstore;
+use Mini\Cms\Modules\Themes\ThemeExtension;
 use Mini\Cms\Services\Services;
 use Symfony\Component\Yaml\Yaml;
 
@@ -21,6 +24,13 @@ class Theme
     private ?string $theme_description;
     private ?string $theme_source;
     private mixed $assets;
+
+    private string $version;
+
+    public function getVersion(): string
+    {
+        return $this->version;
+    }
 
     private ?string $theme_name;
 
@@ -46,6 +56,7 @@ class Theme
         $this->theme_source = $theme['source_directory'] ?? null;
         $this->assets = [];
         $this->theme_name = $theme['name'] ?? null;
+        $this->version = $theme['version'] ?? null;
 
         // Finding assets.
         if(!Theme::isDefaultTheme('default_admin')) {
@@ -71,14 +82,30 @@ class Theme
         Extensions::runHooks('_attachments_assets',[&$this->assets]);
     }
 
+
     public function view(string $file_name, $options = []): ?string
     {
-        $finder = new FileLoader($this->theme_source);
-        $view_file = $finder->findFiles($file_name);
+        $theme_tag = $this->theme_name.'-'.$this->version;
+        $has_build = Caching::cache()->is_exists($theme_tag);
+        $view_file = [];
+        if($has_build) {
+            $files = Caching::cache()->get($theme_tag);
+            $count = count($files);
+            for ($i = 0; $i < $count; $i++) {
+                $filename = explode('/', $files[$i]);
+                if(end($filename) === $file_name) {
+                    $view_file[] = $files[$i];
+                }
+            }
+        }
+        else {
+            $finder = new FileLoader($this->theme_source);
+            $view_file = $finder->findFiles($file_name);
+        }
+
         if(count($view_file) > 1) {
             throw new \Exception('Multiple view file detected ('.$file_name.')');
         }
-
         $currentUser = new CurrentUser();
         $route = get_global('current_route');
         if(empty($view_file[0]) && $file_name !== 'navigation.php') {
@@ -96,6 +123,19 @@ class Theme
                 }
             }
         }
+
+        if(empty($view_file)) {
+            $active_theme = ThemeExtension::getActiveTheme();
+            $default_theme = ThemeExtension::getDefaultTheme('default_admin');
+            if($active_theme['name'] !== $default_theme['name']) {
+                $active_theme = Theme::override($active_theme['name']);
+                if($active_theme instanceof Theme) {
+                    $theme_source = $active_theme->getThemeSource();
+                    $finder = new FileLoader($theme_source);
+                    $view_file = $finder->findFiles($file_name);
+                }
+            }
+        }
         $variables = [
             'content'=>$options,
             'current_route' => $route,
@@ -107,26 +147,26 @@ class Theme
         if(!empty($view_file[0]) && file_exists($view_file[0])) {
             ob_start();
             extract($variables);
-            require $view_file[0];
+            require get_global('mini_wrapper_class')->getRealPath($view_file[0]);
             return ob_get_clean();
         }
         return null;
     }
 
+
     public static function loader(): ?Theme
     {
-        $config = Services::create('config.factory');
-        if($config instanceof ConfigFactory) {
-            $theme = $config->get('theme');
-            Extensions::runHooks('_themes_list_alter',[&$theme]);
-            $theme_default = array_filter($theme,function ($item){
-                 return $item['active'] === true;
-            });
-            if($theme_default) {
-                return new Theme(reset($theme_default));
-            }
+        $themes = ThemeExtension::getThemes();
+        Extensions::runHooks('_themes_list_alter',[&$themes]);
+        $theme_default = array_filter($themes,function ($item){
+            return $item['active'] === 1 || $item['active'] === true;
+        });
+        if($theme_default) {
+            return new Theme(reset($theme_default));
         }
-        return null;
+        else {
+            return new Theme(ThemeExtension::getDefaultTheme('default_admin'));
+        }
     }
 
     public function writeNavigation(): string|null
@@ -138,10 +178,9 @@ class Theme
             //TODO: calling menus_alter hook.
             if($navigation instanceof Menus) {
                 $currentUser = new CurrentUser();
-
                 if($currentUser->isAdmin()) {
                     $default_theme = Theme::override('default_admin');
-                    if(!Theme::isDefaultTheme($theme->getThemeName() ?? 'default_admin')) {
+                    if($theme->getThemeName() !== $default_theme->getThemeName()) {
                        $default_navigation = $default_theme->view('navigation.php',$navigation);
                     }
                 }
@@ -229,47 +268,22 @@ class Theme
 
     public static function override(string $theme): ?Theme
     {
-        $config = Services::create('config.factory');
-        if($config instanceof ConfigFactory) {
-            $themes = $config->get('theme');
-            $theme_default = array_filter($themes,function ($item) use ($theme){
-                return $item['name'] === $theme;
-            });
-            if($theme_default) {
-                return new Theme(reset($theme_default));
-            }
+        $theme = ThemeExtension::getTheme($theme);
+        if(empty($theme)) {
+           return null;
         }
-        return null;
+        return new Theme($theme);
     }
 
     public static function isDefaultTheme(string $theme): bool
     {
-        $config = Services::create('config.factory');
-        if($config instanceof ConfigFactory) {
-            $themes = $config->get('theme');
-            $theme_default = array_filter($themes,function ($item) use ($theme){
-                return $item['name'] === $theme && $item['active'] === true;
-            });
-            if($theme_default) {
-               return true;
-            }
-        }
-        return false;
+        return ThemeExtension::isThemeActive($theme);
     }
 
     public static function themeSource(string $theme): ?string
     {
-        $config = Services::create('config.factory');
-        if($config instanceof ConfigFactory) {
-            $themes = $config->get('theme');
-            $theme_default = array_filter($themes,function ($item) use ($theme){
-                return $item['name'] === $theme;
-            });
-            if($theme_default) {
-                return reset($theme_default)['source_directory'];
-            }
-        }
-        return null;
+        $theme = ThemeExtension::getTheme($theme);
+        return $theme['source_directory'] ?? null;
     }
 
     public function processBuildContentHtml(string $content): string

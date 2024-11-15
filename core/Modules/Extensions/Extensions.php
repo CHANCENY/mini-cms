@@ -9,6 +9,7 @@ use Mini\Cms\Modules\ErrorSystem;
 use Mini\Cms\Modules\Extensions\ModuleHandler\ModuleHandler;
 use Mini\Cms\Modules\FileSystem\File;
 use Mini\Cms\Modules\FileSystem\FileSystem;
+use PDO;
 use Symfony\Component\Yaml\Yaml;
 use Throwable;
 use ZipArchive;
@@ -120,9 +121,47 @@ final class Extensions
     {
         $flag = [];
         foreach ($extensions as $extension_id=>$extension_Status) {
+
+            $query = Mini::connection()->prepare("SELECT ext_name, ext_path, ext_status FROM `extensions` WHERE `ext_id` = :id");
+            $query->execute(['id' => $extension_id]);
+            $extension = $query->fetch(PDO::FETCH_ASSOC);
+
             $query = Database::database()->prepare("UPDATE extensions SET `ext_status` = :status WHERE `ext_id` = :id");
             $flag[] = $query->execute(['status' => $extension_Status, 'id' => $extension_id]);
+            if($extension) {
 
+                $module_path_module = $extension['ext_path'] .DIRECTORY_SEPARATOR . $extension['ext_name'].'.module';
+                if(empty($extension['ext_status']) && $extension_Status === 'on') {
+                    if(file_exists($module_path_module)) {
+                        require_once get_global('mini_wrapper_class')->getRealPath($module_path_module);
+                        $function_name = $extension['ext_name'].'_install';
+                        if(function_exists($function_name)) {
+                            $function_name(...$extension);
+                        }
+                    }
+                }
+
+                if(!empty($extension['ext_status']) && $extension['ext_status'] === 'on' && ($extension_Status === 'off' || empty($extension_Status))) {
+                    if(file_exists($module_path_module)) {
+                        require_once get_global('mini_wrapper_class')->getRealPath($module_path_module);
+                        $function_name = $extension['ext_name'].'_uninstall';
+                        if(function_exists($function_name)) {
+                            $function_name(...$extension);
+                        }
+                    }
+                }
+
+                if(!empty($extension['ext_status']) && $extension['ext_status'] === 'off' && $extension_Status === 'on') {
+                    if(file_exists($module_path_module)) {
+                        require_once get_global('mini_wrapper_class')->getRealPath($module_path_module);
+                        $function_name = $extension['ext_name'].'_install';
+                        if(function_exists($function_name)) {
+                            $function_name(...$extension);
+                        }
+                    }
+                }
+
+            }
         }
         return in_array(true, $flag);
     }

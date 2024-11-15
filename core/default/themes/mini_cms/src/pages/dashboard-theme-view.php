@@ -11,10 +11,27 @@
                         <th>Theme Title</th>
                         <th>Theme Name</th>
                         <th>Theme Version</th>
-                        <td>Theme Description</td>
+                        <th>Theme Description</th>
                         <th>Operation</th>
                     </tr>
                 </thead>
+                <tbody>
+                <?php if(!empty($content['themes'])): foreach ($content['themes'] as $theme): ?>
+               
+                <tr>
+                    <td><?= $theme['title'] ?? null ?></td>
+                    <td><?= $theme['name'] ?? null ?></td>
+                    <td><?= $theme['version'] ?? null ?></td>
+                    <td><?= $theme['description'] ?? null ?></td>
+                    <?php $status = \Mini\Cms\Modules\Themes\ThemeExtension::isThemeActive($theme['name']); ?>
+                    <td><a href="/extend/theme/system/<?= $theme['name'] ?>/status/<?= $status ? 0 : 1  ?>/update">
+                            <?= $status ? 'Disable' : 'Enable' ?>
+                        </a>
+                    </td>
+                </tr>
+                
+                <?php endforeach; endif; ?>
+                </tbody>
             </table>
         </div>
     </div>

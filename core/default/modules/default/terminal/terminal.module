@@ -1,0 +1,39 @@
+<?php
+
+
+function terminal_install(string $ext_name, string $ext_path, string $ext_status): void
+{
+    // write terminal directory
+    $pp_root = \Mini\Cms\Mini::system()->getAppWebRoot();
+    $terminal_dir = $pp_root . DIRECTORY_SEPARATOR . 'terminal';
+
+    if(!is_dir($terminal_dir)) {
+        mkdir($terminal_dir);
+    }
+
+    // write terminal.php
+    $terminal_file_resource = $ext_path . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'Resources' . DIRECTORY_SEPARATOR  . 'terminal.txt';
+    if(file_exists($terminal_file_resource)) {
+        $content = file_get_contents($terminal_file_resource);
+        $terminal_file = $terminal_dir . DIRECTORY_SEPARATOR  . '/console.php';
+        file_put_contents($terminal_file, $content);
+        $access = $terminal_dir . DIRECTORY_SEPARATOR . '.htaccess';
+        $content_htaccess = "Deny from all";
+        file_put_contents($access, $content_htaccess);
+    }
+}
+
+function terminal_uninstall(string $ext_name, string $ext_path, string $ext_status): void
+{
+    $pp_root = \Mini\Cms\Mini::system()->getAppWebRoot();
+    $terminal_dir = $pp_root . DIRECTORY_SEPARATOR . 'terminal';
+    $terminal_file = $terminal_dir . DIRECTORY_SEPARATOR  . '/console.php';
+    $access = $terminal_dir . DIRECTORY_SEPARATOR . '.htaccess';
+    if(file_exists($terminal_file)) {
+        unlink($terminal_file);
+    }
+    if(file_exists($access)) {
+        unlink($access);
+    }
+    @rmdir($terminal_dir);
+}

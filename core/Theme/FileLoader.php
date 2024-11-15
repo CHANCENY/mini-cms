@@ -19,7 +19,7 @@ class FileLoader
         }
     }
 
-    private function cacheTag(): string
+    public function cacheTag(): string
     {
         $tag = clean_string($this->path,DIRECTORY_SEPARATOR,'_');
         $tag = trim($tag,'.');
@@ -29,6 +29,11 @@ class FileLoader
     public function findFiles(string $fileName): array
     {
         return $this->recursive_finder($this->path, $fileName);
+    }
+
+    public function allFiles(): array
+    {
+        return $this->recursive_loader($this->path);
     }
 
     private function recursive_finder(string $dir, string $file_name): array
@@ -43,8 +48,27 @@ class FileLoader
                     $foundFiles = array_merge($foundFiles, $results);
                 }
             }
-
             if(is_file($fullPath) && $file === $file_name){
+                $foundFiles[] = $fullPath;
+            }
+        }
+        return $foundFiles;
+    }
+
+    private function recursive_loader(string $dir): array
+    {
+        $foundFiles = [];
+        $fileInDirectory = array_diff(scandir($dir), ['..', '.']);
+        foreach ($fileInDirectory as $file) {
+            $fullPath = $dir . '/'. $file;
+            if (is_dir($fullPath)) {
+                $results = $this->recursive_loader($fullPath);
+                if(!empty($results)) {
+                    $foundFiles = array_merge($foundFiles, $results);
+                }
+            }
+
+            if(is_file($fullPath)){
                 $foundFiles[] = $fullPath;
             }
         }
@@ -54,6 +78,10 @@ class FileLoader
     public static function find(string $filename,string $path = ''): array
     {
         return (new FileLoader($path))->findFiles($filename);
+    }
+
+    public static function all(string $path): array {
+        return (new FileLoader($path))->allFiles();
     }
 
 }

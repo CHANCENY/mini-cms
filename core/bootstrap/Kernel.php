@@ -9,7 +9,10 @@ use Mini\Cms\App\App;
 use Mini\Cms\Modules\Cache\Caching;
 use Mini\Cms\Modules\ErrorSystem;
 use Mini\Cms\Modules\Extensions\Extensions;
+use Mini\Cms\Modules\Streams\MiniWrapper;
+use Mini\Cms\Modules\Themes\ThemeExtension;
 use Mini\Cms\System\System;
+use Mini\Cms\Theme\Theme;
 use Symfony\Component\Yaml\Yaml;
 
 class Kernel extends System
@@ -64,11 +67,16 @@ class Kernel extends System
                 // Loading menus
                 $menus = $caching->get('system-menus') ?? Extensions::bootMenus();
 
+                // Loading Themes
+                $themes = $caching->get('system-themes') ?? ThemeExtension::bootThemes();
+
                 // Setting globals
                 define_global('routes', $routes);
                 define_global('menus', $menus);
                 define_global('services', $services);
                 define_global('configuration', (array) $configuration);
+                define_global('themes', $themes);
+                define_global('mini_wrapper_class', new MiniWrapper());
             }
         }catch (\Exception $e){
             die("unexpected error loading configurations");

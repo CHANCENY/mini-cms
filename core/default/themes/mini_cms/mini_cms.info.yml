@@ -1,0 +1,5 @@
+name: default_admin
+title: 'Mini Cms'
+version: v4
+description: 'This is default admin theme'
+source_directory: '../core/default/themes/mini_cms/src'

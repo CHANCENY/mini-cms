@@ -16,18 +16,24 @@ class Response
     private mixed $body;
     private $headers;
 
+    private bool $is_gzip = true;
+
+
     public function __construct()
     {
         $this->contentType = ContentType::TEXT_HTML;
         $this->statusCode = StatusCode::OK;
+        $maintain = (bool) get_config_value('maintain_mode.is_active');
+        if($maintain) {
+          $this->is_gzip = false;
+        }
         $this->headers = [
-            'Content-Encoding' => 'gzip',
-            'Cache-Control' => 'public, max-age=604800, immutable',
+            'Content-Encoding' =>  $this->is_gzip ? 'gzip' : 'identity',
+            'Cache-Control' => $this->is_gzip ? 'public, max-age=604800, immutable' : 'max-age=604800, must-revalidate',
             'Expires' => gmdate("D, d M Y H:i:s", time() + 604800) . " GMT",
             'Pragma' => 'public',
             'Vary' => 'Accept-Encoding',
         ];
-
         // Setting Etag and Last Modified.
         $current_route = Mini::currentRoute()->getRouteId();
         $etag_register = Caching::cache()->get('etag-register');
@@ -155,14 +161,10 @@ class Response
                 // Finishing
                 $content = $theme->processBuildContentHtml($in_response_data);
                 header("Content-Type: ".(ContentType::TEXT_HTML)->value);
-                if($flag_cacheable) {
-                    $uid = $current_user->id();
-                    Caching::cache()->set($route_id.'_'.$uid,['headers'=> ['Content-Type' => ContentType::TEXT_HTML->value], 'content' => $content]);
+                if($this->is_gzip) {
+                    $content = gzencode($content, 6);
                 }
-                //print_r($content);
-                // Compress the content and print it
-                $compressedContent = gzencode($content, 6);
-                print_r($compressedContent);
+                print_r($content);
                 return;
             }
 
@@ -175,8 +177,10 @@ class Response
                         $this->body = json_encode($this->body);
                     }
                 }
-                $compressedContent = gzencode($this->body, 6);
-                print_r($compressedContent);
+                if($this->is_gzip) {
+                    $this->body = gzencode($this->body, 6);
+                }
+                print_r($this->body);
                 return;
             }
         }

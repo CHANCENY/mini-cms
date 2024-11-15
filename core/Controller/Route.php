@@ -103,6 +103,7 @@ class Route
 
             // Let's load controller here.
             $controller = $this->loadedRoute->getRouteHandler();
+            Extensions::runHooks('_route_controller_handler_alter',[&$controller]);
 
             // Do security check using hook
             Extensions::runHooks('_route_access_alter',[&$this->loadedRoute]);
@@ -143,7 +144,7 @@ class Route
 
             // Current user here.
             $currentUserRoles = Services::create('current.user')->getRoles();
-            if(!$this->loadedRoute->isUserAllowed($currentUserRoles)) {
+            if((new CurrentUser())->isAdmin() === false && !$this->loadedRoute->isUserAllowed($currentUserRoles)) {
                 Extensions::runHooks('_access_denied_error');
                 throw new AccessDeniedRouteException("Route is not allowed to be access by user with ".implode(',', $currentUserRoles). ' roles RD: '.$this->loadedRoute->getRouteId());
             }

@@ -164,4 +164,13 @@ FILE;
         // Rebuild the path
         return  implode('/', $path_parts);
     }
+
+    public function __toString()
+    {
+        return $this->getFilePath();
+    }
+
+    public function getRaw() {
+        return $this->file_data;
+    }
 }

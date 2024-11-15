@@ -119,6 +119,9 @@ class ModuleHandler
     public function eTagRegisterRoutes(): bool
     {
         $routes = $this->getModuleRoutes();
+        if(empty($routes)) {
+            return false;
+        }
         $etags = [];
         foreach ($routes as $route) {
             $route_obj = new Route($route['id']);
