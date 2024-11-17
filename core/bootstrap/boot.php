@@ -7,7 +7,11 @@
 
 use Mini\Cms\Configurations\ConfigFactory;
 use Mini\Cms\Entities\User;
+use Mini\Cms\Mini;
+use Mini\Cms\Modules\Cache\Caching;
+use Mini\Cms\Modules\CurrentUser\CurrentUser;
 use Mini\Cms\Modules\Extensions\Extensions;
+use Mini\Cms\Modules\Meterical\Meterical;
 use Mini\Cms\Modules\Storage\Tempstore;
 
 
@@ -287,5 +291,24 @@ function mini_cms_exception_handler($exception) {
     ob_end_flush();
     print_r($exception->__toString());
     exit;
+}
+
+function mini_php_shutdown_handler() {
+    
+    // Duration calculation
+    $started_time = get_global('mini_speed_meter');
+    $end_time = time();
+    $time_taken = $end_time - $started_time;
+    $current_uid = (new CurrentUser())->id();
+    Meterical::store([
+        'start_time' => $started_time,
+        'end_time' => $end_time,
+        'time_taken' => $time_taken,
+        'uid' => $current_uid,
+        'method' => Mini::request()->getMethod(),
+        'uri' => Mini::request()->getRequestUri(),
+        'ip' => Mini::request()->getClientIp(),
+    ]);
+    destruct_globals();
 }
 

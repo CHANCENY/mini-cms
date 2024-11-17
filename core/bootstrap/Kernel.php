@@ -77,6 +77,7 @@ class Kernel extends System
                 define_global('configuration', (array) $configuration);
                 define_global('themes', $themes);
                 define_global('mini_wrapper_class', new MiniWrapper());
+                define_global('mini_speed_meter', time());
             }
         }catch (\Exception $e){
             die("unexpected error loading configurations");
@@ -91,8 +92,7 @@ class Kernel extends System
             set_error_handler("mini_cms_error_handler");
             set_exception_handler("mini_cms_exception_handler");
         }
-
-        //register_shutdown_function("myShutdownFunction");
+        register_shutdown_function("mini_php_shutdown_handler");
     }
 
     public function kernelRequestInitialize(): void
@@ -110,7 +110,6 @@ class Kernel extends System
 
     public function terminate(): void
     {
-        destruct_globals();
         unset($this->app);
         exit;
     }
