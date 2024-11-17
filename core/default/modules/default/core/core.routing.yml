@@ -550,3 +550,16 @@
   description: theme extend route
   url: "/extend/theme/system/{theme_name}/status/{status_value}/update"
   handler: Mini\Cms\default\modules\default\core\src\Controllers\Theming::themeStatusUpdateController
+
+- id: cf2fcaa9-f729-4dc3-a348-256cb9-people-settings
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: People Configuration
+  description: this is people configuration page
+  url: "/people/settings"
+  handler: Mini\Cms\default\modules\default\core\src\Controllers\PeopleSettings  

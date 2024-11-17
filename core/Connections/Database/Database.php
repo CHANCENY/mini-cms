@@ -6,6 +6,7 @@ use PDO;
 use Mini\Cms\Services\Services;
 use Mini\Cms\StorageManager\Connector;
 use Mini\Cms\Configurations\ConfigFactory;
+use Mini\Cms\Modules\Extensions\Extensions;
 use Mini\Cms\Modules\FileSystem\FileSystem;
 use Symfony\Component\VarDumper\Exception\ThrowingCasterException;
 
@@ -48,7 +49,7 @@ class Database
                         $this->sqlite_file = $this->sqlite_file .'/'. $this->getDatabaseName(). '.sqlite';
                         $this->connection = new PDO('sqlite:'.$this->sqlite_file);
                         $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                        $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+                        $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC); 
                     }
                 }
 
@@ -59,8 +60,9 @@ class Database
                     $this->connection = new PDO($dsn, $this->getDatabaseUser(), $this->getDatabasePassword());
                     $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                     $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-                    $this->connection->setAttribute(PDO::ATTR_PERSISTENT,true);
+                    $this->connection->setAttribute(PDO::ATTR_PERSISTENT,true);  
                 }
+
                 $database = $this->connection;
             }
         }

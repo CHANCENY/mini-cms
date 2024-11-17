@@ -237,6 +237,9 @@ class MiniWrapper implements StreamWrapper
         }
         elseif(str_starts_with($uri, 'default://')) {
             $uri = str_replace('default://', "..{$brk}core{$brk}default{$brk}modules{$brk}default{$brk}", $uri);
+        } 
+        elseif (str_starts_with($uri, 'config://')) {
+            $uri = str_replace('config://', "..{$brk}configs{$brk}", $uri);
         }
         
         return $uri;

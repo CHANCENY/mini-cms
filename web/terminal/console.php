@@ -47,19 +47,25 @@ extract($colors);
 
 while(true) {
 
-    echo PHP_EOL;
-    echo $green. "console:" . $reset;
-    $input = trim(fgets(STDIN));
-    $parsed = $command_loader->parse($input);
-    $function = $parsed['command'];
-    $options = $parsed['options'];
-    if(function_exists($function)) {
+    try{
+        echo PHP_EOL;
+        echo $green . "console:" . $reset;
+        $input = trim(fgets(STDIN));
+        $parsed = $command_loader->parse($input);
+        $function = $parsed['command'];
+        $options = $parsed['options'];
+        if (function_exists($function)) {
 
-        $result = $function(...$options);
-        if(!empty($result)) {
-            print_r($result);
+            $result = $function(...$options);
+            if (!empty($result)) {
+                print_r($result);
+            }
         }
+        echo PHP_EOL;
+    }catch(\Throwable $e){
+        echo PHP_EOL .$red.'Error: ['.$e->getCode().']'. $e->getMessage(). ' Line: '.$e->getLine(). PHP_EOL;
+        echo "File: (".$e->getFile().")".$reset;
     }
-    echo PHP_EOL;
     
 }
+exit(0);

@@ -1,20 +1,4 @@
 ---
-menu_profile:
-  label: Profile
-  link: "/user"
-  icon: user
-  children: []
-  attributes:
-    class: nav-item
-    id: nav-item-user
-    title: Profile
-  options:
-    roles:
-      - administrator
-      - authenticated
-    permission:
-      - administrator_access
-      - authenticated_access
 menu_dashboard:
   label: Dashboard
   link: "/dashboard"
@@ -29,6 +13,22 @@ menu_dashboard:
       - administrator
     permission:
       - administrator_access
+menu_people:
+  label: People
+  link: "/people/settings"
+  icon: user
+  children: []
+  attributes:
+    class: nav-item
+    id: nav-item-user
+    title: People
+  options:
+    roles:
+      - administrator
+      - authenticated
+    permission:
+      - administrator_access
+      - authenticated_access
 menu_login:
   label: Login
   link: "/user/login"

@@ -175,10 +175,7 @@ class ThemeExtension
 
         $database = new Database(true);
         if($database->getDatabaseType() == 'mysql') {
-            $query = "CREATE DATABASE IF NOT EXISTS themes_register (thid int(11) NOT NULL AUTO_INCREMENT, PRIMARY KEY, 
-            name varchar(255) NOT NULL, version varchar(255) NOT NULL, 
-            title varchar(255) NOT NULL, 
-            description varchar(255) NOT NULL, source_directory varchar(255) NOT NULL, active int(11) NOT NULL DEFAULT '0')";
+            $query = "CREATE TABLE IF NOT EXISTS themes_register (thid int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY, name varchar(255) NOT NULL, version varchar(255) NOT NULL, title varchar(255) NOT NULL, description varchar(255) NOT NULL, source_directory varchar(255) NOT NULL, active int(11) NOT NULL DEFAULT '0')";
         }
         elseif ($database->getDatabaseType() == 'sqlite') {
             $query = "CREATE TABLE IF NOT EXISTS themes_register (thid INTEGER PRIMARY KEY AUTOINCREMENT, 

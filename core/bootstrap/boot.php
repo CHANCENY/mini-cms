@@ -239,19 +239,39 @@ function build_path(string $route_id, array $options = [], array $params = [] ,b
     throw new Exception("Unable to build path: Route with ID {$route_id} not found.");
 }
 
-// Error handler for warnings, notices, and other PHP errors
-function mini_cms_error_handler($errno, $errstr, $errfile, $errline) {
-    $error_saver = get_global('error_saver');
-    if($error_saver) {
-        $error_saver->setError($errno, $errstr, $errfile, $errline);
-        $error_saver->save();
+function mini_cms_error_handler($errno, $errstr, $errfile, $errline)
+{
+    // Define critical error levels (you can expand this list if needed)
+    $critical_errors = [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR];
+
+    // Check if the error is critical
+    if (in_array($errno, $critical_errors)) {
+        // Get the global error saver object (assuming this is part of your custom error handling system)
+        $error_saver = get_global('error_saver');
+
+        if ($error_saver) {
+            // Set the error details into the error saver object
+            $error_saver->setError($errno, $errstr, $errfile, $errline);
+            // Save the error (presumably to log or handle)
+            $error_saver->save();
+        }
+
+        // Clean up output buffer if any
         ob_end_flush();
-        print_r("unexpected error occurred");
-        exit;
+
+        // Output a generic message to the user (you can customize this)
+        print_r("A critical error occurred. Please try again later.");
+        exit;  // Stop script execution on a critical error
+    } else {
+        // For non-critical errors (e.g., warnings, notices), log them without exiting
+        $error_saver = get_global('error_saver');
+
+        if ($error_saver) {
+            // Set and save the non-critical error details for logging purposes
+            $error_saver->setError($errno, $errstr, $errfile, $errline);
+            $error_saver->save();
+        }
     }
-    ob_end_flush();
-   print_r($errstr);
-    exit;
 }
 
 // Exception handler for uncaught exceptions, including PDO exceptions

@@ -28,7 +28,8 @@ class System
             'private' => 'Mini\Cms\Modules\Streams\MiniWrapper',
             'module' => 'Mini\Cms\Modules\Streams\MiniWrapper',
             'theme' => 'Mini\Cms\Modules\Streams\MiniWrapper',
-            'default' => 'Mini\Cms\Modules\Streams\MiniWrapper'
+            'default' => 'Mini\Cms\Modules\Streams\MiniWrapper',
+            'config' => 'Mini\Cms\Modules\Streams\MiniWrapper',
         ];
 
         foreach ($wrappers as $key=>$wrapper) {

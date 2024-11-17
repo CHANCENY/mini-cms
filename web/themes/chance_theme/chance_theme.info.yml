@@ -1,0 +1,5 @@
+name: chance_theme
+title: 'Chance Theme'
+version: '2'
+description: 'My first theme'
+source_directory: 'theme://chance_theme/src'
