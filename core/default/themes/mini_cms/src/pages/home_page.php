@@ -139,5 +139,44 @@
             <li>Click Enable next to your theme to activate it.</li>
         </ul>
         <p>Alternatively, you can also enable the theme directly using the form found in Settings > Extension Configurations.</p>
+     <hr>
+      <h1>Hooks Explanation</h1>
+    <p><strong>_response_headers_alter:</strong> Triggered before sending HTTP response headers, allowing developers to modify or add custom headers dynamically.</p>
+    <p><strong>_inline_head_script_alter:</strong> Allows alteration of inline scripts in the head or footer of a page, enabling dynamic script modifications.</p>
+    <p><strong>_global_definitions_alter:</strong> Provides an opportunity to modify global definitions used across the application.</p>
+    <p><strong>_theme_alter:</strong> Enables modification of the active theme or its properties before rendering begins.</p>
+    <p><strong>_menus_alter:</strong> Allows adjustment of the site's menu definitions, such as adding or modifying menu items.</p>
+    <p><strong>_footer_alter:</strong> Used to alter footer content before it is rendered.</p>
+    <p><strong>_request_params_alter:</strong> Triggered to modify request parameters like <code>$_GET</code> data, enabling custom filtering or processing.</p>
+    <p><strong>_loaded_route_alter:</strong> Provides access to alter the current loaded route’s properties or behavior.</p>
+    <p><strong>_route_controller_handler_alter:</strong> Allows modification of the controller handling a specific route.</p>
+    <p><strong>_route_access_alter:</strong> Facilitates altering access rules for a route before it's processed.</p>
+    <p><strong>_post_request_alter:</strong> Invoked after a request is processed, enabling post-processing tasks.</p>
+    <p><strong>_meta_data_initialize_alter:</strong> Allows modification of metadata tags before they are passed to the view or used in the response.</p>
+    <p><strong>_response_alter:</strong> Triggered to modify the entire response object, allowing final adjustments before it’s sent to the user.</p>
+    <p><strong>_not_found_alter:</strong> Enables changes to the handling of paths that result in a "not found" response.</p>
+    <p><strong>_wrapper_register_alter:</strong> Used for altering wrapper registrations in the application.</p>
+    <p><strong>_user_prepare_insert:</strong> Called before inserting user data, allowing validation or transformation.</p>
+    <p><strong>_user_post_insert:</strong> Triggered after user data is inserted, useful for post-insert actions.</p>
+    <p><strong>_user_prepare_update:</strong> Allows modification of user data before it's updated in the database.</p>
+    <p><strong>_user_post_update:</strong> Executed after a user’s data is updated, useful for logging or cache updates.</p>
+    <p><strong>_user_prepare_delete:</strong> Provides a way to validate or alter user data before deletion.</p>
+    <p><strong>_user_post_delete:</strong> Called after user data is deleted, enabling cleanup tasks.</p>
+    <p><strong>_user_roles_list_alter:</strong> Allows modification of the list of user roles.</p>
+    <p><strong>_authentication_method_alter:</strong> Enables altering the authentication methods available in the system.</p>
+    <p><strong>_user_login_validated:</strong> Triggered after user login validation, allowing custom actions during login.</p>
+    <p><strong>_user_logout:</strong> Called during user logout, providing a way to clean up session or perform custom tasks.</p>
+    <p><strong>_image_styles_alter:</strong> Allows adjustment of image styles before they are applied.</p>
+    <p><strong>_file_system_save_as_alter:</strong> Facilitates altering file save operations, such as changing file paths or metadata.</p>
+    <p><strong>_tokens_info:</strong> Provides a way to modify token definitions before they are used in token replacements.</p>
+    <p><strong>_token_replacement:</strong> Enables custom logic for replacing tokens with dynamic values.</p>
+    <p><strong>_attachments_assets:</strong> Allows modification of assets attached to a theme or page, such as CSS or JS files.</p>
+    <p><strong>_view_data_alter:</strong> Triggered before passing data to the view file, enabling developers to alter the view data dynamically.</p>
+    <p><strong>_themes_list_alter:</strong> Facilitates modification of the list of available themes.</p>
+    <p><strong>_navigation_template_alter:</strong> Allows customization of the navigation template file.</p>
+    <p><strong>_footer_template_alter:</strong> Enables altering the render array of the footer template.</p>
+    <p><strong>_meta_pre_render_alter:</strong> Provides access to metadata before it’s rendered.</p>
+    <p><strong>_html_attribute_alter:</strong> Allows developers to modify HTML attributes applied to elements on the page.</p>
+    <p>Each hook serves as a specific integration point, providing extensive flexibility to developers for customizing and extending the CMS.</p>
     </div>
 </div>
