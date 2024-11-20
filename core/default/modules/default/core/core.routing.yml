@@ -21,7 +21,7 @@
       - anonymous
   name: Installation
   description: Installation route
-  url: "/install"
+  url: "/installation"
   handler: Mini\Cms\default\modules\default\core\src\Controllers\Installation
 - id: 6335a6e9-2cd2-4914-ba9e-fc3dac-e12b29-5985-884747
   options:

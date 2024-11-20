@@ -172,9 +172,9 @@ final class Extensions
      */
     public static function activeModules(): array
     {
-        self::extensionsStorage();
-        $modules = Database::database()->query("SELECT ext_id FROM `extensions` WHERE `ext_type` = 'module' AND ext_status = 'on'")->fetchAll();
         try{
+            self::extensionsStorage();
+            $modules = Database::database()->query("SELECT ext_id FROM `extensions` WHERE `ext_type` = 'module' AND ext_status = 'on'")->fetchAll();
             return array_map(function ($module) {
                 return new ModuleHandler($module['ext_id']);
             }, $modules);

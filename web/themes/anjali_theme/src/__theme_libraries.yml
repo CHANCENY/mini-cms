@@ -1,0 +1,4 @@
+global: {  }
+head:
+  - /themes/anjali_theme/assets/css/anjali.css
+footer: {  }

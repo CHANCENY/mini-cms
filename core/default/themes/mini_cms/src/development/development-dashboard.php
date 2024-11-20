@@ -153,7 +153,33 @@ $site = $content['site'];
                                                 <input type="number" name="smtp_port" id="smtp_port" class="form-control" value="<?= $site->getSmtpInformation('smtp_port') ?>">
                                             </div>
                                             <div class="form-group mt-5">
-                                                <button type="submit" name="smtp" class="btn btn-outline-secondary">Save Site Configuration</button>
+                                                <button type="submit" name="smtp" class="btn btn-outline-secondary">Save SMTP Configuration</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <h3>IMAP Email Configuration</h3>
+                                    <div class="form">
+                                        <form action="" method="post" class="form">
+                                            <div class="form-group">
+                                                <label for="host">Host</label>
+                                                <input type="text" name="host" id="host" class="form-control" value="<?= get_config_value('Imap.host') ?>">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="username">Username</label>
+                                                <input type="text" name="username" id="username" class="form-control" value="<?= get_config_value('Imap.username') ?>">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="password">Password</label>
+                                                <input type="password" name="password" id="password" class="form-control" value="<?= get_config_value('Imap.password') ?>">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="port">Port</label>
+                                                <input type="number" name="port" id="port" class="form-control" value="<?= get_config_value('Imap.port') ?>">
+                                            </div>
+                                            <div class="form-group mt-5">
+                                                <button type="submit" name="imap" class="btn btn-outline-secondary">Save IMAP Configuration</button>
                                             </div>
                                         </form>
                                     </div>

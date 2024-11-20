@@ -92,7 +92,6 @@ class Kernel extends System
             set_error_handler("mini_cms_error_handler");
             set_exception_handler("mini_cms_exception_handler");
         }
-        register_shutdown_function("mini_php_shutdown_handler");
     }
 
     public function kernelRequestInitialize(): void
@@ -110,7 +109,8 @@ class Kernel extends System
 
     public function terminate(): void
     {
+        mini_php_shutdown_handler();
         unset($this->app);
-        exit;
+        exit();
     }
 }

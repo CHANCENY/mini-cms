@@ -38,32 +38,27 @@ class Installation implements ControllerInterface
     {
         if($this->request->getMethod() == 'POST') {
             $payload = $this->request->getPayload();
-            $config = Services::create('config.factory');
+            $config = new ConfigFactory();
+            $database = [
+                'db_host' => $payload->get('db_host'),
+                'db_user' => $payload->get('db_user'),
+                'db_password' => $payload->get('db_password'),
+                'db_name' => $payload->get('db_name'),
+                'db_type' => $payload->get('db_type'),
 
-            // Check if all good
-            if($config instanceof ConfigFactory) {
-                $database = [
-                    'db_host' => $payload->get('db_host'),
-                    'db_user' => $payload->get('db_user'),
-                    'db_password' => $payload->get('db_password'),
-                    'db_name' => $payload->get('db_name'),
-                    'db_type' => $payload->get('db_type'),
-
-                ];
-                $config->set('database', $database);
-                if($config->save(true)) {
-                    $this->response->setStatusCode(StatusCode::PERMANENT_REDIRECT);
-                    // Trying to boot up extensions
-                    try{\Mini\Cms\Modules\Extensions\Extensions::bootRoutes();}catch(\Throwable){
-                        echo "<p>Hello looks like your database configuration are saved but booting up routes failed please manually continue to this page</p>
+            ];
+            $config->set('database', $database);
+            if($config->save(true)) {
+                $this->response->setStatusCode(StatusCode::PERMANENT_REDIRECT);
+                // Trying to boot up extensions
+                try{\Mini\Cms\Modules\Extensions\Extensions::bootRoutes();}catch(\Throwable){
+                    echo "<p>Hello looks like your database configuration are saved but booting up routes failed please manually continue to this page</p>
                               <a href='/site-configuration'>Site Configuration</a>";
-                        exit;
-                    };
-                    (new RedirectResponse('/site-configuration',StatusCode::PERMANENT_REDIRECT->value))->send();
-                    exit;
-                }
+                    return;
+                };
+                (new RedirectResponse('/site-configuration',StatusCode::PERMANENT_REDIRECT->value))->send();
+                return;
             }
-
         }
         $this->response->setStatusCode(StatusCode::NOT_FOUND);
         $theme = get_global('theme_loaded');

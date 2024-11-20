@@ -5,8 +5,10 @@ namespace Mini\Cms\Modules\FileSystem;
 
 use Mini\Cms\Connections\Database\Database;
 use Mini\Cms\Controller\Request;
+use Mini\Cms\Modules\ErrorSystem;
 use Mini\Cms\Modules\Streams\MiniWrapper;
 use Mini\Cms\StorageManager\Connector;
+use Throwable;
 
 class File
 {
@@ -42,12 +44,17 @@ class File
      */
     public function file(int $fid): File|null
     {
-        $query = "SELECT * FROM file_managed WHERE fid = :id";
-        $statement = $this->connector->getConnection()->prepare($query);
-        $statement->bindValue(':id', $fid);
-        $statement->execute();
-        $this->file_data = $statement->fetchAll(\PDO::FETCH_ASSOC)[0] ?? [];
-        return !empty($this->file_data) ? $this : null;
+        try{
+            $query = "SELECT * FROM file_managed WHERE fid = :id";
+            $statement = $this->connector->getConnection()->prepare($query);
+            $statement->bindValue(':id', $fid);
+            $statement->execute();
+            $this->file_data = $statement->fetchAll(\PDO::FETCH_ASSOC)[0] ?? [];
+            return !empty($this->file_data) ? $this : null;
+        }catch (Throwable $exception){
+            (new ErrorSystem())->setException($exception)->save();
+        }
+        return null;
     }
 
     /**

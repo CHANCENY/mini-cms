@@ -128,7 +128,7 @@ class Route
             $access_middle_response = (new AccessMiddleRunner($this->loadedRoute, $this->response))->runMiddleWares();
             if($access_middle_response) {
                 $access_middle_response->send();
-                exit;
+                return;
             }
 
             // Before calling handle lets check options
@@ -269,9 +269,9 @@ class Route
         $config = Services::create('config.factory');
         if($config instanceof ConfigFactory) {
             $database = $config->get('database');
-            if(empty($database)) {
-                (new RedirectResponse('/new-install.php'))->send();
-                exit;
+            if(empty($database) && $_SERVER['REQUEST_URI'] !== '/installation') {
+                (new RedirectResponse('/installation',308))->send();
+                return;
             }
         }
         Extensions::runHooks('_wrapper_register_alter',[]);

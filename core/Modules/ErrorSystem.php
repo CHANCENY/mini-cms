@@ -18,7 +18,7 @@ class ErrorSystem
     public function save(): bool
     {
        $path = $this->error_storage .'/'. $this->savable_error['report_on']. '.txt';
-       return !empty(file_put_contents($path, json_encode($this->savable_error, JSON_PRETTY_PRINT)));
+       return !empty(@file_put_contents($path, json_encode($this->savable_error, JSON_PRETTY_PRINT)));
     }
 
     public function getErrors(): array

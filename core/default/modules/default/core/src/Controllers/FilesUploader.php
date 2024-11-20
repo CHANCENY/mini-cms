@@ -88,7 +88,7 @@ class FilesUploader implements ControllerInterface
             }
 
             // uploading file.
-            $file->prepareUpload($_FILES['files']);
+            $file->prepareUpload($_FILES['files'] ?? []);
             $file->save();
 
             // Fids

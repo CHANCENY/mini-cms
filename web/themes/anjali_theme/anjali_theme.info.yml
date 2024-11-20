@@ -1,0 +1,5 @@
+name: anjali_theme
+title: 'Anjali Theme'
+version: v1
+description: 'This is anjali girl theme'
+source_directory: 'theme://anjali_theme/src'

@@ -1,0 +1,53 @@
+---
+- id: cf2fcaa9-f729-4dc3-a348-256cb9eefaf9-todo-block
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: Todo
+  description: This is imap route
+  url: "/todo/block"
+  handler: Mini\Cms\default\modules\default\todo\src\Controllers\Todo
+
+- id: cf2fcaa9faf9-todo-block-action
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: Todo
+  description: This is imap route
+  url: "/todo/block/actions/post"
+  handler: Mini\Cms\default\modules\default\todo\src\Controllers\Todo::actionsController
+
+- id: cf2fcaa9faf9-todo-block-action-remove
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: Todo
+  description: This is imap route
+  url: "/todo/block/actions/{task_id}/delete"
+  handler: Mini\Cms\default\modules\default\todo\src\Controllers\Todo::deleteController
+
+- id: cf2fcaa9faf9-todo-block-action-remove-bulk
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+      - DELETE
+    roles:
+      - administrator
+  name: Todo
+  description: This is imap route
+  url: "/todo/block/actions/bulk/removal"
+  handler: Mini\Cms\default\modules\default\todo\src\Controllers\Todo::bulkDeleteController

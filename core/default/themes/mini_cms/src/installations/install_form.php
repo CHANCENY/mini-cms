@@ -31,9 +31,9 @@
                         </p>
                     </li>
                     <li>
-                        <strong>Configurations.json file:</strong><br>
+                        <strong>configurations.yml file:</strong><br>
                         <p>
-                            Additionally, verify that you have a file named "configurations.json" present in the designated location, and ensure that this file also has the appropriate permissions to be written to. This ensures that the installation process can successfully update or modify the configurations stored within this file.
+                            configuration.yml file: Additionally, verify that you have a file named "configuration.yml" present in the designated location, and ensure that this file also has the appropriate permissions to be written to. This ensures that the installation process can successfully update or modify the configurations stored within this file.
                         </p>
                     </li>
                 </ol>

@@ -80,28 +80,73 @@
             const new_data_set = [
                 {
                     label: 'GET',
-                    data: data_set.method.GET.time_taken || [],
+                    data: data_set?.method?.GET?.time_taken ?? [],
                     backgroundColor: "rgba(0, 156, 255, .7)"
                 },
                 {
                     label: 'POST',
-                    data: data_set.method.POST.time_taken || [],
+                    data: data_set?.method?.POST?.time_taken ?? [],
                     backgroundColor: "rgba(0, 156, 255, .5)"
                 },
                 {
                     label: 'PUT',
-                    data: data_set.method.PUT.time_taken || [],
+                    data: data_set?.method?.PUT?.time_taken ?? [],
                     backgroundColor: "rgba(0, 156, 255, .6)"
                 },
                 {
                     label: 'PATCH',
-                    data: data_set.method.PATCH.time_taken || [],
+                    data: data_set?.method?.PATCH?.time_taken ?? [],
                     backgroundColor: "rgba(0, 156, 255, .2)"
                 },
                 {
                     label: 'DELETE',
-                    data: data_set.method.DELETE.time_taken || [],
+                    data: data_set?.method?.DELETE?.time_taken ?? [],
                     backgroundColor: "rgba(0, 156, 255, .8)"
+                }
+            ];
+            return {
+                date: data_set.DATE,
+                data: new_data_set,
+                time: data_set.TIME
+            }
+        }
+        return {date: [], data: []}
+    }
+
+    function getClientMetrics() {
+        const client_metrics = document.getElementById('client_metrics');
+        if(client_metrics) {
+            const data_set = JSON.parse(client_metrics.textContent);
+            const new_data_set = [
+                {
+                    label: 'GET',
+                    data: data_set?.method?.GET?.time_taken || [],
+                    backgroundColor: "rgba(0, 156, 255, .7)",
+                    fill: true
+                },
+                {
+                    label: 'POST',
+                    data: data_set?.method?.POST?.time_taken ?? [],
+                    backgroundColor: "rgba(0, 156, 255, .5)",
+                    fill: true
+                },
+                {
+                    label: 'PUT',
+                    data: data_set?.method?.PUT?.time_taken ?? [],
+                    backgroundColor: "rgba(0, 156, 255, .6)",
+                    fill: true
+                },
+                {
+                    label: 'PATCH',
+                    data: data_set?.method?.PATCH?.time_taken ?? [],
+                    backgroundColor: "rgba(0, 156, 255, .2)",
+                    fill: true
+                },
+                {
+                    label: 'DELETE',
+                    data: data_set?.method?.DELETE?.time_taken ?? [],
+                    backgroundColor: "rgba(0, 156, 255, .8)",
+                    fill: true
                 }
             ];
             return {
@@ -114,25 +159,14 @@
     }
     
 
+    const client_metrics = getClientMetrics();
     // Salse & Revenue Chart
     var ctx2 = $("#salse-revenue").get(0).getContext("2d");
     var myChart2 = new Chart(ctx2, {
         type: "line",
         data: {
-            labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
-            datasets: [{
-                    label: "Salse",
-                    data: [15, 30, 55, 45, 70, 65, 85],
-                    backgroundColor: "rgba(0, 156, 255, .5)",
-                    fill: true
-                },
-                {
-                    label: "Revenue",
-                    data: [99, 135, 170, 130, 190, 180, 270],
-                    backgroundColor: "rgba(0, 156, 255, .3)",
-                    fill: true
-                }
-            ]
+            labels: client_metrics.time,
+            datasets: client_metrics.data
             },
         options: {
             responsive: true

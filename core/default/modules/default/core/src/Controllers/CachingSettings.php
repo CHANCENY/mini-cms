@@ -2,6 +2,7 @@
 
 namespace Mini\Cms\default\modules\default\core\src\Controllers;
 
+use Mini\Cms\Connections\Imap\ImapServer;
 use Mini\Cms\Mini;
 use Mini\Cms\Modules\Extensions\ModuleHandler\ModuleHandler;
 use Mini\Cms\Modules\Site\Site;
@@ -36,6 +37,7 @@ class CachingSettings implements ControllerInterface
     public function writeBody(): void
     {
         if($this->request->isMethod(RequestAlias::METHOD_POST)) {
+
             if($this->request->request->has('database')) {
                 $payload = $this->request->getPayload();
                 $config = new ConfigFactory();
@@ -52,6 +54,7 @@ class CachingSettings implements ControllerInterface
                     (new RedirectResponse('/settings'))->send();
                 }
             }
+
             if($this->request->request->has('site')) {
                 $payload = $this->request->getPayload();
                 $site = new Site();
@@ -81,6 +84,14 @@ class CachingSettings implements ControllerInterface
                 ];
                 $site->setContactInformation("Smtp", $smtp);
                 if($site->save()) {
+                    (new RedirectResponse('/settings'))->send();
+                }
+            }
+
+            if($this->request->request->has('imap')) {
+                $payload = $this->request->getPayload();
+                if(ImapServer::saveSettings($payload->all())) {
+                    Mini::messenger()->addMessage("Settings for IMAP Server successfully saved");
                     (new RedirectResponse('/settings'))->send();
                 }
             }

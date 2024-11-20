@@ -1,0 +1,23 @@
+<?php
+
+
+use Mini\Cms\Connections\Database\Database;
+
+function todo_install(...$any): void
+{
+    $database = new Database(true);
+
+    if($database->getDatabaseType() == 'mysql'){
+        $query = "CREATE TABLE IF NOT EXISTS todo_tasks (tid int(11) AUTO_INCREMENT PRIMARY KEY, task VARCHAR(255) NOT NULL, time_stamp VARCHAR(255) NOT NULL)";
+    }
+    elseif ($database->getDatabaseType() == 'sqlite'){
+        $query = "CREATE TABLE IF NOT EXISTS todo_tasks (tid INTEGER PRIMARY KEY AUTOINCREMENT, task VARCHAR(255) NOT NULL, time_stamp VARCHAR(255) NOT NULL)";
+    }
+    $database->connect()->exec($query);
+}
+
+function todo_uninstall(...$any)
+{
+    $query = "DROP TABLE todo_tasks";
+    \Mini\Cms\Mini::connection()->exec($query);
+}

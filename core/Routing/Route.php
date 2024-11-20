@@ -98,18 +98,18 @@ class Route
      * Getting route id.
      * @return string
      */
-    public function getRouteId(): string
+    public function getRouteId(): ?string
     {
-        return $this->route['id'];
+        return $this->route['id'] ?? null;
     }
 
     /**
      * Get saved url.
      * @return string
      */
-    public function getUrl(): string
+    public function getUrl(): ?string
     {
-        return $this->route['url'];
+        return $this->route['url'] ?? null;
     }
 
     /**

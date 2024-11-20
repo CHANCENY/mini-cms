@@ -128,10 +128,12 @@ class ModuleHandler
             if($route_obj->isUserAllowed(['anonymous']) && !(str_contains($route_obj->getUrl(), '{') || str_contains($route_obj->getUrl(), '}')) && $route_obj->isMethod('GET')) {
                 $response = $route_obj->loadController();
                 $data = $response->getBody();
-                $etags[$route_obj->getRouteId()] = [
-                    'id' => md5($data),
-                    'last_modified' => time()
-                ];
+                if(is_string($data)) {
+                    $etags[$route_obj->getRouteId()] = [
+                        'id' => md5($data),
+                        'last_modified' => time()
+                    ];
+                }
             }
         }
         if(!empty($etags)) {

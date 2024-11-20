@@ -1,0 +1,13 @@
+---
+- id: cf2fcaa9-f729-4dc3-a348-256cb9eefaf9-imap
+  options:
+    unauthorized_access: true
+    methods:
+      - GET
+      - POST
+    roles:
+      - administrator
+  name: Mail Inbox
+  description: This is imap route
+  url: "/imap/panel"
+  handler: Mini\Cms\default\modules\default\inbox\src\Controllers\ImapPanel
