@@ -82,4 +82,5 @@ enum ContentTypeEnum: string
     case MODEL_X3D_VRML = 'model/x3d+vrml';
     case MODEL_X3D_FASTINFOSET = 'application/x3d+fastinfoset';
     case MODEL_X3D_VRML_BINARY = 'model/x3d-vrml+binary';
+
 }

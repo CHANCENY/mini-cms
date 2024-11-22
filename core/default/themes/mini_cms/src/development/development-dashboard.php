@@ -19,6 +19,9 @@ $site = $content['site'];
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="extension-tab" data-bs-toggle="tab" data-bs-target="#extension" type="button" role="tab" aria-controls="extension" aria-selected="false">Extension Configurations</button>
                     </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="customconfiguration-tab" data-bs-toggle="tab" data-bs-target="#customconfiguration" type="button" role="tab" aria-controls="customconfiguration" aria-selected="false">Custom Configurations</button>
+                    </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="configuration" role="tabpanel" aria-labelledby="configuration-tab">
@@ -213,6 +216,13 @@ $site = $content['site'];
                             <?= $content['role_controller'] ?>
                             <h3>Themes</h3>
                             <?= $content['theme_controller'] ?>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="customconfiguration" role="tabpanel" aria-labelledby="customconfiguration-tab">
+                        <div class="d-block mt-4 extension-settings">
+                            <?php if(!empty($content['custom_settings'])): foreach ($content['custom_settings'] as $custom_setting): ?>
+                            <?= $custom_setting ?? null ?>
+                            <?php endforeach; endif; ?>
                         </div>
                     </div>
                 </div>

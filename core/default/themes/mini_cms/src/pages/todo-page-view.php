@@ -103,7 +103,9 @@
             xhr.onload = function () {
                 if(this.status === 200) {
                     checkboxes.forEach((checkbox)=>{
-                        checkbox.parentElement.remove();
+                       if(checkbox.checked) {
+                           checkbox.parentElement.remove();
+                       }
                     })
                 }
             }

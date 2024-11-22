@@ -1,12 +1,17 @@
 file_auto_uploader:
-    is_active: true
-    file_type: [image/png, image/gif, image/jpeg, image/svg, image/jpg, application/pdf, application/zip]
-    file_size: '20011000'
-    is_public: true
+  is_active: true
+  file_type:
+    [
+      image/png,
+      image/gif,
+      image/jpeg,
+      image/svg,
+      image/jpg,
+      application/pdf,
+      application/zip,
+    ]
+  file_size: "20011000"
+  is_public: true
 maintain_mode:
-    is_active: true
+  is_active: falses
 error_saver: true
-
-theme:
-    - { title: MiniCMS, description: 'Theme for admin dashboard', source_directory: ../core/default/themes/mini_cms/src, active: true, name: default_admin }
-    - { title: Classy, description: 'Theme for classy theme', source_directory: themes/classy/src, active: false, name: default_theme }

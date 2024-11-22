@@ -260,9 +260,6 @@ function mini_cms_error_handler($errno, $errstr, $errfile, $errline)
             $error_saver->save();
         }
 
-        // Clean up output buffer if any
-        ob_end_flush();
-
         // Output a generic message to the user (you can customize this)
         print_r("A critical error occurred. Please try again later.");
         exit;  // Stop script execution on a critical error
@@ -284,7 +281,6 @@ function mini_cms_exception_handler($exception) {
     if($error_saver) {
         $error_saver->setException($exception);
         $error_saver->save();
-        ob_end_flush();
         print_r("unexpected error occurred");
         exit;
     }

@@ -92,5 +92,4 @@ enum ContentType: string
         }
         return null; // Return null if no match found
     }
-
 }

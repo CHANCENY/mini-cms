@@ -52,6 +52,10 @@ class MetaTag
                 MetagEnum::Charset->name =>[
                     'value' => 'UTF-8',
                     'tag' => MetagEnum::Charset
+                ],
+                MetagEnum::Generator->name => [
+                    'value' => 'Mini Cms 4 (https://github.com/CHANCENY/mini-cms)',
+                    'tag' => MetagEnum::Generator
                 ]
             ];
         }

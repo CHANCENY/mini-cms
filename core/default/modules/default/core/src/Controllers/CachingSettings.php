@@ -103,6 +103,10 @@ class CachingSettings implements ControllerInterface
         $response = $extend_controller->loadController();
         $response_r = $role_controller->loadController();
         $response_t = $theme_controller->loadController();
+
+        // Loading custom settings
+        $custom_settings = [];
+        Extensions::runHooks('_custom_settings_views', [&$custom_settings]);
         $this->response->write(
             Services::create('render')
             ->render('development-dashboard.php',
@@ -110,7 +114,8 @@ class CachingSettings implements ControllerInterface
                     'site'=>new Site(),
                     'extend'=>$response->getBody(),
                     'role_controller'=>$response_r->getBody(),
-                    'theme_controller'=>$response_t->getBody()
+                    'theme_controller'=>$response_t->getBody(),
+                    'custom_settings'=>$custom_settings,
                 ]
             )
         );
